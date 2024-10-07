@@ -1,3 +1,20 @@
 <resources>
     <string name="app_name">FitBoostTrainer</string>
+    <string name="estadisticas">Estadísticas</string>
+    <string name="rutinas">Rutinas</string>
+    <string name="alimentacion">Alimentación</string>
+
+    <!-- Textos de las rutinas -->
+    <string name="dr_fullbody">Full body</string>
+    <string name="dr_fullbody_description">Combina entrenamiento aeróbico con pierna, torso, abdomen y glúteo</string>
+
+    <string name="dr_tren_superior">Tren superior</string>
+    <string name="dr_tren_superior_description">Fortalece brazos, hombros, pecho y espalda.</string>
+
+    <string name="dr_tren_inferior">Tren inferior</string>
+    <string name="dr_tren_inferior_description">Tonifica piernas y glúteos con ejercicios de resistencia.</string>
+
+    <string name="dr_abdomen">Abdomen</string>
+    <string name="dr_abdomen_description">Define y fortalece el core con ejercicios específicos para el abdomen.</string>
+    <string name="default_routines">Rutinas preestablecidas</string>
 </resources>
