@@ -10,6 +10,7 @@ import androidx.compose.ui.Modifier
 import edu.unicauca.fitboosttrainer.ui.theme.FitBoostTrainerTheme
 import edu.unicauca.fitboosttrainer.ui.screens.RoutineCreationScreen
 
+
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

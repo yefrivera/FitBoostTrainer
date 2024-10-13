@@ -22,9 +22,13 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.ui.unit.dp
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ModalDrawerSheet
+import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.rememberDrawerState
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.input.nestedscroll.nestedScroll
@@ -37,12 +41,22 @@ import edu.unicauca.fitboosttrainer.ui.components.BottomNavigation
 fun RoutineCreationScreen() {
 
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
-    Scaffold(
-        modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
-        topBar = { MainTopAppBar(modifier = Modifier, scrollBehavior,title = stringResource(R.string.app_name)) },
-        bottomBar = { BottomNavigation() }
-    ) { innerPadding ->
-        ScrollContent(innerPadding = innerPadding)
+    val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
+
+    ModalNavigationDrawer(
+        drawerState = drawerState,
+        drawerContent = {
+            ModalDrawerSheet { /* Drawer content */ }
+        },
+    ){
+        Scaffold(
+            modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
+            topBar = { MainTopAppBar(modifier = Modifier, scrollBehavior,
+                title = stringResource(R.string.app_name),drawerState =  drawerState)},
+            bottomBar = { BottomNavigation() }
+        ) { innerPadding ->
+            ScrollContent(innerPadding = innerPadding)
+        }
     }
 
 }
