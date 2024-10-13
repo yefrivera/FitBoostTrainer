@@ -29,7 +29,7 @@ import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import edu.unicauca.fitboosttrainer.data.defaultRoutineData
-import edu.unicauca.fitboosttrainer.ui.components.CenterAlignedTopAppBar
+import edu.unicauca.fitboosttrainer.ui.components.MainTopAppBar
 import edu.unicauca.fitboosttrainer.ui.components.BottomNavigation
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -39,7 +39,7 @@ fun RoutineCreationScreen() {
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
     Scaffold(
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
-        topBar = { CenterAlignedTopAppBar(modifier = Modifier, scrollBehavior) },
+        topBar = { MainTopAppBar(modifier = Modifier, scrollBehavior,title = stringResource(R.string.app_name)) },
         bottomBar = { BottomNavigation() }
     ) { innerPadding ->
         ScrollContent(innerPadding = innerPadding)
