@@ -1,5 +1,6 @@
 package edu.unicauca.fitboosttrainer.ui.screens
 
+import android.graphics.fonts.FontStyle
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -25,6 +26,10 @@ import edu.unicauca.fitboosttrainer.ui.components.BottomNavigation
 import edu.unicauca.fitboosttrainer.ui.components.MainTopAppBar
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.material3.Text
+import androidx.compose.ui.res.stringResource
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.ui.unit.sp
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -64,23 +69,23 @@ fun FuerzaMaximaScreen(scrollBehavior: TopAppBarScrollBehavior, drawerState: Dra
             ExerciseItem(
                 title = "Press Banca",
                 imageRes = R.drawable.banca,
-                reps = "(3x10)"
+                reps = "(3 x 10)"
 
             )
             ExerciseItem(
                 title = "Press Militar",
                 imageRes = R.drawable.militar,
-                reps = "(2x10)"
+                reps = "(2 x 10)"
             )
             ExerciseItem(
                 title = "Remo",
                 imageRes = R.drawable.remo,
-                reps = "(2x10)"
+                reps = "(2 x 10)"
             )
             ExerciseItem(
                 title = "Curl",
                 imageRes = R.drawable.curl,
-                reps = "(2x10)"
+                reps = "(2 x 10)"
             )
             ExerciseItem(
                 title = "Sentadilla",
@@ -90,7 +95,7 @@ fun FuerzaMaximaScreen(scrollBehavior: TopAppBarScrollBehavior, drawerState: Dra
             ExerciseItem(
                 title = "Peso Muerto",
                 imageRes = R.drawable.muerto,
-                reps = "(2x10)"
+                reps = "(2 x 10)"
             )
 
             Spacer(modifier = Modifier.height(16.dp))
@@ -154,11 +159,17 @@ fun ExerciseItem(title: String, imageRes: Int, reps: String) {
                     TextField(
                         value = weight,
                         onValueChange = { weight = it },
-                        placeholder = { Text(text = stringResource(R.string.peso_placeholder)) },
-                        modifier = Modifier.width(80.dp),
+                        placeholder = {
+                            Text(
+                                text = stringResource(R.string.peso_placeholder),
+                                fontSize = (11.sp),
+                                fontStyle = androidx.compose.ui.text.font.FontStyle.Italic  // Cursiva aplicada
+                            )
+                        },
+                        modifier = Modifier.width(60.dp),  // Hacer más corto el campo de entrada
                         singleLine = true,
                         keyboardOptions = KeyboardOptions(
-                            keyboardType = KeyboardType.Number,
+                            keyboardType = KeyboardType.Number,  // Teclado numérico
                             imeAction = ImeAction.Done
                         )
                     )

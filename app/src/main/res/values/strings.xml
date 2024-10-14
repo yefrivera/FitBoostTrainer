@@ -47,12 +47,34 @@
     <string name="cardio_letal">Cardio Letal</string>
     <string name="cardio_letal_d">Entrenamiento cardiovascular de ritmo constante</string>
 
-    <!-- Textos de los fuerza máxima -->
+    <!-- Textos de fuerza máxima -->
     <string name="strength_max_title">Fuerza Máxima</string>
     <string name="ejercicios">Ejercicios (Series x Repeticiones)</string>
     <string name="peso">Peso:</string>
     <string name="peso_placeholder">Peso</string>
     <string name="finalizar">Finalizar</string>
+
+    <!-- Textos de alimentación -->
+
+    <string name="alimentacion_title">Alimentación</string>
+    <string name="seguimiento_calorico">Seguimiento calórico</string>
+    <string name="endulza">Endulza tus días</string>
+    <string name="dessert">Postres saludables y fáciles de hacer</string>
+    <string name="snack">Snacks Saludables</string>
+    <string name="desayuno">Desayuno</string>
+    <string name="almuerzo">Almuerzo</string>
+    <string name="cena">Cena</string>
+
+    <!-- calorias -->
+
+    <string name="calorias_title">Calorías</string>
+    <string name="meta_diaria">Meta diaria</string>
+
+    <string name="agregar_comida">Añadir comida</string>
+    <string name="comidas_agregadas">Comidas agregadas</string>
+    <string name="buscar_comida">Buscar comida</string>
+    <string name="calorias">Calorías</string>
+
 
 
 

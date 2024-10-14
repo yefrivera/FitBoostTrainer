@@ -7,16 +7,14 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.Surface
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.ui.Modifier
-import edu.unicauca.fitboosttrainer.ui.components.InitialScreen
-import edu.unicauca.fitboosttrainer.ui.screens.FullBodyScreen
+import edu.unicauca.fitboosttrainer.navigation.NavigationFunction
+import edu.unicauca.fitboosttrainer.ui.screens.AlimentacionScreen
 import edu.unicauca.fitboosttrainer.ui.theme.FitBoostTrainerTheme
-import edu.unicauca.fitboosttrainer.ui.screens.RoutineCreationScreen
-import edu.unicauca.fitboosttrainer.ui.screens.TrainCompletedScreen
-import edu.unicauca.fitboosttrainer.ui.screens.FuerzaMaximaScreen
 
 
 class MainActivity : ComponentActivity() {
@@ -27,17 +25,11 @@ class MainActivity : ComponentActivity() {
         setContent {
             FitBoostTrainerTheme {
 
-                val drawerState = rememberDrawerState(DrawerValue.Closed)
-                val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
 
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                 ) {
-                    //RoutineCreationScreen()
-                    //InitialScreen()
-                    //TrainCompletedScreen()
-                    //FullBodyScreen(drawerState = drawerState, scrollBehavior = scrollBehavior)
-                    FuerzaMaximaScreen(drawerState = drawerState, scrollBehavior = scrollBehavior)
+                    NavigationFunction()
                 }
                 }
             }
