@@ -17,4 +17,6 @@
     <string name="dr_abdomen">Abdomen</string>
     <string name="dr_abdomen_description">Define y fortalece el core con ejercicios específicos para el abdomen.</string>
     <string name="default_routines">Rutinas preestablecidas</string>
+    <string name="create_routine">Crear Rutina</string>
+    <string name="saved_routines">Rutinas Guardadas</string>
 </resources>

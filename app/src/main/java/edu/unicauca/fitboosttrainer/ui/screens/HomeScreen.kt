@@ -13,15 +13,20 @@ import edu.unicauca.fitboosttrainer.ui.theme.FitBoostTrainerTheme
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AccountCircle
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.ui.unit.dp
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ModalDrawerSheet
@@ -32,22 +37,23 @@ import androidx.compose.material3.rememberDrawerState
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.sp
 import edu.unicauca.fitboosttrainer.data.defaultRoutineData
 import edu.unicauca.fitboosttrainer.ui.components.MainTopAppBar
 import edu.unicauca.fitboosttrainer.ui.components.BottomNavigation
+import edu.unicauca.fitboosttrainer.ui.components.DrawerApp
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun RoutineCreationScreen() {
+fun HomeScreen() {
 
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
 
     ModalNavigationDrawer(
         drawerState = drawerState,
-        drawerContent = {
-            ModalDrawerSheet { /* Drawer content */ }
-        },
+        drawerContent = { DrawerApp() }
     ){
         Scaffold(
             modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
@@ -74,7 +80,7 @@ private fun RoutinesCard(
     ) {
 
         Card(
-            elevation = CardDefaults.cardElevation(defaultElevation = 5.dp),
+
             modifier = modifier
                 .fillMaxWidth()
                 .padding(bottom = 16.dp)
@@ -82,6 +88,8 @@ private fun RoutinesCard(
             Column(modifier = Modifier.padding(16.dp)) {
                 Text(
                     text = stringResource(text),
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 18.sp
                 )
                 Text(
                     text = stringResource(text2),
@@ -104,7 +112,7 @@ private fun RoutinesList(modifier: Modifier = Modifier) {
 }
 
 @Composable
-fun ScrollContent(innerPadding: PaddingValues) {
+private fun ScrollContent(innerPadding: PaddingValues) {
 
     val mediumPadding = 8.dp
     Column(
@@ -142,10 +150,10 @@ fun ScrollContent(innerPadding: PaddingValues) {
     }
 }
 
-@Preview
+@Preview(showBackground = true)
 @Composable
-fun RoutineCreationScreenPreview(){
+fun HomeScreenPreview(){
     FitBoostTrainerTheme {
-        RoutineCreationScreen()
+        HomeScreen()
     }
 }

@@ -29,7 +29,7 @@ fun BottomNavigation(
             label = {
                 Text(stringResource(R.string.alimentacion))
             },
-            selected = true,
+            selected =false,
             onClick = {}
         )
         NavigationBarItem(
@@ -42,7 +42,7 @@ fun BottomNavigation(
             label = {
                 Text(stringResource(R.string.rutinas))
             },
-            selected = false,
+            selected = true,
             onClick = {}
         )
         NavigationBarItem(
