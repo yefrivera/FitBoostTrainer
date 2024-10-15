@@ -16,12 +16,20 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import edu.unicauca.fitboosttrainer.ui.components.MainTopAppBarAlt
 import edu.unicauca.fitboosttrainer.ui.theme.FitBoostTrainerTheme
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun LoginScreen() {
+fun LoginScreen( drawerState: DrawerState) {
     Scaffold(
-
+        topBar ={
+            MainTopAppBarAlt(
+                title = "FitBoost Trainer",
+                scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(),
+                drawerState = drawerState
+            )
+        }
     ) { padding ->
         Column(
             modifier = Modifier
@@ -68,52 +76,6 @@ fun LoginScreen() {
 }
 
 
-@OptIn(ExperimentalMaterial3Api::class)
-@Preview
-@Composable
-fun CenterAlignedTopAppBarExample() {
-    val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
-
-    Scaffold(
-        modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
-
-        topBar = {
-            CenterAlignedTopAppBar(
-                colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.primaryContainer,
-                    titleContentColor = MaterialTheme.colorScheme.primary,
-                ),
-                title = {
-                    Text(
-                        "FITBOOST TRAINER",
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis
-                    )
-                },
-                navigationIcon = {
-                    IconButton(onClick = { /* do something */ }) {
-                        Icon(
-                            imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                            contentDescription = "Localized description"
-                        )
-                    }
-                },
-                actions = {
-                    IconButton(onClick = { /* do something */ }) {
-                        Icon(
-                            imageVector = Icons.Filled.Menu,
-                            contentDescription = "Localized description"
-                        )
-                    }
-                },
-                scrollBehavior = scrollBehavior,
-            )
-        },
-    ) { innerPadding ->
-        ScrollContent(innerPadding)
-    }
-}
-
 @Composable
 fun ScrollContent(padding: PaddingValues) {
     Column(
@@ -132,6 +94,6 @@ fun ScrollContent(padding: PaddingValues) {
 @Composable
 fun PreviewLoginScreen() {
     FitBoostTrainerTheme {
-        LoginScreen()
+        LoginScreen(drawerState = rememberDrawerState(initialValue = DrawerValue.Closed))
     }
 }
