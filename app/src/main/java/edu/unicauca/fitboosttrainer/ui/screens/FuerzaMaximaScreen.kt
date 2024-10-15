@@ -30,24 +30,29 @@ import androidx.compose.material3.Text
 import androidx.compose.ui.res.stringResource
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
+import edu.unicauca.fitboosttrainer.ui.components.MainTopAppBarAlt
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun FuerzaMaximaScreen(scrollBehavior: TopAppBarScrollBehavior, drawerState: DrawerState) {
-    var selectedNavItem by remember { mutableStateOf(BottomNavItem.RUTINAS) }  // Control de la barra de navegación
+fun FuerzaMaximaScreen(scrollBehavior: TopAppBarScrollBehavior, drawerState: DrawerState, navController: NavHostController) {
+    var selectedNavItem by remember { mutableStateOf(BottomNavItem.RUTINAS) }
     Scaffold(
         topBar = {
-            MainTopAppBar(
-                title = stringResource(R.string.strength_max_title),
+            MainTopAppBarAlt(
+                title = "Fuerza Máxima",
+                scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(),
                 drawerState = drawerState,
-                scrollBehavior = scrollBehavior
+                onBackClick = { navController.popBackStack() }
             )
         },
         bottomBar = {
             BottomNavigation(
                 selectedItem = selectedNavItem,
-                onItemSelected = { selectedNavItem = it }
+                onItemSelected = { selectedNavItem = it },
+                navController = navController
             )
         }
     ) { paddingValues ->
@@ -101,7 +106,7 @@ fun FuerzaMaximaScreen(scrollBehavior: TopAppBarScrollBehavior, drawerState: Dra
             Spacer(modifier = Modifier.height(16.dp))
 
             Button(
-                onClick = { /* Acción del botón */ },
+                onClick = { navController.navigate("trainCompletedScreen")},
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp),
@@ -163,13 +168,13 @@ fun ExerciseItem(title: String, imageRes: Int, reps: String) {
                             Text(
                                 text = stringResource(R.string.peso_placeholder),
                                 fontSize = (11.sp),
-                                fontStyle = androidx.compose.ui.text.font.FontStyle.Italic  // Cursiva aplicada
+                                fontStyle = androidx.compose.ui.text.font.FontStyle.Italic
                             )
                         },
-                        modifier = Modifier.width(60.dp),  // Hacer más corto el campo de entrada
+                        modifier = Modifier.width(60.dp),
                         singleLine = true,
                         keyboardOptions = KeyboardOptions(
-                            keyboardType = KeyboardType.Number,  // Teclado numérico
+                            keyboardType = KeyboardType.Number,
                             imeAction = ImeAction.Done
                         )
                     )
@@ -194,5 +199,6 @@ fun ExerciseItem(title: String, imageRes: Int, reps: String) {
 fun FuerzaMaximaScreenPreview() {
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
-    FuerzaMaximaScreen(scrollBehavior = scrollBehavior, drawerState = drawerState)
+    val navController = rememberNavController()
+    FuerzaMaximaScreen(scrollBehavior = scrollBehavior, drawerState = drawerState, navController = navController)
 }

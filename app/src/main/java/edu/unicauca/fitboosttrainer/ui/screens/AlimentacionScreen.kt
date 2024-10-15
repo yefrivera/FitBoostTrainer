@@ -45,7 +45,8 @@ fun AlimentacionScreen(
         bottomBar = {
             BottomNavigation(
                 selectedItem = selectedNavItem,
-                onItemSelected = { selectedNavItem = it }
+                onItemSelected = { selectedNavItem = it },
+                navController = navController
             )
         }
     ) { paddingValues ->

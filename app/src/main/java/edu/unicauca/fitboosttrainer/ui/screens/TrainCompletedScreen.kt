@@ -1,6 +1,5 @@
 package edu.unicauca.fitboosttrainer.ui.screens
 
-
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -9,9 +8,15 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.ClickableText
 import androidx.compose.material.*
 import androidx.compose.material3.Button
+import androidx.compose.material3.DrawerState
+import androidx.compose.material3.DrawerValue
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.TopAppBarScrollBehavior
+import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -27,36 +32,38 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import edu.unicauca.fitboosttrainer.R
 import edu.unicauca.fitboosttrainer.ui.theme.FitBoostTrainerTheme
 
 @Composable
-fun TrainCompletedScreen() {
+fun TrainCompletedScreen(
+    navController: NavHostController
+) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier
             .fillMaxSize()
-            .padding(top=16.dp)
+            //.padding(top=16.dp)
     ) {
 
         Row(
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier
                 .fillMaxWidth()
-                //.padding(16.dp)
+                .padding(top=52.dp)
         ) {
-            IconButton(
-                onClick = { /* Acción para volver atrás */ },
+            /*IconButton(
+                onClick = { navController.popBackStack() },
                 modifier = Modifier.align(Alignment.CenterVertically)
             ) {
                 Icon(
                     painter = painterResource(id = R.drawable.ic_back),
                     contentDescription = "Volver atrás"
                 )
-            }
+            }*/
 
-
-            // Título centrado
             Text(
                 text = stringResource(id = R.string.app_name),
                 style = TextStyle(
@@ -64,15 +71,13 @@ fun TrainCompletedScreen() {
                     fontWeight = FontWeight.Bold,
                     textAlign = TextAlign.Center
                 ),
-                modifier = Modifier.padding(start = 40.dp)
+                modifier = Modifier.padding(start = 85.dp)
             )
         }
 
         Spacer(modifier = Modifier.height(42.dp))
 
-        // Imagen con las flechas de navegación
         Box(modifier = Modifier.fillMaxWidth()) {
-            // Logo
             Image(
                 painter = painterResource(id = R.drawable.logo),
                 contentDescription = "Logo",
@@ -95,7 +100,7 @@ fun TrainCompletedScreen() {
         Spacer(modifier = Modifier.height(132.dp))
 
         Button(
-            onClick = { /* Acción */ },
+            onClick = { navController.navigate("home") },
             modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp)
         ) {
             Text(text = stringResource(id = R.string.dr_sig))
@@ -107,8 +112,8 @@ fun TrainCompletedScreen() {
 @Composable
 fun TrainCompletedScreenPreview() {
     FitBoostTrainerTheme {
-        TrainCompletedScreen()
+
+        val navController = rememberNavController()
+        TrainCompletedScreen( navController = navController)
     }
 }
-
-
