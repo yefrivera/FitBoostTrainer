@@ -81,9 +81,11 @@ fun NavigationFunction() {
 
             // Pantalla de creación de Rutinas
             composable("routine") {
-                RoutineCreationScreen()
+                CreateRoutineScreen(
+                    navController = navController,
+                    drawerState = drawerState,
+                    scrollBehavior = scrollBehavior)
             }
-
 
         }
     }

@@ -17,6 +17,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -34,10 +35,15 @@ import edu.unicauca.fitboosttrainer.ui.components.BottomNavigation
 import edu.unicauca.fitboosttrainer.ui.components.DrawerContent
 import edu.unicauca.fitboosttrainer.ui.components.MainTopAppBar
 import edu.unicauca.fitboosttrainer.ui.components.MainTopAppBarAlt
+import edu.unicauca.fitboosttrainer.ui.theme.FitBoostTrainerTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun Home(userName: String,scrollBehavior: TopAppBarScrollBehavior, drawerState: DrawerState, navController: NavHostController) {
+fun Home(userName: String,
+         scrollBehavior: TopAppBarScrollBehavior,
+         drawerState: DrawerState,
+         navController: NavHostController
+) {
     var selectedNavItem by remember { mutableStateOf(BottomNavItem.HOME) }
 
     Scaffold(
@@ -177,6 +183,7 @@ fun NewWorkoutButton() {
 @Preview(showBackground = true)
 @Composable
 fun HomePreview() {
-
-    Home(userName = "John", scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(), drawerState = rememberDrawerState(initialValue = DrawerValue.Closed), navController = NavHostController(LocalContext.current))
+    FitBoostTrainerTheme {
+        Home(userName = "John", scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(), drawerState = rememberDrawerState(initialValue = DrawerValue.Closed), navController = NavHostController(LocalContext.current))
+    }
 }
