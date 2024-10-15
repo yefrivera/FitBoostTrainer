@@ -17,6 +17,62 @@
     <string name="dr_abdomen">Abdomen</string>
     <string name="dr_abdomen_description">Define y fortalece el core con ejercicios específicos para el abdomen.</string>
     <string name="default_routines">Rutinas preestablecidas</string>
-    <string name="create_routine">Crear Rutina</string>
+    <string name="create_routine">Crear Rutinas</string>
     <string name="saved_routines">Rutinas Guardadas</string>
+
+    <!-- Textos pantalla inicial -->
+
+    <string name="dr_description">¡Cada repetición te acerca a tu mejor versión! \nHoy es el día perfecto para superar tus límites.</string>
+    <string name="dr_name">Bienvenido a \nFitBoostTrainer</string>
+    <string name="dr_login">Iniciar Sesión o Registrarse</string>
+    <string name="dr_mas">Ver más</string>
+
+    <!-- Textos pantalla entremiento completado -->
+
+    <string name="dr_congrats">¡Felicidades! \nTerminaste tu entrenamiento</string>
+    <string name="dr_sig">Siguiente</string>
+
+    <!-- Textos pantalla full body -->
+
+    <string name="full_body">Full Body</string>
+
+    <string name="strength_max">Fuerza Máxima</string>"
+    <string name="strength_max_d">Centrada en el levantamiento de pesas</string>
+
+    <string name="suelo_pie">El Suelo es Lava (Todo de Pie)</string>
+    <string name="suelo_pie_d">Es perfecta para aquellos que prefieren mantenerse en movimiento constante</string>
+
+    <string name="desafio_explosivo">Desafío Explosivo</string>
+    <string name="desafio_explosivo_d">Ejercicios pliométricos y de alta intensidad</string>
+
+    <string name="cardio_letal">Cardio Letal</string>
+    <string name="cardio_letal_d">Entrenamiento cardiovascular de ritmo constante</string>
+
+    <!-- Textos de fuerza máxima -->
+    <string name="strength_max_title">Fuerza Máxima</string>
+    <string name="ejercicios">Ejercicios (Series x Repeticiones)</string>
+    <string name="peso">Peso:</string>
+    <string name="peso_placeholder">Peso</string>
+    <string name="finalizar">Finalizar</string>
+
+    <!-- Textos de alimentación -->
+
+    <string name="alimentacion_title">Alimentación</string>
+    <string name="seguimiento_calorico">Seguimiento calórico</string>
+    <string name="endulza">Endulza tus días</string>
+    <string name="dessert">Postres saludables y fáciles de hacer</string>
+    <string name="snack">Snacks Saludables</string>
+    <string name="desayuno">Desayuno</string>
+    <string name="almuerzo">Almuerzo</string>
+    <string name="cena">Cena</string>
+
+    <!-- calorias -->
+
+    <string name="calorias_title">Calorías</string>
+    <string name="meta_diaria">Meta diaria</string>
+
+    <string name="agregar_comida">Añadir comida</string>
+    <string name="comidas_agregadas">Comidas agregadas</string>
+    <string name="buscar_comida">Buscar comida</string>
+    <string name="calorias">Calorías</string>
 </resources>

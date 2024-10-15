@@ -7,9 +7,9 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
-import edu.unicauca.fitboosttrainer.ui.screens.CreateRoutineScreen
-import edu.unicauca.fitboosttrainer.ui.screens.HomeScreen
+import edu.unicauca.fitboosttrainer.ui.components.InitialScreen
 import edu.unicauca.fitboosttrainer.ui.theme.FitBoostTrainerTheme
+
 
 
 class MainActivity : ComponentActivity() {
@@ -21,7 +21,7 @@ class MainActivity : ComponentActivity() {
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                 ) {
-                    HomeScreen()
+                    InitialScreen()
                 }
                 }
             }
