@@ -9,6 +9,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
+import androidx.compose.material3.DrawerState
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -17,6 +18,7 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.*
@@ -32,24 +34,31 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import edu.unicauca.fitboosttrainer.R
+import edu.unicauca.fitboosttrainer.ui.components.BottomNavItem
 import edu.unicauca.fitboosttrainer.ui.components.BottomNavigation
 import edu.unicauca.fitboosttrainer.ui.components.MainTopAppBar
 import edu.unicauca.fitboosttrainer.ui.theme.FitBoostTrainerTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CreateRoutineScreen() {
-
-    val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
-    val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
+fun CreateRoutineScreen(scrollBehavior: TopAppBarScrollBehavior,
+                        drawerState: DrawerState,
+                        navController: NavHostController
+) {
+    var selectedNavItem by remember { mutableStateOf(BottomNavItem.RUTINAS) }
 
     Scaffold(
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = { MainTopAppBar(modifier = Modifier, scrollBehavior,
             title = stringResource(R.string.create_routine), drawerState = drawerState)
         },
-        bottomBar = { BottomNavigation() }
+        bottomBar = { BottomNavigation(
+            selectedItem = selectedNavItem,
+            onItemSelected = { selectedNavItem = it },
+            navController = navController) }
     ) { innerPadding ->
 
         ScrollContent(innerPadding = innerPadding)
@@ -149,23 +158,27 @@ data class Exercise(val name: String, val category: String, val imageRes: Int)
 
 fun getExercises(): List<Exercise> {
     return listOf(
-        Exercise("Peso muerto", "Pierna", R.drawable.ic_deadlift),
-        Exercise("Sentadilla con barra", "Pierna", R.drawable.ic_deadlift),
-        Exercise("Bulgara", "Pierna", R.drawable.ic_deadlift),
-        Exercise("Peso muerto", "Pierna", R.drawable.ic_deadlift),
-        Exercise("Sentadilla con barra", "Pierna", R.drawable.ic_deadlift),
-        Exercise("Bulgara", "Pierna", R.drawable.ic_deadlift),
-        Exercise("Peso muerto", "Pierna", R.drawable.ic_deadlift),
-        Exercise("Sentadilla con barra", "Pierna", R.drawable.ic_deadlift),
-        Exercise("Bulgara", "Pierna", R.drawable.ic_deadlift),
-        Exercise("Elevación de caderas", "Pierna", R.drawable.ic_deadlift)
+        Exercise("Peso muerto", "Pierna", R.drawable.muerto),
+        Exercise("Sentadilla con barra", "Pierna", R.drawable.muerto),
+        Exercise("Bulgara", "Pierna", R.drawable.muerto),
+        Exercise("Peso muerto", "Pierna", R.drawable.muerto),
+        Exercise("Sentadilla con barra", "Pierna", R.drawable.muerto),
+        Exercise("Bulgara", "Pierna", R.drawable.muerto),
+        Exercise("Peso muerto", "Pierna", R.drawable.muerto),
+        Exercise("Sentadilla con barra", "Pierna", R.drawable.muerto),
+        Exercise("Bulgara", "Pierna", R.drawable.muerto),
+        Exercise("Elevación de caderas", "Pierna", R.drawable.muerto)
     )
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Preview(showBackground = true)
 @Composable
 fun PreviewCreateRoutineScreen() {
     FitBoostTrainerTheme {
-        CreateRoutineScreen()
+        val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
+        val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
+        val navController = rememberNavController()
+        CreateRoutineScreen(scrollBehavior = scrollBehavior, drawerState = drawerState, navController = navController)
     }
 }
