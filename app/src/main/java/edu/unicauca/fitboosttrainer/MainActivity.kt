@@ -7,6 +7,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
+import edu.unicauca.fitboosttrainer.navigation.NavigationFunction
 import edu.unicauca.fitboosttrainer.ui.components.InitialScreen
 import edu.unicauca.fitboosttrainer.ui.theme.FitBoostTrainerTheme
 
@@ -21,7 +22,8 @@ class MainActivity : ComponentActivity() {
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                 ) {
-                    InitialScreen()
+                    //InitialScreen()
+                    NavigationFunction()
                 }
                 }
             }
