@@ -23,23 +23,24 @@ import androidx.navigation.compose.rememberNavController
 import edu.unicauca.fitboosttrainer.R
 import edu.unicauca.fitboosttrainer.ui.components.BottomNavItem
 import edu.unicauca.fitboosttrainer.ui.components.BottomNavigation
-import edu.unicauca.fitboosttrainer.ui.components.MainTopAppBar
+import edu.unicauca.fitboosttrainer.ui.components.MainTopAppBarAlt
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AlimentacionScreen(
-    navController: NavHostController,  // Agregar el parámetro navController
-    drawerState: DrawerState,
-    scrollBehavior: TopAppBarScrollBehavior
+    scrollBehavior: TopAppBarScrollBehavior,
+    navController: NavHostController,
+    drawerState: DrawerState
 ){
-    var selectedNavItem by remember { mutableStateOf(BottomNavItem.ALIMENTACION) }  // Control de la barra de navegación
+    var selectedNavItem by remember { mutableStateOf(BottomNavItem.ALIMENTACION) }
 
     Scaffold(
         topBar = {
-            MainTopAppBar(
-                title = stringResource(R.string.alimentacion_title),
+            MainTopAppBarAlt(
+                title = "Alimentación",
+                scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(),
                 drawerState = drawerState,
-                scrollBehavior = scrollBehavior
+                onBackClick = { navController.popBackStack() }
             )
         },
         bottomBar = {
@@ -142,5 +143,5 @@ fun AlimentacionScreenPreview() {
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val navController = rememberNavController()
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
-    AlimentacionScreen(navController= navController, scrollBehavior = scrollBehavior, drawerState = drawerState)
+    AlimentacionScreen(scrollBehavior = scrollBehavior, navController= navController, drawerState = drawerState)
 }

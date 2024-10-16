@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.ExitToApp
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.Person
@@ -70,41 +71,29 @@ fun MainTopAppBarAlt(
 }
 
 @Composable
-fun DrawerContent(userName: String, userEmail: String) {
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            //.padding(top=16.dp)
-            .background(Color.White),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Top
-
-    ) {
-        Spacer(modifier = Modifier.height(50.dp))
-        // Avatar del usuario
-        Icon(
-            imageVector = Icons.Default.Person,
-            contentDescription = "Avatar de usuario",
-            modifier = Modifier
-                .size(80.dp)
-                .padding(8.dp),
-            tint = Color.Gray
-        )
-        Spacer(modifier = Modifier.height(16.dp))
-        // Nombre de usuario
-        Text(text = userName, style = MaterialTheme.typography.titleLarge)
-        // Correo electrónico del usuario
-        Text(text = userEmail, style = MaterialTheme.typography.bodyLarge, color = Color.Gray)
-        Spacer(modifier = Modifier.height(32.dp))
-        // Botón de cerrar sesión
-        Button(
-            onClick = { /* Acción para cerrar sesión */ },
-            modifier = Modifier.width(350.dp),
-            colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary)
+fun DrawerContent(){
+    ModalDrawerSheet(modifier = Modifier.fillMaxWidth(0.7f)) {
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center,
+            modifier = Modifier.fillMaxSize()
         ) {
-            Icon(imageVector = Icons.Default.ExitToApp, contentDescription = "Cerrar sesión")
-            Spacer(modifier = Modifier.width(8.dp))
-            Text(text = "Cerrar Sesión")
+            Icon(
+                imageVector = Icons.Default.AccountCircle,
+                contentDescription = null,
+                modifier = Modifier
+                    .size(124.dp)
+                    .padding(top = 16.dp, bottom = 16.dp)
+            )
+            Text(text="Usuario")
+            Text(text="correo@gmail.com")
+            Spacer(modifier = Modifier.height(16.dp))
+            Button(
+                onClick = { /* Acción al hacer clic */ },
+                shape = MaterialTheme.shapes.small,
+            ) {
+                Text(text = "Cerrar Sesión")
+            }
         }
     }
 }
@@ -112,8 +101,5 @@ fun DrawerContent(userName: String, userEmail: String) {
 @Preview(showBackground = true)
 @Composable
 fun DrawerContentPreview() {
-    DrawerContent(
-        userName = "Usuario",
-        userEmail = "usuario@correo.com",
-    )
+    DrawerContent()
 }

@@ -6,7 +6,6 @@ import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
-import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -23,10 +22,7 @@ fun NavigationFunction() {
     ModalNavigationDrawer(
         drawerState = drawerState,
         drawerContent = {
-            DrawerContent(
-                userName = "Usuario",
-                userEmail = "usuario@correo.com",
-            )
+            DrawerContent()
         },
     ) {
         // Definir el NavHost para manejar las pantallas
@@ -35,10 +31,10 @@ fun NavigationFunction() {
             // Pantalla de inicio (Home)
             composable("home") {
                 Home(
-                    userName = "John", // Puedes pasar el nombre del usuario desde una fuente de datos
-                    scrollBehavior = scrollBehavior,
+                    userName = "John",
                     drawerState = drawerState,
-                    navController = navController
+                    navController = navController,
+                    scrollBehavior = scrollBehavior
                 )
             }
 
@@ -77,6 +73,14 @@ fun NavigationFunction() {
             // Pantalla de Entrenamiento Finalizado
             composable("trainCompletedScreen") {
                 TrainCompletedScreen(navController = navController)
+            }
+
+            composable("crearRutinasHome") {
+                HomeScreen(
+                    navController = navController,
+                    drawerState = drawerState,
+                    scrollBehavior = scrollBehavior
+                )
             }
 
             // Pantalla de creación de Rutinas

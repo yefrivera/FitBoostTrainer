@@ -40,9 +40,9 @@ import edu.unicauca.fitboosttrainer.ui.theme.FitBoostTrainerTheme
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun Home(userName: String,
-         scrollBehavior: TopAppBarScrollBehavior,
          drawerState: DrawerState,
-         navController: NavHostController
+         navController: NavHostController,
+         scrollBehavior: TopAppBarScrollBehavior
 ) {
     var selectedNavItem by remember { mutableStateOf(BottomNavItem.HOME) }
 
@@ -70,7 +70,6 @@ fun Home(userName: String,
                 .padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            // Saludo al usuario
             Text(
                 text = "Hola, $userName \n¿Listo para entrenar hoy?",
                 fontSize = 28.sp,
@@ -94,7 +93,7 @@ fun Home(userName: String,
 
             RoutineSection()
             ProgressSummary()
-            NewWorkoutButton()
+            NewWorkoutButton(navController)
         }
     }
 }
@@ -167,9 +166,9 @@ fun ProgressSummary() {
 }
 
 @Composable
-fun NewWorkoutButton() {
+fun NewWorkoutButton(navController: NavHostController) {
     Button(
-        onClick = { /* Acción para registrar nuevo entrenamiento */ },
+        onClick = { navController.navigate("crearRutinasHome")},
         modifier = Modifier
             .fillMaxWidth()
             .padding(vertical = 16.dp),
@@ -184,6 +183,6 @@ fun NewWorkoutButton() {
 @Composable
 fun HomePreview() {
     FitBoostTrainerTheme {
-        Home(userName = "John", scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(), drawerState = rememberDrawerState(initialValue = DrawerValue.Closed), navController = NavHostController(LocalContext.current))
+        Home(userName = "John", drawerState = rememberDrawerState(initialValue = DrawerValue.Closed), navController = NavHostController(LocalContext.current),scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior())
     }
 }

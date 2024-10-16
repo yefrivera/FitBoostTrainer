@@ -56,7 +56,7 @@ fun BottomNavigation(
             },
             selected = selectedItem == BottomNavItem.RUTINAS,
             onClick = { onItemSelected(BottomNavItem.RUTINAS)
-                        navController.navigate("fullBodyScreen")}
+                        navController.navigate("crearRutinasHome")}
         )
         NavigationBarItem(
             icon = {
