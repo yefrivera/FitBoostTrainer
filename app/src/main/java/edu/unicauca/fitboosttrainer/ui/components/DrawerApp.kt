@@ -48,3 +48,9 @@ fun DrawerApp(){
         }
     }
 }
+
+@Preview
+@Composable
+fun DrawerAppPreview(){
+    DrawerApp()
+}

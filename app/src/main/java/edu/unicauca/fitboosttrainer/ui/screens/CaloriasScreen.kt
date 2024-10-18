@@ -49,7 +49,8 @@ fun CaloriasScreen(navController: NavHostController) {
         bottomBar = {
             BottomNavigation(
                 selectedItem = selectedItem.value,
-                onItemSelected = { selectedItem.value = it }
+                onItemSelected = { selectedItem.value = it },
+                navController = navController
             )
         }
     ) { paddingValues ->

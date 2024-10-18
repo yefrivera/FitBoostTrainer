@@ -13,29 +13,38 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import edu.unicauca.fitboosttrainer.R
 import edu.unicauca.fitboosttrainer.ui.components.BottomNavItem
 import edu.unicauca.fitboosttrainer.ui.components.BottomNavigation
 import edu.unicauca.fitboosttrainer.ui.components.MainTopAppBar
+import edu.unicauca.fitboosttrainer.ui.components.MainTopAppBarAlt
 import edu.unicauca.fitboosttrainer.ui.theme.FitBoostTrainerTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun FullBodyScreen(scrollBehavior: TopAppBarScrollBehavior, drawerState: DrawerState) {
-    var selectedNavItem by remember { mutableStateOf(BottomNavItem.RUTINAS) }  // Rutinas está seleccionada por defecto
+fun FullBodyScreen(
+    scrollBehavior: TopAppBarScrollBehavior,
+    drawerState: DrawerState,
+    navController: NavHostController
+) {
+    var selectedNavItem by remember { mutableStateOf(BottomNavItem.RUTINAS) }
 
     Scaffold(
         topBar = {
-            MainTopAppBar(
-                title = stringResource(R.string.full_body),
+            MainTopAppBarAlt(
+                title = "Full Body",
+                scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(),
                 drawerState = drawerState,
-                scrollBehavior = scrollBehavior
+                onBackClick = { navController.popBackStack() }
             )
         },
         bottomBar = {
             BottomNavigation(
                 selectedItem = selectedNavItem,
-                onItemSelected = { selectedNavItem = it }  // Cambia el ítem seleccionado
+                onItemSelected = { selectedNavItem = it },
+                navController = navController
             )
         }
     ) { paddingValues ->
@@ -49,32 +58,36 @@ fun FullBodyScreen(scrollBehavior: TopAppBarScrollBehavior, drawerState: DrawerS
             RoutineItem(
                 title = stringResource(R.string.strength_max),
                 description = stringResource(R.string.strength_max_d),
+                onClick = { navController.navigate("fuerzaMaximaScreen") }
             )
             RoutineItem(
                 title = stringResource(R.string.suelo_pie),
                 description = stringResource(R.string.suelo_pie_d),
+                onClick = { /*navController.navigate("sueloPieDetail")*/ }
             )
             RoutineItem(
                 title = stringResource(R.string.desafio_explosivo),
                 description = stringResource(R.string.desafio_explosivo_d),
+                onClick = { /*navController.navigate("desafioExplosivoDetail")*/ }
             )
             RoutineItem(
                 title = stringResource(R.string.cardio_letal),
                 description = stringResource(R.string.cardio_letal_d),
+                onClick = { /*navController.navigate("cardioLetalDetail")*/ }
             )
         }
     }
 }
 
 @Composable
-fun RoutineItem(title: String, description: String) {
+fun RoutineItem(title: String, description: String, onClick: () -> Unit) {
     Card(
         shape = RoundedCornerShape(8.dp),
         elevation = CardDefaults.cardElevation(4.dp),
         modifier = Modifier
             .fillMaxWidth()
             .padding(vertical = 8.dp)
-            .clickable { /* Navegar a detalle de rutina */ },
+            .clickable(onClick = onClick),
         colors = CardDefaults.cardColors(containerColor =  Color(0xFFDDE3E7))
     ) {
         Row(
@@ -111,6 +124,7 @@ fun RoutineItem(title: String, description: String) {
 fun FullBodyScreenPreview() {
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
-    FullBodyScreen(scrollBehavior = scrollBehavior, drawerState = drawerState)
+    val navController = rememberNavController()
+    FullBodyScreen(scrollBehavior = scrollBehavior, drawerState = drawerState, navController= navController)
 
 }

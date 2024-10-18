@@ -1,6 +1,7 @@
 package edu.unicauca.fitboosttrainer.ui.screens
 
 import androidx.annotation.StringRes
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -26,6 +27,7 @@ import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
+import androidx.compose.material3.DrawerState
 import androidx.compose.ui.unit.dp
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -33,42 +35,62 @@ import androidx.compose.material3.ModalDrawerSheet
 import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.material3.rememberTopAppBarState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import edu.unicauca.fitboosttrainer.data.defaultRoutineData
+import edu.unicauca.fitboosttrainer.ui.components.BottomNavItem
 import edu.unicauca.fitboosttrainer.ui.components.MainTopAppBar
 import edu.unicauca.fitboosttrainer.ui.components.BottomNavigation
 import edu.unicauca.fitboosttrainer.ui.components.DrawerApp
+import edu.unicauca.fitboosttrainer.ui.components.MainTopAppBarAlt
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeScreen() {
+fun HomeScreen(
+    navController: NavHostController,  // Agregar el parámetro navController
+    drawerState: DrawerState,
+    scrollBehavior: TopAppBarScrollBehavior
+) {
 
-    val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
-    val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
+    //val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
+    //val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
+    var selectedNavItem by remember { mutableStateOf(BottomNavItem.RUTINAS) }
 
-    ModalNavigationDrawer(
-        drawerState = drawerState,
-        drawerContent = { DrawerApp() }
-    ){
-        Scaffold(
-            modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
-            topBar = { MainTopAppBar(modifier = Modifier, scrollBehavior,
-                title = stringResource(R.string.app_name),drawerState =  drawerState)},
-            bottomBar = { BottomNavigation() }
-        ) { innerPadding ->
-            ScrollContent(innerPadding = innerPadding)
+
+    Scaffold(
+        topBar = {
+            MainTopAppBarAlt(
+                title = "Crear Rutinas",
+                scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(),
+                drawerState = drawerState,
+                onBackClick = { navController.popBackStack() }
+            )
+        },
+        bottomBar = {
+            BottomNavigation(
+                selectedItem = selectedNavItem,
+                onItemSelected = { selectedNavItem = it },
+                navController = navController
+            )
         }
+    ) { innerPadding ->
+        ScrollContent2(innerPadding = innerPadding)
+    }
     }
 
-}
-
 @Composable
-private fun RoutinesCard(
+ fun RoutinesCard(
     @StringRes text: Int,
     @StringRes text2: Int,
     modifier: Modifier = Modifier
@@ -79,11 +101,13 @@ private fun RoutinesCard(
             .padding(start = 16.dp, end = 16.dp)
     ) {
 
+
         Card(
 
             modifier = modifier
                 .fillMaxWidth()
                 .padding(bottom = 16.dp)
+
         ) {
             Column(modifier = Modifier.padding(16.dp)) {
                 Text(
@@ -101,7 +125,7 @@ private fun RoutinesCard(
 }
 
 @Composable
-private fun RoutinesList(modifier: Modifier = Modifier) {
+fun RoutinesList(modifier: Modifier = Modifier) {
     LazyColumn(
         modifier = modifier
     ) {
@@ -112,7 +136,7 @@ private fun RoutinesList(modifier: Modifier = Modifier) {
 }
 
 @Composable
-private fun ScrollContent(innerPadding: PaddingValues) {
+fun ScrollContent2(innerPadding: PaddingValues) {
 
     val mediumPadding = 8.dp
     Column(
@@ -150,10 +174,15 @@ private fun ScrollContent(innerPadding: PaddingValues) {
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Preview(showBackground = true)
 @Composable
 fun HomeScreenPreview(){
     FitBoostTrainerTheme {
-        HomeScreen()
+        HomeScreen(
+            navController = rememberNavController(),
+            drawerState = rememberDrawerState(initialValue = DrawerValue.Closed),
+            scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
+        )
     }
 }

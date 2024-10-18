@@ -4,6 +4,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material.icons.filled.Face
+import androidx.compose.material.icons.filled.Home
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
@@ -11,9 +12,11 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.navigation.NavHostController
 import edu.unicauca.fitboosttrainer.R
 
 enum class BottomNavItem {
+    HOME,
     ALIMENTACION,
     RUTINAS,
     ESTADISTICAS
@@ -23,21 +26,23 @@ enum class BottomNavItem {
 fun BottomNavigation(
     selectedItem: BottomNavItem,  // Nuevo parámetro
     onItemSelected: (BottomNavItem) -> Unit,
+    navController: NavHostController,
     modifier: Modifier = Modifier
 ) {
     NavigationBar {
         NavigationBarItem(
             icon = {
                 Icon(
-                    imageVector = Icons.Default.Face,
+                    imageVector = Icons.Default.Home,
                     contentDescription = null
                 )
             },
             label = {
-                Text(stringResource(R.string.alimentacion))
+                Text(stringResource(R.string.home))
             },
-            selected = selectedItem == BottomNavItem.ALIMENTACION,
-            onClick = { onItemSelected(BottomNavItem.ALIMENTACION) }
+            selected = selectedItem == BottomNavItem.HOME,
+            onClick = { onItemSelected(BottomNavItem.HOME)
+                        navController.navigate("home")}
         )
         NavigationBarItem(
             icon = {
@@ -50,7 +55,22 @@ fun BottomNavigation(
                 Text(stringResource(R.string.rutinas))
             },
             selected = selectedItem == BottomNavItem.RUTINAS,
-            onClick = { onItemSelected(BottomNavItem.RUTINAS) }
+            onClick = { onItemSelected(BottomNavItem.RUTINAS)
+                        navController.navigate("crearRutinasHome")}
+        )
+        NavigationBarItem(
+            icon = {
+                Icon(
+                    imageVector = Icons.Default.Face,
+                    contentDescription = null
+                )
+            },
+            label = {
+                Text(stringResource(R.string.alimentacion))
+            },
+            selected = selectedItem == BottomNavItem.ALIMENTACION,
+            onClick = { onItemSelected(BottomNavItem.ALIMENTACION)
+                        navController.navigate("alimentacionScreen")}
         )
         NavigationBarItem(
             icon = {
@@ -63,7 +83,8 @@ fun BottomNavigation(
                 Text(stringResource(R.string.estadisticas))
             },
             selected = selectedItem == BottomNavItem.ESTADISTICAS,
-            onClick = { onItemSelected(BottomNavItem.ESTADISTICAS) }
+            onClick = { onItemSelected(BottomNavItem.ESTADISTICAS)
+                        navController.navigate("trainCompletedScreen")}
         )
     }
 }
