@@ -92,7 +92,6 @@ fun RoutinesCard(
                 .fillMaxWidth()
                 .padding(bottom = 16.dp)
                 .clickable {
-                    // Navega a la pantalla específica cuando se hace clic
                     navController.navigate(route)
                 }
         ) {
@@ -145,7 +144,7 @@ fun ScrollContent2(innerPadding: PaddingValues, navController: NavHostController
             verticalAlignment = Alignment.CenterVertically
         ) {
             Button(
-                onClick = { /* Acción al hacer clic */ },
+                onClick = { navController.navigate("creationRoutine") },
                 shape = MaterialTheme.shapes.small,
                 modifier = Modifier.padding(end = mediumPadding)
             ) {
@@ -163,7 +162,7 @@ fun ScrollContent2(innerPadding: PaddingValues, navController: NavHostController
             text = stringResource(R.string.default_routines),
             modifier = Modifier.padding(mediumPadding)
         )
-        RoutinesList(navController = navController) // Pasa navController a la lista
+        RoutinesList(navController = navController)
     }
 }
 
