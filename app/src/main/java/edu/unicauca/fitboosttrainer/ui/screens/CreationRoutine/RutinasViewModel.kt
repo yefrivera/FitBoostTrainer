@@ -1,4 +1,4 @@
-package edu.unicauca.fitboosttrainer.ui
+package edu.unicauca.fitboosttrainer.ui.screens.CreationRoutine
 
 import androidx.lifecycle.ViewModel
 

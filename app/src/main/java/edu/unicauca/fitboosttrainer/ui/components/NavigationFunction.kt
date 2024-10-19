@@ -11,6 +11,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import edu.unicauca.fitboosttrainer.ui.components.DrawerContent
 import edu.unicauca.fitboosttrainer.ui.screens.*
+import edu.unicauca.fitboosttrainer.ui.screens.CreationRoutine.CreateRoutineScreen
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
