@@ -20,6 +20,15 @@
     <string name="default_routines">Rutinas preestablecidas</string>
     <string name="create_routine">Crear Rutinas</string>
     <string name="saved_routines">Rutinas Guardadas</string>
+    <string name="ic_deadlift">Peso Muerto</string>
+    <string name="ce_chest">Pecho</string>
+    <string name="ce_back">Espalda</string>
+    <string name="ce_bicep">Bicep</string>
+    <string name="ce_leg">Pierna</string>
+    <string name="bd_squad">Sentadilla con barra</string>
+    <string name="bd_barbel_row">Remo con barra</string>
+    <string name="bd_bench_press">Press de banca</string>
+    <string name="bd_biceps_curl">Curl de biceps</string>
 
     <!-- Textos pantalla inicial -->
 
@@ -76,5 +85,5 @@
     <string name="comidas_agregadas">Comidas agregadas</string>
     <string name="buscar_comida">Buscar comida</string>
     <string name="calorias">Calorías</string>
-    <string name="ic_deadlift">Peso Muerto</string>
+
 </resources>
