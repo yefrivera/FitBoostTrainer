@@ -85,5 +85,13 @@
     <string name="comidas_agregadas">Comidas agregadas</string>
     <string name="buscar_comida">Buscar comida</string>
     <string name="calorias">Calorías</string>
+    <string name="nombre">Nombre</string>
+    <string name="correo">Correo</string>
+    <string name="contrasena">Contraseña</string>
+    <string name="altura">Altura(Cm)</string>
+    <string name="pesoKg">Peso(Kg)</string>
+    <string name="iniciar_sesion">Iniciar Sesión</string>
+    <string name="no_cuenta">¿No tienes cuenta?</string>
+    <string name="registrarse">Regístrate</string>
 
 </resources>
