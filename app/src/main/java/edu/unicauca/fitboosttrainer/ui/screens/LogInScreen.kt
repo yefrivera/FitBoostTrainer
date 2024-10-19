@@ -13,6 +13,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.style.TextOverflow
@@ -28,7 +29,7 @@ fun LoginScreen( drawerState: DrawerState) {
     Scaffold(
         topBar ={
             MainTopAppBarAlt(
-                title = "FitBoost Trainer",
+                title = stringResource(R.string.app_name),
                 scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(),
                 drawerState = drawerState
             )
@@ -57,15 +58,16 @@ fun LoginScreen( drawerState: DrawerState) {
             TextField(
                 value = "",
                 onValueChange = {},
-                label = { Text("Correo") },
+                label = {Text(stringResource(R.string.correo))},
                 singleLine = true,
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email)
             )
+
             Spacer(modifier = Modifier.height(16.dp))
             TextField(
                 value = "", // Vincula esto a un estado en tu ViewModel
                 onValueChange = {}, // Actualiza el estado aquí
-                label = { Text("Contraseña") },
+                label = { Text(stringResource(R.string.contrasena)) },
                 singleLine = true,
                 visualTransformation = PasswordVisualTransformation(),
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password)
@@ -75,16 +77,16 @@ fun LoginScreen( drawerState: DrawerState) {
                 onClick = { /* Lógica para iniciar sesión */ },
                 modifier = Modifier.fillMaxWidth()
             ) {
-                Text("Iniciar Sesión")
+                Text(stringResource(R.string.iniciar_sesion))
             }
             Spacer(modifier = Modifier.height(16.dp))
-            Text("Si aún no tienes cuenta regístrate aquí")
+            Text(stringResource(R.string.no_cuenta))
             Spacer(modifier = Modifier.height(8.dp))
             Button(
                 onClick = { /*AQUI VA LA PAGINA SIGUIENTE*/ },
                 modifier = Modifier.fillMaxWidth()
             ) {
-                Text("Regístrate")
+                Text(stringResource(R.string.registrarse))
             }
         }
     }
