@@ -83,5 +83,12 @@
     <string name="iniciar_sesion">Iniciar Sesión</string>
     <string name="no_cuenta">Si aún no tienes cuenta regístrate aquí</string>
     <string name="registrarse">Regístrate</string>
-    
+
+    <!-- sing in -->
+    <string name="nombre">Nombre</string>
+    <string name="fecha_nacimiento">Fecha de nacimiento (DD/MM/YYYY)</string>
+    <string name="altura">Altura (cm)</string>
+    <string name="frecuencia_entrenamiento">¿Cuántas veces a la semana desea entrenar?</string>
+    <string name="meta_entrenamiento">¿Cuál es su meta de entrenamiento?</string>
+    <string name="dia">Dia(DD)</string>
 </resources>
