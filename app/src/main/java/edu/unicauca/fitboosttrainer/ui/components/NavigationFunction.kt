@@ -78,13 +78,12 @@ fun NavigationFunction() {
             composable("crearRutinasHome") {
                 HomeScreen(
                     navController = navController,
-                    drawerState = drawerState,
-                    scrollBehavior = scrollBehavior
+                    drawerState = drawerState
                 )
             }
 
             // Pantalla de creación de Rutinas
-            composable("routine") {
+            composable("creationRoutine") {
                 CreateRoutineScreen(
                     navController = navController,
                     drawerState = drawerState,

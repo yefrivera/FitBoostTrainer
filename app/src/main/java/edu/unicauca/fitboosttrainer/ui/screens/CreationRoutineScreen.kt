@@ -7,6 +7,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.DrawerState
@@ -29,6 +30,7 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
@@ -69,6 +71,7 @@ fun CreateRoutineScreen(scrollBehavior: TopAppBarScrollBehavior,
 private fun ScrollContent(innerPadding: PaddingValues) {
     var routineName by remember { mutableStateOf(TextFieldValue("")) }
     var seriesNumber by remember { mutableStateOf(TextFieldValue("")) }
+    var searchExercise by remember { mutableStateOf(TextFieldValue("")) }
 
     Column(
         modifier = Modifier
@@ -78,11 +81,24 @@ private fun ScrollContent(innerPadding: PaddingValues) {
         
     ) {
 
+        OutlinedTextField(
+            value = searchExercise,
+            onValueChange = {searchExercise = it },
+            label = { Text("Buscar ejercicio" ) },
+            leadingIcon = {
+                Icon(
+                    imageVector = Icons.Default.Search,  // Ícono de lupa
+                    contentDescription = "Buscar"
+                )
+            },
+            modifier = Modifier.fillMaxWidth()
+        )
+
         // Nombre de la rutina
         OutlinedTextField(
             value = routineName,
             onValueChange = { routineName = it },
-            label = { Text("Nombre") },
+            label = { Text("Nombre de la rutina") },
             placeholder = { Text("Ej: Rutina de pierna") },
             modifier = Modifier.fillMaxWidth()
         )
@@ -114,9 +130,10 @@ private fun ScrollContent(innerPadding: PaddingValues) {
         // Botón Finalizar
         Button(
             onClick = { /* Acción al finalizar */ },
-            modifier = Modifier
-                .height(48.dp),
             shape = RoundedCornerShape(8.dp),
+            modifier = Modifier
+                .height(48.dp)
+                .align(Alignment.CenterHorizontally)
         ) {
             Text(text = "Finalizar", color = Color.White)
         }
@@ -153,7 +170,7 @@ fun ExerciseItem(exercise: Exercise) {
         }
     }
 }
-
+//Poner esto en la carpeta data
 data class Exercise(val name: String, val category: String, val imageRes: Int)
 
 fun getExercises(): List<Exercise> {
