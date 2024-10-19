@@ -87,9 +87,19 @@ fun NavigationFunction() {
                 CreateRoutineScreen(
                     navController = navController,
                     drawerState = drawerState,
-                    scrollBehavior = scrollBehavior)
+                    scrollBehavior = scrollBehavior
+                )
             }
 
+            // Pantalla de Rutinas guardadas
+            composable("savedRoutine") {
+                SavedRoutinesScreen(
+                    navController = navController,
+                    drawerState = drawerState
+                )
+
+            }
         }
+
     }
 }

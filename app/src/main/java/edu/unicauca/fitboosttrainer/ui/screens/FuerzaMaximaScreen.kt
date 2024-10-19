@@ -33,6 +33,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import edu.unicauca.fitboosttrainer.ui.components.MainTopAppBarAlt
+import edu.unicauca.fitboosttrainer.ui.theme.FitBoostTrainerTheme
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -167,8 +168,7 @@ fun ExerciseItem(title: String, imageRes: Int, reps: String) {
                         placeholder = {
                             Text(
                                 text = stringResource(R.string.peso_placeholder),
-                                fontSize = (11.sp),
-                                fontStyle = androidx.compose.ui.text.font.FontStyle.Italic
+                                fontSize = (11.sp)
                             )
                         },
                         modifier = Modifier.width(60.dp),
@@ -197,8 +197,10 @@ fun ExerciseItem(title: String, imageRes: Int, reps: String) {
 @Preview(showBackground = true)
 @Composable
 fun FuerzaMaximaScreenPreview() {
-    val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
-    val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
-    val navController = rememberNavController()
-    FuerzaMaximaScreen(scrollBehavior = scrollBehavior, drawerState = drawerState, navController = navController)
+    FitBoostTrainerTheme {
+        val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
+        val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
+        val navController = rememberNavController()
+        FuerzaMaximaScreen(scrollBehavior = scrollBehavior, drawerState = drawerState, navController = navController)
+    }
 }
