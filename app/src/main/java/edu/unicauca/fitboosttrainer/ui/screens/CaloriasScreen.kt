@@ -10,6 +10,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.AddCircle
 import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
@@ -18,7 +20,6 @@ import androidx.compose.ui.res.stringResource
 import edu.unicauca.fitboosttrainer.R
 import edu.unicauca.fitboosttrainer.ui.components.BottomNavItem
 import edu.unicauca.fitboosttrainer.ui.components.BottomNavigation
-import edu.unicauca.fitboosttrainer.ui.components.MainTopAppBar
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.TopAppBarDefaults
@@ -33,8 +34,8 @@ import edu.unicauca.fitboosttrainer.ui.components.MainTopAppBarAlt
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CaloriasScreen(navController: NavHostController) {
-    val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
+fun CaloriasScreen(scrollBehavior: TopAppBarScrollBehavior,drawerState: DrawerState, navController: NavHostController) {
+
     val selectedItem = remember { mutableStateOf(BottomNavItem.ALIMENTACION) }
 
     Scaffold(
@@ -43,7 +44,7 @@ fun CaloriasScreen(navController: NavHostController) {
                 title = "Calorías",
                 scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(),
                 drawerState = drawerState,
-                onBackClick = { navController.popBackStack() }  // Usamos popBackStack para navegar hacia atrás
+                onBackClick = { navController.popBackStack() }
             )
         },
         bottomBar = {
@@ -111,36 +112,71 @@ fun AddFoodSection() {
             Text(text = stringResource(R.string.agregar_comida), style = MaterialTheme.typography.titleLarge)
             Spacer(modifier = Modifier.height(8.dp))
             Row(
-                verticalAlignment = Alignment.CenterVertically
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier.fillMaxWidth()
             ) {
+
                 OutlinedTextField(
                     value = "",
                     onValueChange = {},
-                    label = { Text("Buscar comida", fontStyle = FontStyle.Italic ) },
+                    label = { Text("Comida", fontStyle = FontStyle.Italic ) },
                     leadingIcon = {
                         Icon(
-                            imageVector = Icons.Default.Search,  // Ícono de lupa
-                            contentDescription = "Buscar"
+                            imageVector = Icons.Default.Add,
+                            contentDescription = "Comida"
                         )
                     },
                     modifier = Modifier.weight(1f)
                 )
             }
             Spacer(modifier = Modifier.height(8.dp))
+
             Row(
-                verticalAlignment = Alignment.CenterVertically, // Alineamos verticalmente en el centro
+                verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier.fillMaxWidth()
             ) {
-                DropdownMenuExample()  // No es necesario modificar el peso, solo alineación
-                Spacer(modifier = Modifier.width(8.dp))
+
+                //Spacer(modifier = Modifier.width(8.dp))
                 OutlinedTextField(
                     value = "",
                     onValueChange = {},
-                    label = { Text("Calorías", fontStyle = FontStyle.Italic ) },
+                    label = { Text("Gramos", fontStyle = FontStyle.Italic ) },
+                    leadingIcon = {
+                        Icon(
+                            imageVector = Icons.Default.Add,
+                            contentDescription = "Gramos"
+                        )
+                    },
                     modifier = Modifier.weight(1f)
                 )
             }
             Spacer(modifier = Modifier.height(8.dp))
+
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier.fillMaxWidth()
+            ) {
+
+                //Spacer(modifier = Modifier.width(8.dp))
+                OutlinedTextField(
+                    value = "",
+                    onValueChange = {},
+                    label = { Text("Calorías", fontStyle = FontStyle.Italic ) },
+                    leadingIcon = {
+                        Icon(
+                            imageVector = Icons.Default.Add,
+                            contentDescription = "Calorías"
+                        )
+                    },
+                    modifier = Modifier.weight(1f)
+                )
+            }
+            Spacer(modifier = Modifier.height(8.dp))
+
+            DropdownMenuExample()
+
+            Spacer(modifier = Modifier.height(8.dp))
+
             Button(onClick = { /* Añadir acción */ }, modifier = Modifier.align(Alignment.CenterHorizontally)) {
                 Text(text = "+ Añadir")
             }
@@ -206,7 +242,6 @@ fun DropdownMenuExample() {
                     contentDescription = "Dropdown Arrow",
                     modifier = Modifier.size(24.dp)
                 )
-
             }
         }
         DropdownMenu(
@@ -239,9 +274,12 @@ fun DropdownMenuExample() {
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Preview(showBackground = true)
 @Composable
 fun PreviewCaloriasScreen() {
+    val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
+    val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     var navController = rememberNavController()
-    CaloriasScreen(navController= navController)
+    CaloriasScreen(scrollBehavior= scrollBehavior, drawerState = drawerState,navController= navController)
 }

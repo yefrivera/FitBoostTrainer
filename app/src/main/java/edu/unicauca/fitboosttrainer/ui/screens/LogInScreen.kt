@@ -19,18 +19,21 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import edu.unicauca.fitboosttrainer.ui.components.MainTopAppBarAlt
 import edu.unicauca.fitboosttrainer.ui.theme.FitBoostTrainerTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun LoginScreen( drawerState: DrawerState) {
+fun LoginScreen(drawerState: DrawerState, navController: NavHostController,) {
     Scaffold(
         topBar ={
             MainTopAppBarAlt(
                 title = "FitBoost Trainer",
                 scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(),
-                drawerState = drawerState
+                drawerState = drawerState,
+                onBackClick = { navController.popBackStack() }
             )
         }
     ) { padding ->
@@ -72,7 +75,10 @@ fun LoginScreen( drawerState: DrawerState) {
             )
             Spacer(modifier = Modifier.height(32.dp))
             Button(
-                onClick = { /* Lógica para iniciar sesión */ },
+                onClick = { /* Lógica para iniciar sesión */
+                //mientras tanto voy a poner la navegación
+                    navController.navigate("home")
+                },
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Text("Iniciar Sesión")
@@ -94,6 +100,6 @@ fun LoginScreen( drawerState: DrawerState) {
 @Composable
 fun PreviewLoginScreen() {
     FitBoostTrainerTheme {
-        LoginScreen(drawerState = rememberDrawerState(initialValue = DrawerValue.Closed))
+        LoginScreen(drawerState = rememberDrawerState(initialValue = DrawerValue.Closed), navController = rememberNavController())
     }
 }

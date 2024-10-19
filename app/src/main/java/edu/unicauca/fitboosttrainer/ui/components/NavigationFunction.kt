@@ -9,7 +9,9 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import edu.unicauca.fitboosttrainer.LoginScreen
 import edu.unicauca.fitboosttrainer.ui.components.DrawerContent
+import edu.unicauca.fitboosttrainer.ui.components.InitialScreen
 import edu.unicauca.fitboosttrainer.ui.screens.*
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -26,7 +28,16 @@ fun NavigationFunction() {
         },
     ) {
         // Definir el NavHost para manejar las pantallas
-        NavHost(navController = navController, startDestination = "home") {
+        NavHost(navController = navController, startDestination = "welcome") {
+
+            //Pantalla de Bienvenida
+            composable("welcome") {
+                InitialScreen( navController = navController)
+            }
+
+            composable("login") {
+                LoginScreen(drawerState = drawerState, navController = navController)
+            }
 
             // Pantalla de inicio (Home)
             composable("home") {
@@ -49,7 +60,9 @@ fun NavigationFunction() {
 
             // Pantalla de Calorías
             composable("caloriasScreen") {
-                CaloriasScreen(navController = navController)
+                CaloriasScreen(scrollBehavior = scrollBehavior,
+                    drawerState = drawerState,
+                    navController= navController)
             }
 
             // Pantalla de Full Body
