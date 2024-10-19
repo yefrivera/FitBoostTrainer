@@ -20,8 +20,18 @@
     <string name="default_routines">Rutinas preestablecidas</string>
     <string name="create_routine">Crear Rutinas</string>
     <string name="saved_routines">Rutinas Guardadas</string>
-    
+    <string name="ic_deadlift">Peso Muerto</string>
+    <string name="ce_chest">Pecho</string>
+    <string name="ce_back">Espalda</string>
+    <string name="ce_bicep">Bicep</string>
+    <string name="ce_leg">Pierna</string>
+    <string name="bd_squad">Sentadilla con barra</string>
+    <string name="bd_barbel_row">Remo con barra</string>
+    <string name="bd_bench_press">Press de banca</string>
+    <string name="bd_biceps_curl">Curl de biceps</string>
+
     <!-- Textos pantalla inicial -->
+
     <string name="dr_description">¡Cada repetición te acerca a tu mejor versión! \nHoy es el día perfecto para superar tus límites.</string>
     <string name="dr_name">Bienvenido a \nFitBoostTrainer</string>
     <string name="dr_login">Iniciar Sesión o Registrarse</string>
@@ -70,25 +80,10 @@
 
     <string name="calorias_title">Calorías</string>
     <string name="meta_diaria">Meta diaria</string>
+
     <string name="agregar_comida">Añadir comida</string>
     <string name="comidas_agregadas">Comidas agregadas</string>
     <string name="buscar_comida">Buscar comida</string>
     <string name="calorias">Calorías</string>
-    <string name="ic_deadlift">Peso Muerto</string>
-    
-    <!-- login screen -->
-    
-    <string name="correo">Correo</string>
-    <string name="contrasena">Contraseña</string>
-    <string name="iniciar_sesion">Iniciar Sesión</string>
-    <string name="no_cuenta">Si aún no tienes cuenta regístrate aquí</string>
-    <string name="registrarse">Regístrate</string>
 
-    <!-- sing in -->
-    <string name="nombre">Nombre</string>
-    <string name="fecha_nacimiento">Fecha de nacimiento (DD/MM/YYYY)</string>
-    <string name="altura">Altura (cm)</string>
-    <string name="frecuencia_entrenamiento">¿Cuántas veces a la semana desea entrenar?</string>
-    <string name="meta_entrenamiento">¿Cuál es su meta de entrenamiento?</string>
-    <string name="dia">Dia(DD)</string>
 </resources>

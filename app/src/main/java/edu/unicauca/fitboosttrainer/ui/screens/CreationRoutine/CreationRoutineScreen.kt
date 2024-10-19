@@ -1,10 +1,13 @@
-package edu.unicauca.fitboosttrainer.ui.screens
+package edu.unicauca.fitboosttrainer.ui.screens.CreationRoutine
 
+import androidx.annotation.DrawableRes
+import androidx.annotation.StringRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Search
@@ -21,7 +24,6 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.material3.rememberDrawerState
-import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -30,8 +32,9 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -39,6 +42,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import edu.unicauca.fitboosttrainer.R
+import edu.unicauca.fitboosttrainer.data.ExerciseData
 import edu.unicauca.fitboosttrainer.ui.components.BottomNavItem
 import edu.unicauca.fitboosttrainer.ui.components.BottomNavigation
 import edu.unicauca.fitboosttrainer.ui.components.MainTopAppBar
@@ -62,13 +66,12 @@ fun CreateRoutineScreen(scrollBehavior: TopAppBarScrollBehavior,
             onItemSelected = { selectedNavItem = it },
             navController = navController) }
     ) { innerPadding ->
-
-        ScrollContent(innerPadding = innerPadding)
+        ScrollContent(innerPadding = innerPadding, navController= navController)
     }
 }
 
 @Composable
-private fun ScrollContent(innerPadding: PaddingValues) {
+private fun ScrollContent(innerPadding: PaddingValues,navController: NavHostController,modifier: Modifier = Modifier) {
     var routineName by remember { mutableStateOf(TextFieldValue("")) }
     var seriesNumber by remember { mutableStateOf(TextFieldValue("")) }
     var searchExercise by remember { mutableStateOf(TextFieldValue("")) }
@@ -105,12 +108,15 @@ private fun ScrollContent(innerPadding: PaddingValues) {
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        // Lista de ejercicios
         LazyColumn(
             modifier = Modifier.weight(1f)
         ) {
-            items(getExercises()) { exercise ->
-                ExerciseItem(exercise)
+            items(ExerciseData) { item ->
+                ExerciseItem(
+                    item.nameExercise,
+                    item.categoryExercise,
+                    item.imageRes
+                )
             }
         }
 
@@ -122,6 +128,10 @@ private fun ScrollContent(innerPadding: PaddingValues) {
             onValueChange = { seriesNumber = it },
             label = { Text("Número de series a realizar") },
             placeholder = { Text("Ej: 3-4") },
+            keyboardOptions = KeyboardOptions(
+                keyboardType = KeyboardType.Number,
+                imeAction = ImeAction.Done
+            ),
             modifier = Modifier.fillMaxWidth()
         )
 
@@ -141,7 +151,9 @@ private fun ScrollContent(innerPadding: PaddingValues) {
 }
 
 @Composable
-fun ExerciseItem(exercise: Exercise) {
+fun ExerciseItem(@StringRes nameExercise: Int,
+                 @StringRes categoryExercise: Int,
+                 @DrawableRes imageRes: Int) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -154,38 +166,21 @@ fun ExerciseItem(exercise: Exercise) {
             verticalAlignment = Alignment.CenterVertically
         ) {
             Image(
-                painter = painterResource(id = exercise.imageRes),
+                painter = painterResource(imageRes),
                 contentDescription = null,
                 modifier = Modifier.size(56.dp),
                 contentScale = ContentScale.Crop
             )
             Spacer(modifier = Modifier.width(16.dp))
             Column(modifier = Modifier.weight(1f)) {
-                Text(text = exercise.name, fontSize = 18.sp, fontWeight = FontWeight.Bold)
-                Text(text = exercise.category, fontSize = 14.sp, color = Color.Gray)
+                Text(text = stringResource(nameExercise), fontSize = 18.sp, fontWeight = FontWeight.Bold)
+                Text(text = stringResource(categoryExercise), fontSize = 14.sp, color = Color.Gray)
             }
             IconButton(onClick = { /* Acción para agregar */ }) {
                 Icon(Icons.Default.Add, contentDescription = "Agregar")
             }
         }
     }
-}
-//Poner esto en la carpeta data
-data class Exercise(val name: String, val category: String, val imageRes: Int)
-
-fun getExercises(): List<Exercise> {
-    return listOf(
-        Exercise("Peso muerto", "Pierna", R.drawable.muerto),
-        Exercise("Sentadilla con barra", "Pierna", R.drawable.muerto),
-        Exercise("Bulgara", "Pierna", R.drawable.muerto),
-        Exercise("Peso muerto", "Pierna", R.drawable.muerto),
-        Exercise("Sentadilla con barra", "Pierna", R.drawable.muerto),
-        Exercise("Bulgara", "Pierna", R.drawable.muerto),
-        Exercise("Peso muerto", "Pierna", R.drawable.muerto),
-        Exercise("Sentadilla con barra", "Pierna", R.drawable.muerto),
-        Exercise("Bulgara", "Pierna", R.drawable.muerto),
-        Exercise("Elevación de caderas", "Pierna", R.drawable.muerto)
-    )
 }
 
 @OptIn(ExperimentalMaterial3Api::class)

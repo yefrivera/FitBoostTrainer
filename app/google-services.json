@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "259683336365",
+    "project_id": "fitboosttrainer",
+    "storage_bucket": "fitboosttrainer.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:259683336365:android:4709881e9a32c0ccfe0624",
+        "android_client_info": {
+          "package_name": "edu.unicauca.fitboosttrainer"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCyQ7Tvb1k477YltKwCSp4yHa6MoRE7BdA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
