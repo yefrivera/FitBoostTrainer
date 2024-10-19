@@ -66,7 +66,7 @@ fun AlimentacionScreen(
                 shape = RoundedCornerShape(8.dp),
                 elevation = CardDefaults.cardElevation(4.dp),
                 modifier = Modifier.fillMaxWidth(),
-                colors = CardDefaults.cardColors(containerColor = Color(0xFFDDE3E7))
+                //colors = CardDefaults.cardColors(containerColor = Color(0xFFDDE3E7))
             ) {
                 Row(
                     modifier = Modifier
@@ -85,7 +85,7 @@ fun AlimentacionScreen(
 
                     Column {
                         Text(text = stringResource(R.string.endulza), style = MaterialTheme.typography.titleLarge)
-                        Text(text = stringResource(R.string.dessert), color = Color.Gray)
+                        //Text(text = stringResource(R.string.dessert), color = Color.Gray)
                     }
                 }
             }
@@ -104,7 +104,7 @@ fun AlimentacionScreen(
             Button(
                 onClick = { navController.navigate("caloriasScreen") },
                 modifier = Modifier.fillMaxWidth(),
-                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF006C7A))
+                //colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF006C7A))
             ) {
                 Text(text = stringResource(R.string.seguimiento_calorico))
             }
@@ -121,7 +121,7 @@ fun CategoryItem(title: String) {
             .fillMaxWidth()
             .padding(vertical = 8.dp)
             .clickable { /* Acción al hacer clic */ },
-        colors = CardDefaults.cardColors(containerColor = Color.White)
+        //colors = CardDefaults.cardColors(containerColor = Color.White)
     ) {
         Row(
             modifier = Modifier

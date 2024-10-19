@@ -32,8 +32,6 @@ import androidx.navigation.compose.rememberNavController
 import edu.unicauca.fitboosttrainer.R
 import edu.unicauca.fitboosttrainer.ui.components.BottomNavItem
 import edu.unicauca.fitboosttrainer.ui.components.BottomNavigation
-import edu.unicauca.fitboosttrainer.ui.components.DrawerContent
-import edu.unicauca.fitboosttrainer.ui.components.MainTopAppBar
 import edu.unicauca.fitboosttrainer.ui.components.MainTopAppBarAlt
 import edu.unicauca.fitboosttrainer.ui.theme.FitBoostTrainerTheme
 

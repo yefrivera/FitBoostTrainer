@@ -26,11 +26,13 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import edu.unicauca.fitboosttrainer.R
 import edu.unicauca.fitboosttrainer.ui.theme.FitBoostTrainerTheme
 
 @Composable
-fun InitialScreen() {
+fun InitialScreen(navController: NavHostController) {
     var imageIndex by remember { mutableStateOf(0) }
     val images = listOf(
         painterResource(id = R.drawable.image1),
@@ -62,10 +64,7 @@ fun InitialScreen() {
 
         Spacer(modifier = Modifier.height(22.dp))
 
-        // Imagen con las flechas de navegación
-
         Box(modifier = Modifier.fillMaxWidth()) {
-            // Imagen a la izquierda
             Image(
                 painter = images[(imageIndex - 1 + images.size) % images.size],
                 contentDescription = "Previous Image",
@@ -76,7 +75,6 @@ fun InitialScreen() {
 
             )
 
-            // Imagen central (la principal)
             Image(
                 painter = images[imageIndex],
                 contentDescription = "Main Image",
@@ -85,7 +83,7 @@ fun InitialScreen() {
                     .align(Alignment.Center)
 
             )
-            //imagen logo superpuesta
+
             Image(
                 painter = painterResource(id = R.drawable.logo),
                 contentDescription = "Logo",
@@ -95,8 +93,6 @@ fun InitialScreen() {
                     .zIndex(1f)
 
             )
-
-            // Imagen a la derecha
             Image(
                 painter = images[(imageIndex + 1) % images.size],
                 contentDescription = "Next Image",
@@ -106,16 +102,12 @@ fun InitialScreen() {
                     .offset(x = (50).dp)
                     .zIndex(-1f)
             )
-
-            // Flecha izquierda
             IconButton(
                 onClick = { imageIndex = (imageIndex - 1 + images.size) % images.size },
                 modifier = Modifier.align(Alignment.CenterStart)
             ) {
                 Icon(painter = painterResource(id = R.drawable.ic_arrow_left), contentDescription = "Previous Image")
             }
-
-            // Flecha derecha
             IconButton(
                 onClick = { imageIndex = (imageIndex + 1) % images.size },
                 modifier = Modifier.align(Alignment.CenterEnd)
@@ -126,9 +118,8 @@ fun InitialScreen() {
 
         Spacer(modifier = Modifier.height(22.dp))
 
-        // Botones de login y más
         Button(
-            onClick = { /* Acción para iniciar sesión */ },
+            onClick = { navController.navigate("login") },
             modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp)
         ) {
             Text(text = stringResource(id = R.string.dr_login))
@@ -149,7 +140,7 @@ fun InitialScreen() {
 @Composable
 fun InitialScreenPreview() {
     FitBoostTrainerTheme  {
-        InitialScreen()
+        InitialScreen(navController= rememberNavController())
     }
 }
 

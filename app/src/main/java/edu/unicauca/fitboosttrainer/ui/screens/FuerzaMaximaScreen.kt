@@ -23,7 +23,6 @@ import androidx.compose.ui.unit.dp
 import edu.unicauca.fitboosttrainer.R
 import edu.unicauca.fitboosttrainer.ui.components.BottomNavItem
 import edu.unicauca.fitboosttrainer.ui.components.BottomNavigation
-import edu.unicauca.fitboosttrainer.ui.components.MainTopAppBar
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.material3.Text

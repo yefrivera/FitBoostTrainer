@@ -45,7 +45,7 @@ import edu.unicauca.fitboosttrainer.R
 import edu.unicauca.fitboosttrainer.data.ExerciseData
 import edu.unicauca.fitboosttrainer.ui.components.BottomNavItem
 import edu.unicauca.fitboosttrainer.ui.components.BottomNavigation
-import edu.unicauca.fitboosttrainer.ui.components.MainTopAppBar
+import edu.unicauca.fitboosttrainer.ui.components.MainTopAppBarAlt
 import edu.unicauca.fitboosttrainer.ui.theme.FitBoostTrainerTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -58,8 +58,13 @@ fun CreateRoutineScreen(scrollBehavior: TopAppBarScrollBehavior,
 
     Scaffold(
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
-        topBar = { MainTopAppBar(modifier = Modifier, scrollBehavior,
-            title = stringResource(R.string.create_routine), drawerState = drawerState)
+        topBar = {
+            MainTopAppBarAlt(
+                title = stringResource(R.string.create_routine),
+                scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(),
+                drawerState = drawerState,
+                onBackClick = { navController.popBackStack() }
+            )
         },
         bottomBar = { BottomNavigation(
             selectedItem = selectedNavItem,
