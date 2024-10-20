@@ -93,5 +93,16 @@
     <string name="iniciar_sesion">Iniciar Sesión</string>
     <string name="no_cuenta">¿No tienes cuenta?</string>
     <string name="registrarse">Regístrate</string>
+    <string name="medidas">Medidas corporales (cm)</string>
+    <string name="hombro">Hombro</string>
+    <string name="pecho">Pecho</string>
+    <string name="BicepIzq">Bicep Izquierdo</string>
+    <string name="bicepDer">Bicep Derecho</string>
+    <string name="cintura">Cintura</string>
+    <string name="musloIzq">Muslo Izquierdo</string>
+    <string name="musloDer">Muslo Derecho</string>
+    <string name="cadera">Cadera</string>
+    <string name="pantorrillaIzq">Pantorrilla Izquierda</string>
+    <string name="pantorrillaDer">Pantorrilla Derecha</string>
 
 </resources>
