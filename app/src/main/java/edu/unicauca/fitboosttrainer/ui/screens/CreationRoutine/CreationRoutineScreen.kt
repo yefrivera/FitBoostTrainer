@@ -35,13 +35,13 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import edu.unicauca.fitboosttrainer.R
+import edu.unicauca.fitboosttrainer.data.Exercise
 import edu.unicauca.fitboosttrainer.data.ExerciseData
 import edu.unicauca.fitboosttrainer.ui.components.BottomNavItem
 import edu.unicauca.fitboosttrainer.ui.components.BottomNavigation
@@ -50,10 +50,13 @@ import edu.unicauca.fitboosttrainer.ui.theme.FitBoostTrainerTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CreateRoutineScreen(scrollBehavior: TopAppBarScrollBehavior,
-                        drawerState: DrawerState,
-                        navController: NavHostController
+fun CreateRoutineScreen(
+    scrollBehavior: TopAppBarScrollBehavior,
+    drawerState: DrawerState,
+    navController: NavHostController,
+    viewModel: RoutineViewModel = androidx.lifecycle.viewmodel.compose.viewModel() // Instancia del ViewModel
 ) {
+
     var selectedNavItem by remember { mutableStateOf(BottomNavItem.RUTINAS) }
 
     Scaffold(
@@ -66,36 +69,43 @@ fun CreateRoutineScreen(scrollBehavior: TopAppBarScrollBehavior,
                 onBackClick = { navController.popBackStack() }
             )
         },
-        bottomBar = { BottomNavigation(
-            selectedItem = selectedNavItem,
-            onItemSelected = { selectedNavItem = it },
-            navController = navController) }
+        bottomBar = {
+            BottomNavigation(
+                selectedItem = selectedNavItem,
+                onItemSelected = { selectedNavItem = it },
+                navController = navController
+            )
+        }
     ) { innerPadding ->
-        ScrollContent(innerPadding = innerPadding, navController= navController)
+        ScrollContent(
+            innerPadding = innerPadding,
+            viewModel = viewModel
+        )
     }
 }
 
 @Composable
-private fun ScrollContent(innerPadding: PaddingValues,navController: NavHostController,modifier: Modifier = Modifier) {
-    var routineName by remember { mutableStateOf(TextFieldValue("")) }
-    var seriesNumber by remember { mutableStateOf(TextFieldValue("")) }
-    var searchExercise by remember { mutableStateOf(TextFieldValue("")) }
+private fun ScrollContent(
+    innerPadding: PaddingValues,
+    viewModel: RoutineViewModel
+) {
+    val uiState = viewModel.uiState
 
     Column(
         modifier = Modifier
             .fillMaxSize()
             .padding(innerPadding)
             .padding(16.dp)
-        
     ) {
 
+        // Campo de búsqueda
         OutlinedTextField(
-            value = searchExercise,
-            onValueChange = {searchExercise = it },
-            label = { Text("Buscar ejercicio" ) },
+            value = viewModel.searchExercise,
+            onValueChange = { viewModel.onSearchExerciseChange(it) },
+            label = { Text("Buscar ejercicio") },
             leadingIcon = {
                 Icon(
-                    imageVector = Icons.Default.Search,  // Ícono de lupa
+                    imageVector = Icons.Default.Search,
                     contentDescription = "Buscar"
                 )
             },
@@ -104,24 +114,32 @@ private fun ScrollContent(innerPadding: PaddingValues,navController: NavHostCont
 
         // Nombre de la rutina
         OutlinedTextField(
-            value = routineName,
-            onValueChange = { routineName = it },
+            value = viewModel.routineName,
+            onValueChange = { viewModel.onRoutineNameChange(it) },
             label = { Text("Nombre de la rutina") },
             placeholder = { Text("Ej: Rutina de pierna") },
             modifier = Modifier.fillMaxWidth()
         )
-
         Spacer(modifier = Modifier.height(16.dp))
 
+        // Lista filtrada de ejercicios
         LazyColumn(
             modifier = Modifier.weight(1f)
         ) {
-            items(ExerciseData) { item ->
-                ExerciseItem(
-                    item.nameExercise,
-                    item.categoryExercise,
-                    item.imageRes
-                )
+            items(uiState.filteredExercises) { item ->
+                // Aquí es donde puedes usar `stringResource()` para realizar comparaciones
+                val exerciseName = stringResource(id = item.nameExercise)
+
+                if (exerciseName.contains(uiState.searchExercise, ignoreCase = true)) {
+                    ExerciseItem(
+                        nameExercise = item.nameExercise,
+                        categoryExercise = item.categoryExercise,
+                        imageRes = item.imageRes,
+                        onAddExercise = {
+                            viewModel.addExercise(item)
+                        }
+                    )
+                }
             }
         }
 
@@ -129,8 +147,8 @@ private fun ScrollContent(innerPadding: PaddingValues,navController: NavHostCont
 
         // Número de series
         OutlinedTextField(
-            value = seriesNumber,
-            onValueChange = { seriesNumber = it },
+            value = viewModel.seriesNumber,
+            onValueChange = { viewModel.onSeriesNumberChange(it) },
             label = { Text("Número de series a realizar") },
             placeholder = { Text("Ej: 3-4") },
             keyboardOptions = KeyboardOptions(
@@ -142,9 +160,16 @@ private fun ScrollContent(innerPadding: PaddingValues,navController: NavHostCont
 
         Spacer(modifier = Modifier.height(16.dp))
 
+        // Mostrar número de ejercicios seleccionados
+        Text(text = "Ejercicios seleccionados: ${uiState.selectedExercises.size}")
+
+        Spacer(modifier = Modifier.height(16.dp))
+
         // Botón Finalizar
         Button(
-            onClick = { /* Acción al finalizar */ },
+            onClick = {
+                // Lógica para guardar la rutina en Firebase
+            },
             shape = RoundedCornerShape(8.dp),
             modifier = Modifier
                 .height(48.dp)
@@ -154,11 +179,13 @@ private fun ScrollContent(innerPadding: PaddingValues,navController: NavHostCont
         }
     }
 }
-
 @Composable
-fun ExerciseItem(@StringRes nameExercise: Int,
-                 @StringRes categoryExercise: Int,
-                 @DrawableRes imageRes: Int) {
+fun ExerciseItem(
+    @StringRes nameExercise: Int,
+    @StringRes categoryExercise: Int,
+    @DrawableRes imageRes: Int,
+    onAddExercise: () -> Unit // Pasar callback para agregar ejercicio
+) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -181,7 +208,7 @@ fun ExerciseItem(@StringRes nameExercise: Int,
                 Text(text = stringResource(nameExercise), fontSize = 18.sp, fontWeight = FontWeight.Bold)
                 Text(text = stringResource(categoryExercise), fontSize = 14.sp, color = Color.Gray)
             }
-            IconButton(onClick = { /* Acción para agregar */ }) {
+            IconButton(onClick = onAddExercise) {
                 Icon(Icons.Default.Add, contentDescription = "Agregar")
             }
         }
