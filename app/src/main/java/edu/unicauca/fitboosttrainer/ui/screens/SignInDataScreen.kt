@@ -1,10 +1,13 @@
 package edu.unicauca.fitboosttrainer.ui.screens
 
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
@@ -56,9 +59,10 @@ fun Registro(innerPadding: PaddingValues) {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(top = innerPadding.calculateTopPadding(), start = 16.dp, end = 16.dp),
+            .padding(top = innerPadding.calculateTopPadding(), start = 20.dp, end = 20.dp),
         verticalArrangement = Arrangement.Top
     ) {
+        //-------- FALTA AGREGAR LAS RESTRICCIONES DE LOS DATOS DE ENTRADA --------
         // Nombre
         Spacer(modifier = Modifier.height(espaciado))
         OutlinedTextField(
@@ -96,20 +100,42 @@ fun Registro(innerPadding: PaddingValues) {
         ) {
             OutlinedTextField(
                 value = day,
-                onValueChange = { day = it },
+                onValueChange = {
+                    if (it.length <= 2) {
+                        day = it
+                    } },
                 label = { Text("DD") },
+                keyboardOptions = KeyboardOptions(
+                    keyboardType = KeyboardType.Number,
+                    imeAction = ImeAction.Done
+                ),
                 modifier = Modifier.weight(1f)
             )
             OutlinedTextField(
                 value = month,
-                onValueChange = { month = it },
+                onValueChange = {
+                    if (it.length <= 2) {
+                        month = it
+                    } },
                 label = { Text("MM")},
+                keyboardOptions = KeyboardOptions(
+                    keyboardType = KeyboardType.Number,
+                    imeAction = ImeAction.Done
+                ),
                 modifier = Modifier.weight(1f)
+
             )
             OutlinedTextField(
                 value = year,
-                onValueChange = { year = it },
+                onValueChange = {
+                    if (it.length <= 4) {
+                        year = it
+                    } },
                 label = { Text("YYYY") },
+                keyboardOptions = KeyboardOptions(
+                    keyboardType = KeyboardType.Number,
+                    imeAction = ImeAction.Done
+                ),
                 modifier = Modifier.weight(2f)
             )
         }
@@ -125,14 +151,28 @@ fun Registro(innerPadding: PaddingValues) {
         ) {
             OutlinedTextField(
                 value = height,
-                onValueChange = { height = it },
+                onValueChange = {
+                    if (it.length <= 3) {
+                    height = it }},
                 label = { Text(stringResource(R.string.altura)) },
+                keyboardOptions = KeyboardOptions(
+                    keyboardType = KeyboardType.Number,
+                    imeAction = ImeAction.Done
+                ),
                 modifier = Modifier.weight(1f)
             )
             OutlinedTextField(
                 value = weight,
-                onValueChange = { weight = it },
-                label = { Text(stringResource(R.string.peso)) },
+                onValueChange = {
+                    if (it.length <= 3) {
+                        weight = it
+                    }
+                },
+                label = { Text(stringResource(R.string.pesoKg)) },
+                keyboardOptions = KeyboardOptions(
+                    keyboardType = KeyboardType.Number,
+                    imeAction = ImeAction.Done
+                ),
                 modifier = Modifier.weight(1f)
             )
         }
