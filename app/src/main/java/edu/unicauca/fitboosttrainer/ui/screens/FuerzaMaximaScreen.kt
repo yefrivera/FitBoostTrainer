@@ -110,7 +110,7 @@ fun FuerzaMaximaScreen(scrollBehavior: TopAppBarScrollBehavior, drawerState: Dra
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp),
-                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF006C7A))  // Color del botón
+                //colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF006C7A))  // Color del botón
             ) {
                 Text(text = stringResource(R.string.finalizar))  // Texto del botón
             }
@@ -129,7 +129,7 @@ fun ExerciseItem(title: String, imageRes: Int, reps: String) {
         modifier = Modifier
             .fillMaxWidth()
             .padding(vertical = 8.dp),
-        colors = CardDefaults.cardColors(containerColor = Color(0xFFDDE3E7))
+        //colors = CardDefaults.cardColors(containerColor = Color(0xFFDDE3E7))
     ) {
         Row(
             modifier = Modifier

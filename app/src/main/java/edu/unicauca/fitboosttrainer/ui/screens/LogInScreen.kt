@@ -27,7 +27,7 @@ import edu.unicauca.fitboosttrainer.ui.theme.FitBoostTrainerTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun LoginScreen(drawerState: DrawerState, navController: NavHostController,) {
+fun LoginScreen(drawerState: DrawerState, navController: NavHostController) {
     Scaffold(
         topBar ={
             MainTopAppBarAlt(

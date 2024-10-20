@@ -6,8 +6,10 @@ import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import edu.unicauca.fitboosttrainer.LoginScreen
 import edu.unicauca.fitboosttrainer.ui.components.DrawerContent
@@ -22,25 +24,39 @@ fun NavigationFunction() {
     val drawerState = rememberDrawerState(DrawerValue.Closed)
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
 
+    // Lista de pantallas donde NO quieres que el drawer se muestre
+    val screensWithoutDrawer = listOf(
+        "welcome",
+        "login",
+        "trainCompletedScreen"
+    )
+
+    val currentBackStackEntry by navController.currentBackStackEntryAsState()
+    val currentDestination = currentBackStackEntry?.destination?.route
+    val shouldShowDrawer = currentDestination !in screensWithoutDrawer
+
     ModalNavigationDrawer(
         drawerState = drawerState,
         drawerContent = {
-            DrawerContent()
+            if (shouldShowDrawer) {
+                DrawerContent()
+            }
         },
+        gesturesEnabled = shouldShowDrawer
     ) {
-        // Definir el NavHost para manejar las pantallas
         NavHost(navController = navController, startDestination = "welcome") {
 
-            //Pantalla de Bienvenida
+            // Pantalla de Bienvenida (sin drawer)
             composable("welcome") {
-                InitialScreen( navController = navController)
+                InitialScreen(navController = navController)
             }
 
+            // Pantalla de Login (sin drawer)
             composable("login") {
-                LoginScreen(drawerState = drawerState, navController = navController)
+                LoginScreen( drawerState = drawerState, navController = navController)
             }
 
-            // Pantalla de inicio (Home)
+            // Pantalla de inicio (Home) con drawer
             composable("home") {
                 Home(
                     userName = "John",
@@ -50,7 +66,7 @@ fun NavigationFunction() {
                 )
             }
 
-            // Pantalla de Alimentación
+            // Pantalla de Alimentación con drawer
             composable("alimentacionScreen") {
                 AlimentacionScreen(
                     navController = navController,
@@ -59,14 +75,16 @@ fun NavigationFunction() {
                 )
             }
 
-            // Pantalla de Calorías
+            // Pantalla de Calorías con drawer
             composable("caloriasScreen") {
-                CaloriasScreen(scrollBehavior = scrollBehavior,
+                CaloriasScreen(
+                    scrollBehavior = scrollBehavior,
                     drawerState = drawerState,
-                    navController= navController)
+                    navController = navController
+                )
             }
 
-            // Pantalla de Full Body
+            // Pantalla de Full Body con drawer
             composable("fullBodyScreen") {
                 FullBodyScreen(
                     navController = navController,
@@ -75,7 +93,7 @@ fun NavigationFunction() {
                 )
             }
 
-            // Pantalla de Fuerza Máxima
+            // Pantalla de Fuerza Máxima con drawer
             composable("fuerzaMaximaScreen") {
                 FuerzaMaximaScreen(
                     navController = navController,
@@ -84,11 +102,12 @@ fun NavigationFunction() {
                 )
             }
 
-            // Pantalla de Entrenamiento Finalizado
+            // Pantalla de Entrenamiento Finalizado (sin drawer)
             composable("trainCompletedScreen") {
                 TrainCompletedScreen(navController = navController)
             }
 
+            // Pantalla de Crear Rutinas con drawer
             composable("crearRutinasHome") {
                 HomeScreen(
                     navController = navController,
@@ -96,7 +115,7 @@ fun NavigationFunction() {
                 )
             }
 
-            // Pantalla de creación de Rutinas
+            // Pantalla de Creación de Rutinas con drawer
             composable("creationRoutine") {
                 CreateRoutineScreen(
                     navController = navController,
@@ -105,15 +124,13 @@ fun NavigationFunction() {
                 )
             }
 
-            // Pantalla de Rutinas guardadas
+            // Pantalla de Rutinas Guardadas con drawer
             composable("savedRoutine") {
                 SavedRoutinesScreen(
                     navController = navController,
                     drawerState = drawerState
                 )
-
             }
         }
-
     }
 }

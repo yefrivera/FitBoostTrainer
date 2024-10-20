@@ -87,7 +87,7 @@ fun RoutineItem(title: String, description: String, onClick: () -> Unit) {
             .fillMaxWidth()
             .padding(vertical = 8.dp)
             .clickable(onClick = onClick),
-        colors = CardDefaults.cardColors(containerColor =  Color(0xFFDDE3E7))
+        //colors = CardDefaults.cardColors(containerColor =  Color(0xFFDDE3E7))
     ) {
         Row(
             modifier = Modifier
@@ -105,13 +105,13 @@ fun RoutineItem(title: String, description: String, onClick: () -> Unit) {
                 Text(
                     text = description,
                     style = MaterialTheme.typography.bodyMedium,
-                    color = Color.Gray
+                    //color = Color.Gray
                 )
             }
             Icon(
                 imageVector = Icons.Default.ArrowForward,
                 contentDescription = "Ir a detalles de rutina",
-                tint = Color.Gray
+                //tint = Color.Gray
             )
         }
     }

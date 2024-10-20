@@ -2,7 +2,9 @@ package edu.unicauca.fitboosttrainer.ui.screens
 
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -59,7 +61,9 @@ fun CaloriasScreen(scrollBehavior: TopAppBarScrollBehavior,drawerState: DrawerSt
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues)
+                .verticalScroll(rememberScrollState())
                 .padding(16.dp)
+
         ) {
 
             DailyGoalSection()
@@ -104,7 +108,8 @@ fun DailyGoalSection() {
 @Composable
 fun AddFoodSection() {
     Card(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier
+            .fillMaxWidth(),
         elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
         shape = MaterialTheme.shapes.medium
     ) {
@@ -157,7 +162,6 @@ fun AddFoodSection() {
                 modifier = Modifier.fillMaxWidth()
             ) {
 
-                //Spacer(modifier = Modifier.width(8.dp))
                 OutlinedTextField(
                     value = "",
                     onValueChange = {},
@@ -209,6 +213,58 @@ fun AddedFoodsSection() {
                 }
             }
 
+            // Comida ejemplo 2
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(text = "Arroz", modifier = Modifier.weight(1f))
+                IconButton(onClick = { /* Editar comida */ }) {
+                    Icon(imageVector = Icons.Default.Edit, contentDescription = "Editar")
+                }
+                IconButton(onClick = { /* Eliminar comida */ }) {
+                    Icon(imageVector = Icons.Default.Delete, contentDescription = "Eliminar")
+                }
+            }
+            // Comida ejemplo 2
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(text = "Arroz", modifier = Modifier.weight(1f))
+                IconButton(onClick = { /* Editar comida */ }) {
+                    Icon(imageVector = Icons.Default.Edit, contentDescription = "Editar")
+                }
+                IconButton(onClick = { /* Eliminar comida */ }) {
+                    Icon(imageVector = Icons.Default.Delete, contentDescription = "Eliminar")
+                }
+            }
+            // Comida ejemplo 2
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(text = "Arroz", modifier = Modifier.weight(1f))
+                IconButton(onClick = { /* Editar comida */ }) {
+                    Icon(imageVector = Icons.Default.Edit, contentDescription = "Editar")
+                }
+                IconButton(onClick = { /* Eliminar comida */ }) {
+                    Icon(imageVector = Icons.Default.Delete, contentDescription = "Eliminar")
+                }
+            }
+            // Comida ejemplo 2
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(text = "Arroz", modifier = Modifier.weight(1f))
+                IconButton(onClick = { /* Editar comida */ }) {
+                    Icon(imageVector = Icons.Default.Edit, contentDescription = "Editar")
+                }
+                IconButton(onClick = { /* Eliminar comida */ }) {
+                    Icon(imageVector = Icons.Default.Delete, contentDescription = "Eliminar")
+                }
+            }
             // Comida ejemplo 2
             Row(
                 modifier = Modifier.fillMaxWidth(),
