@@ -281,7 +281,7 @@ fun RegistroMedidas(innerPadding: PaddingValues) {
             onClick = { /* Lógica del botón */ },
             modifier = Modifier.fillMaxWidth()
         ) {
-            Text(text = "Siguiente")
+            Text(text = "Finalizar")
         }
     }
 }
