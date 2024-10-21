@@ -12,8 +12,11 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
+import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.OutlinedTextField
@@ -35,10 +38,12 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import edu.unicauca.fitboosttrainer.R
 import edu.unicauca.fitboosttrainer.ui.components.MainTopAppBarAlt
+import edu.unicauca.fitboosttrainer.ui.components.TopBarTitle
 import edu.unicauca.fitboosttrainer.ui.theme.FitBoostTrainerTheme
 
 
@@ -50,10 +55,8 @@ fun RegistrerMessureScreen() {
 
     Scaffold(
         topBar ={
-            MainTopAppBarAlt(
-                title = stringResource(R.string.app_name),
-                scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(),
-                drawerState = drawerState
+            TopBarTitle(
+                title = stringResource(R.string.app_name)
             )
         }
     ) { innerPadding ->
@@ -75,25 +78,32 @@ fun RegistroMedidas(innerPadding: PaddingValues) {
     var musloDer by remember { mutableStateOf("") }
     var pantorrillaDer by remember { mutableStateOf("") }
     val espaciado = 20.dp
-
+    val scrollState = rememberScrollState()
 
     Column (
         modifier = Modifier
             .fillMaxSize()
-            .padding(top = innerPadding.calculateTopPadding(), start = 12.dp, end = 12.dp),
+            .verticalScroll(scrollState)
+            .padding(top = innerPadding.calculateTopPadding(), start = 12.dp, end = 12.dp, bottom = 40.dp),
         horizontalAlignment = Alignment.CenterHorizontally
 
     )
     {
 
         Image(
-            painter = painterResource(id = R.drawable.medidas),
+            painter = painterResource(id = R.drawable.medidassombra),
             contentDescription = "Referencia medidas corporales",
             modifier = Modifier.size(350.dp)
         )
 
         Text(
             text = stringResource(R.string.medidas),
+            textAlign = TextAlign.Center,
+            modifier = Modifier.fillMaxWidth()
+        )
+
+        Text(
+            text = stringResource(R.string.infomedidas),
             textAlign = TextAlign.Center,
             modifier = Modifier.fillMaxWidth()
         )
@@ -106,7 +116,7 @@ fun RegistroMedidas(innerPadding: PaddingValues) {
                 OutlinedTextField(
                     value = hombro,
                     onValueChange = {
-                        if (it.length <= 2) {
+                        if (it.length <= 3) {
                             hombro = it
                         }
                     },
@@ -175,7 +185,7 @@ fun RegistroMedidas(innerPadding: PaddingValues) {
                 OutlinedTextField(
                     value = cintura,
                     onValueChange = {
-                        if (it.length <= 2) {
+                        if (it.length <= 3) {
                             cintura = it
                         }
                     },
@@ -189,7 +199,7 @@ fun RegistroMedidas(innerPadding: PaddingValues) {
                 OutlinedTextField(
                     value = cadera,
                     onValueChange = {
-                        if (it.length <= 2) {
+                        if (it.length <= 3) {
                             cadera = it
                         }
                     },
@@ -285,6 +295,7 @@ fun RegistroMedidas(innerPadding: PaddingValues) {
         }
     }
 }
+
 
 @Preview(showBackground = true)
 @Composable

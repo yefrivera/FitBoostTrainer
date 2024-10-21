@@ -1,7 +1,9 @@
 package edu.unicauca.fitboosttrainer.ui.screens
 
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
@@ -13,6 +15,7 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import edu.unicauca.fitboosttrainer.R
 import edu.unicauca.fitboosttrainer.ui.components.MainTopAppBarAlt
+import edu.unicauca.fitboosttrainer.ui.components.TopBarTitle
 import edu.unicauca.fitboosttrainer.ui.theme.FitBoostTrainerTheme
 
 
@@ -24,10 +27,8 @@ fun SingInDataScreen() {
 
     Scaffold(
         topBar ={
-            MainTopAppBarAlt(
+            TopBarTitle(
                 title = stringResource(R.string.app_name),
-                scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(),
-                drawerState = drawerState
             )
         }
     ) { innerPadding ->
@@ -55,10 +56,12 @@ fun Registro(innerPadding: PaddingValues) {
     val goalOptions = listOf("Perder peso", "Ganar masa muscular", "Crear hábitos saludables")
 
     var espaciado = 20.dp
+    val scrollState = rememberScrollState()
 
     Column(
         modifier = Modifier
             .fillMaxSize()
+            .verticalScroll(scrollState)
             .padding(top = innerPadding.calculateTopPadding(), start = 20.dp, end = 20.dp),
         verticalArrangement = Arrangement.Top
     ) {

@@ -23,6 +23,7 @@ import androidx.compose.ui.zIndex
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import edu.unicauca.fitboosttrainer.ui.components.MainTopAppBarAlt
+import edu.unicauca.fitboosttrainer.ui.components.TopBarTitle
 import edu.unicauca.fitboosttrainer.ui.theme.FitBoostTrainerTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -30,11 +31,9 @@ import edu.unicauca.fitboosttrainer.ui.theme.FitBoostTrainerTheme
 fun LoginScreen(drawerState: DrawerState, navController: NavHostController) {
     Scaffold(
         topBar ={
-            MainTopAppBarAlt(
+            TopBarTitle(
                 title = stringResource(R.string.app_name),
-                scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(),
-                drawerState = drawerState,
-                onBackClick = { navController.popBackStack() }
+
             )
         }
     ) { padding ->
@@ -89,7 +88,7 @@ fun LoginScreen(drawerState: DrawerState, navController: NavHostController) {
             Text(stringResource(R.string.no_cuenta))
             Spacer(modifier = Modifier.height(8.dp))
             Button(
-                onClick = { /*AQUI VA LA PAGINA SIGUIENTE*/ },
+                onClick = { },
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Text(stringResource(R.string.registrarse))
