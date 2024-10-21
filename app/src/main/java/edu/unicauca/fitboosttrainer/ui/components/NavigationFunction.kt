@@ -16,6 +16,8 @@ import edu.unicauca.fitboosttrainer.ui.components.DrawerContent
 import edu.unicauca.fitboosttrainer.ui.components.InitialScreen
 import edu.unicauca.fitboosttrainer.ui.screens.*
 import edu.unicauca.fitboosttrainer.ui.screens.CreationRoutine.CreateRoutineScreen
+import edu.unicauca.fitboosttrainer.ui.screens.SingIn.RegistrerMessureScreen
+import edu.unicauca.fitboosttrainer.ui.screens.SingIn.SingInDataScreen
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -27,8 +29,10 @@ fun NavigationFunction() {
     // Lista de pantallas donde NO quieres que el drawer se muestre
     val screensWithoutDrawer = listOf(
         "welcome",
-        "login",
-        "trainCompletedScreen"
+        "LoginScreen",
+        "trainCompletedScreen",
+        "RegistrerMessureScreen",
+        "SingInDataScreen"
     )
 
     val currentBackStackEntry by navController.currentBackStackEntryAsState()
@@ -53,7 +57,17 @@ fun NavigationFunction() {
 
             // Pantalla de Login (sin drawer)
             composable("login") {
-                LoginScreen( drawerState = drawerState, navController = navController)
+                LoginScreen( navController = navController)
+            }
+
+            //Pantalla SingIn (sin drawer)
+            composable("singIn") {
+                SingInDataScreen(navController = navController)
+            }
+
+            // Pantalla registro de medidas (sin drawer)
+            composable("RegistrerMessureScreen") {
+                RegistrerMessureScreen(navController = navController)
             }
 
             // Pantalla de inicio (Home) con drawer
@@ -131,6 +145,8 @@ fun NavigationFunction() {
                     drawerState = drawerState
                 )
             }
+
+
         }
     }
 }

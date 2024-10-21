@@ -1,34 +1,26 @@
 package edu.unicauca.fitboosttrainer
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.zIndex
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
-import edu.unicauca.fitboosttrainer.ui.components.MainTopAppBarAlt
 import edu.unicauca.fitboosttrainer.ui.components.TopBarTitle
 import edu.unicauca.fitboosttrainer.ui.theme.FitBoostTrainerTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun LoginScreen(drawerState: DrawerState, navController: NavHostController) {
+fun LoginScreen(navController: NavHostController) {
     Scaffold(
         topBar ={
             TopBarTitle(
@@ -67,8 +59,8 @@ fun LoginScreen(drawerState: DrawerState, navController: NavHostController) {
 
             Spacer(modifier = Modifier.height(16.dp))
             TextField(
-                value = "", // Vincula esto a un estado en tu ViewModel
-                onValueChange = {}, // Actualiza el estado aquí
+                value = "",
+                onValueChange = {},
                 label = { Text(stringResource(R.string.contrasena)) },
                 singleLine = true,
                 visualTransformation = PasswordVisualTransformation(),
@@ -76,9 +68,7 @@ fun LoginScreen(drawerState: DrawerState, navController: NavHostController) {
             )
             Spacer(modifier = Modifier.height(32.dp))
             Button(
-                onClick = { /* Lógica para iniciar sesión */
-                //mientras tanto voy a poner la navegación
-                    navController.navigate("home")
+                onClick = {navController.navigate("home")
                 },
                 modifier = Modifier.fillMaxWidth()
             ) {
@@ -88,7 +78,7 @@ fun LoginScreen(drawerState: DrawerState, navController: NavHostController) {
             Text(stringResource(R.string.no_cuenta))
             Spacer(modifier = Modifier.height(8.dp))
             Button(
-                onClick = { },
+                onClick = { navController.navigate("singIn")},
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Text(stringResource(R.string.registrarse))
@@ -101,6 +91,6 @@ fun LoginScreen(drawerState: DrawerState, navController: NavHostController) {
 @Composable
 fun PreviewLoginScreen() {
     FitBoostTrainerTheme {
-        LoginScreen(drawerState = rememberDrawerState(initialValue = DrawerValue.Closed), navController = rememberNavController())
+        LoginScreen(navController = rememberNavController())
     }
 }

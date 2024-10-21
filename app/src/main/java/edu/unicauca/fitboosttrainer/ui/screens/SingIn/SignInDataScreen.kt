@@ -1,4 +1,4 @@
-package edu.unicauca.fitboosttrainer.ui.screens
+package edu.unicauca.fitboosttrainer.ui.screens.SingIn
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
@@ -13,17 +13,16 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import edu.unicauca.fitboosttrainer.R
-import edu.unicauca.fitboosttrainer.ui.components.MainTopAppBarAlt
 import edu.unicauca.fitboosttrainer.ui.components.TopBarTitle
 import edu.unicauca.fitboosttrainer.ui.theme.FitBoostTrainerTheme
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SingInDataScreen() {
-
-    val drawerState = rememberDrawerState(DrawerValue.Closed)
+fun SingInDataScreen(navController: NavHostController) {
 
     Scaffold(
         topBar ={
@@ -32,12 +31,12 @@ fun SingInDataScreen() {
             )
         }
     ) { innerPadding ->
-            Registro(innerPadding=innerPadding)
+            Registro(innerPadding=innerPadding, navController=navController)
         }
 }
 
 @Composable
-fun Registro(innerPadding: PaddingValues) {
+fun Registro(innerPadding: PaddingValues, navController: NavHostController) {
 
     var name by remember { mutableStateOf("") }
     var email by remember { mutableStateOf("") }
@@ -55,7 +54,7 @@ fun Registro(innerPadding: PaddingValues) {
     val frequencyOptions = listOf("1 a 2 días", "3 a 4 días", "5 a 6 días", "Todos los días")
     val goalOptions = listOf("Perder peso", "Ganar masa muscular", "Crear hábitos saludables")
 
-    var espaciado = 20.dp
+    val espaciado = 20.dp
     val scrollState = rememberScrollState()
 
     Column(
@@ -201,7 +200,7 @@ fun Registro(innerPadding: PaddingValues) {
         // Botón Siguiente
         Spacer(modifier = Modifier.height(espaciado))
         Button(
-            onClick = { /* Lógica del botón */ },
+            onClick = {navController.navigate("registrerMessureScreen") },
             modifier = Modifier.fillMaxWidth()
         ) {
             Text(text = "Siguiente")
@@ -219,7 +218,7 @@ fun DropdownMenuField(
 ) {
     var expanded by remember { mutableStateOf(false) }
 
-    // This allows you to create a composable with an exposed dropdown menu
+
     ExposedDropdownMenuBox(
         expanded = expanded,
         onExpandedChange = { expanded = !expanded }
@@ -227,13 +226,13 @@ fun DropdownMenuField(
         OutlinedTextField(
             value = selectedOption,
             onValueChange = { },
-            readOnly = true,  // Ensures that users can't type into the field
+            readOnly = true,
             label = { Text(label) },
             trailingIcon = {
                 ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded)
             },
             modifier = Modifier
-                .menuAnchor() // This attaches the menu to the text field
+                .menuAnchor()
                 .fillMaxWidth()
         )
         // Menu options
@@ -255,8 +254,8 @@ fun DropdownMenuField(
 }
 @Preview(showBackground = true)
 @Composable
-fun RegistrationScreenPreview() {
+fun SingInDataScreenPreview() {
     FitBoostTrainerTheme {
-        SingInDataScreen()
+        SingInDataScreen(navController= rememberNavController())
     }
 }
