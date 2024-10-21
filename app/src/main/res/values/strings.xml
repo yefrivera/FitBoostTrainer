@@ -104,5 +104,6 @@
     <string name="cadera">Cadera</string>
     <string name="pantorrillaIzq">Pantorrilla Izquierda</string>
     <string name="pantorrillaDer">Pantorrilla Derecha</string>
+    <string name="infomedidas">Todas las medidas se toman en contorno</string>
 
 </resources>
