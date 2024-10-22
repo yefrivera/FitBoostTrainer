@@ -41,8 +41,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import edu.unicauca.fitboosttrainer.R
-import edu.unicauca.fitboosttrainer.data.Exercise
-import edu.unicauca.fitboosttrainer.data.ExerciseData
 import edu.unicauca.fitboosttrainer.ui.components.BottomNavItem
 import edu.unicauca.fitboosttrainer.ui.components.BottomNavigation
 import edu.unicauca.fitboosttrainer.ui.components.MainTopAppBarAlt
@@ -79,13 +77,15 @@ fun CreateRoutineScreen(
     ) { innerPadding ->
         ScrollContent(
             innerPadding = innerPadding,
-            viewModel = viewModel
+            viewModel = viewModel,
+            navController = navController
         )
     }
 }
 
 @Composable
 private fun ScrollContent(
+    navController: NavHostController,
     innerPadding: PaddingValues,
     viewModel: RoutineViewModel
 ) {
@@ -100,7 +100,7 @@ private fun ScrollContent(
 
         // Campo de búsqueda
         OutlinedTextField(
-            value = viewModel.searchExercise,
+            value = uiState.searchExercise,
             onValueChange = { viewModel.onSearchExerciseChange(it) },
             label = { Text("Buscar ejercicio") },
             leadingIcon = {
@@ -114,7 +114,7 @@ private fun ScrollContent(
 
         // Nombre de la rutina
         OutlinedTextField(
-            value = viewModel.routineName,
+            value = uiState.routineName,
             onValueChange = { viewModel.onRoutineNameChange(it) },
             label = { Text("Nombre de la rutina") },
             placeholder = { Text("Ej: Rutina de pierna") },
@@ -147,7 +147,7 @@ private fun ScrollContent(
 
         // Número de series
         OutlinedTextField(
-            value = viewModel.seriesNumber,
+            value = uiState.seriesNumber,
             onValueChange = { viewModel.onSeriesNumberChange(it) },
             label = { Text("Número de series a realizar") },
             placeholder = { Text("Ej: 3-4") },
@@ -168,17 +168,19 @@ private fun ScrollContent(
         // Botón Finalizar
         Button(
             onClick = {
-                // Lógica para guardar la rutina en Firebase
+                // Guardar rutina en Firebase
+                val series = uiState.seriesNumber.toIntOrNull() ?: 0
+                viewModel.saveRoutine(uiState.routineName, series)
+                //navController.navigate("routineSummary")
             },
             shape = RoundedCornerShape(8.dp),
-            modifier = Modifier
-                .height(48.dp)
-                .align(Alignment.CenterHorizontally)
+            modifier = Modifier.height(48.dp).align(Alignment.CenterHorizontally)
         ) {
             Text(text = "Finalizar", color = Color.White)
         }
     }
 }
+
 @Composable
 fun ExerciseItem(
     @StringRes nameExercise: Int,
@@ -223,6 +225,10 @@ fun PreviewCreateRoutineScreen() {
         val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
         val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
         val navController = rememberNavController()
-        CreateRoutineScreen(scrollBehavior = scrollBehavior, drawerState = drawerState, navController = navController)
+        CreateRoutineScreen(
+            scrollBehavior = scrollBehavior,
+            drawerState = drawerState,
+            navController = navController
+        )
     }
 }

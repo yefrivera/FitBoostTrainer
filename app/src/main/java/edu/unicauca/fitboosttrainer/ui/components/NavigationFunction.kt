@@ -7,6 +7,7 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
@@ -16,6 +17,7 @@ import edu.unicauca.fitboosttrainer.ui.components.DrawerContent
 import edu.unicauca.fitboosttrainer.ui.components.InitialScreen
 import edu.unicauca.fitboosttrainer.ui.screens.*
 import edu.unicauca.fitboosttrainer.ui.screens.CreationRoutine.CreateRoutineScreen
+import edu.unicauca.fitboosttrainer.ui.screens.CreationRoutine.RoutineSummaryScreen
 import edu.unicauca.fitboosttrainer.ui.screens.singIn.MeasuresScreen
 import edu.unicauca.fitboosttrainer.ui.screens.singIn.SingInDataScreen
 
@@ -94,7 +96,8 @@ fun NavigationFunction() {
                 CaloriasScreen(
                     scrollBehavior = scrollBehavior,
                     drawerState = drawerState,
-                    navController = navController
+                    navController = navController,
+                    viewModel = viewModel()
                 )
             }
 
@@ -144,6 +147,10 @@ fun NavigationFunction() {
                     navController = navController,
                     drawerState = drawerState
                 )
+            }
+
+            composable("routineSummary") {
+                RoutineSummaryScreen(navController = navController)
             }
 
 
