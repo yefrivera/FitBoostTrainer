@@ -1,4 +1,4 @@
-package edu.unicauca.fitboosttrainer.ui.screens.SingIn
+package edu.unicauca.fitboosttrainer.ui.screens.singIn
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
@@ -32,7 +32,7 @@ fun SingInDataScreen(navController: NavHostController) {
         }
     ) { innerPadding ->
             Registro(innerPadding=innerPadding, navController=navController)
-        }
+    }
 }
 
 @Composable
@@ -61,7 +61,7 @@ fun Registro(innerPadding: PaddingValues, navController: NavHostController) {
         modifier = Modifier
             .fillMaxSize()
             .verticalScroll(scrollState)
-            .padding(top = innerPadding.calculateTopPadding(), start = 20.dp, end = 20.dp),
+            .padding(top = innerPadding.calculateTopPadding(), start = 20.dp, end = 20.dp,bottom = 40.dp),
         verticalArrangement = Arrangement.Top
     ) {
         //-------- FALTA AGREGAR LAS RESTRICCIONES DE LOS DATOS DE ENTRADA --------
@@ -71,6 +71,7 @@ fun Registro(innerPadding: PaddingValues, navController: NavHostController) {
             value = name,
             onValueChange = { name = it },
             label = { Text(stringResource(R.string.nombre)) },
+            singleLine = true,
             modifier = Modifier.fillMaxWidth()
         )
 
@@ -80,6 +81,7 @@ fun Registro(innerPadding: PaddingValues, navController: NavHostController) {
             value = email,
             onValueChange = { email = it },
             label = { Text(stringResource(R.string.correo)) },
+            singleLine = true,
             modifier = Modifier.fillMaxWidth()
         )
 
@@ -89,6 +91,7 @@ fun Registro(innerPadding: PaddingValues, navController: NavHostController) {
             value = password,
             onValueChange = { password = it },
             label = { Text(stringResource(R.string.contrasena)) },
+            singleLine = true,
             modifier = Modifier.fillMaxWidth(),
             visualTransformation = PasswordVisualTransformation() // Para ocultar la contraseña
         )
@@ -111,6 +114,7 @@ fun Registro(innerPadding: PaddingValues, navController: NavHostController) {
                     keyboardType = KeyboardType.Number,
                     imeAction = ImeAction.Done
                 ),
+                singleLine = true,
                 modifier = Modifier.weight(1f)
             )
             OutlinedTextField(
