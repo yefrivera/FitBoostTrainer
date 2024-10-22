@@ -11,14 +11,11 @@ class FoodViewModel : ViewModel() {
     var foodName = mutableStateOf("")
     var foodGrams = mutableStateOf("")
     var foodCalories = mutableStateOf("")
-    //var mealType = mutableStateOf("Desayuno")
 
     var addedFoods = mutableStateListOf<Map<String, Any>>()
     var suggestions = mutableStateListOf<Map<String, Any>>()
-
     private val db = FirebaseFirestore.getInstance()
     private var firestoreListener: ListenerRegistration? = null
-
     var dailyGoalCalories = mutableStateOf(1000)
     var totalCalories = mutableStateOf(0)
 
@@ -40,15 +37,10 @@ class FoodViewModel : ViewModel() {
         foodCalories.value = newCalories
     }
 
-    /*fun setMealType(newMealType: String) {
-        mealType.value = newMealType
-    }*/
-
     fun clearFields() {
         foodName.value = ""
         foodGrams.value = ""
         foodCalories.value = ""
-        //mealType.value = "Desayuno"
     }
 
     suspend fun addFoodToFirebase(): Boolean {
@@ -102,7 +94,6 @@ class FoodViewModel : ViewModel() {
                 "name", updatedFood["name"].toString(),
                 "grams", updatedFood["grams"].toString(),
                 "calories", updatedFood["calories"].toString(),
-                //"mealType", updatedFood["mealType"].toString()
             )
             .addOnSuccessListener {
                 val index = addedFoods.indexOfFirst { it["id"] == documentId }
@@ -158,7 +149,7 @@ class FoodViewModel : ViewModel() {
 
     fun selectSuggestedFood(food: Map<String, Any>) {
         foodName.value = food["name"].toString()
-        foodGrams.value = "100" // Siempre es 100 gramos por defecto
+        foodGrams.value = "100"
         foodCalories.value = food["calories"].toString()
     }
 }

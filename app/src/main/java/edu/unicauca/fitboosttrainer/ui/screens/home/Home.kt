@@ -35,7 +35,7 @@ fun Home(
     drawerState: DrawerState,
     navController: NavHostController,
     scrollBehavior: TopAppBarScrollBehavior,
-    homeViewModel: HomeViewModel = viewModel() // Agregamos el ViewModel aquí
+    homeViewModel: HomeViewModel = viewModel()
 ) {
     var selectedNavItem by remember { mutableStateOf(BottomNavItem.HOME) }
 

@@ -238,8 +238,6 @@ fun AddFoodSection(viewModel: FoodViewModel, snackbarHostState: SnackbarHostStat
         Column(modifier = Modifier.padding(16.dp)) {
             Text(text = "Agregar Comida", style = MaterialTheme.typography.titleLarge)
             Spacer(modifier = Modifier.height(8.dp))
-
-            // Usamos ExposedDropdownMenuBox en lugar de DropdownMenu para evitar cerrar el teclado
             ExposedDropdownMenuBox(
                 expanded = showSuggestions,
                 onExpandedChange = {
@@ -256,17 +254,15 @@ fun AddFoodSection(viewModel: FoodViewModel, snackbarHostState: SnackbarHostStat
                     leadingIcon = { Icon(imageVector = Icons.Default.Add, contentDescription = "Comida") },
                     modifier = Modifier
                         .fillMaxWidth()
-                        .menuAnchor(), // Importante para anclar el menú
+                        .menuAnchor(),
                     keyboardOptions = KeyboardOptions.Default.copy(
                         imeAction = ImeAction.Next,
                         capitalization = KeyboardCapitalization.Sentences
                     ),
                     keyboardActions = KeyboardActions(onNext = {
-                        gramsFocusRequester.requestFocus() // Mover el foco al campo "Gramos"
+                        gramsFocusRequester.requestFocus()
                     })
                 )
-
-                // Mostrar sugerencias sin cerrar el teclado
                 ExposedDropdownMenu(
                     expanded = showSuggestions,
                     onDismissRequest = { showSuggestions = false }
@@ -277,8 +273,7 @@ fun AddFoodSection(viewModel: FoodViewModel, snackbarHostState: SnackbarHostStat
                             onClick = {
                                 viewModel.selectSuggestedFood(suggestion)
                                 showSuggestions = false
-                                gramsFocusRequester.requestFocus() // Mover el foco al campo Gramos
-                                // Cerrar el teclado si lo deseas aquí
+                                gramsFocusRequester.requestFocus()
                             }
                         )
                     }
@@ -353,38 +348,6 @@ fun AddFoodSection(viewModel: FoodViewModel, snackbarHostState: SnackbarHostStat
     }
 }
 
-/*@Composable
-fun DropdownMenuExample(viewModel: FoodViewModel) {
-    var expanded by remember { mutableStateOf(false) }
-
-    Box {
-        TextButton(onClick = { expanded = true }) {
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                Text(text = viewModel.mealType.value)
-                Icon(imageVector = Icons.Default.ArrowDropDown, contentDescription = "Dropdown Arrow")
-            }
-        }
-        DropdownMenu(expanded = expanded, onDismissRequest = { expanded = false }) {
-            DropdownMenuItem(text = { Text("Desayuno") }, onClick = {
-                viewModel.setMealType("Desayuno")
-                expanded = false
-            })
-            DropdownMenuItem(text = { Text("Almuerzo") }, onClick = {
-                viewModel.setMealType("Almuerzo")
-                expanded = false
-            })
-            DropdownMenuItem(text = { Text("Cena") }, onClick = {
-                viewModel.setMealType("Cena")
-                expanded = false
-            })
-            DropdownMenuItem(text = { Text("Snack") }, onClick = {
-                viewModel.setMealType("Snack")
-                expanded = false
-            })
-        }
-    }
-}*/
-
 @Composable
 fun AddedFoodsSection(viewModel: FoodViewModel) {
     var foodToEdit by remember { mutableStateOf<Map<String, Any>?>(null) }
@@ -418,12 +381,6 @@ fun AddedFoodsSection(viewModel: FoodViewModel) {
                                 .padding(16.dp),
                             verticalArrangement = Arrangement.SpaceBetween
                         ) {
-                            /*Text(
-                                text = "${food["mealType"].toString()}",
-                                modifier = Modifier
-                                    .padding(4.dp)
-                                    .align(Alignment.CenterHorizontally)
-                            )*/
                             Row(
                                 modifier = Modifier.fillMaxWidth(),
                                 horizontalArrangement = Arrangement.SpaceBetween
@@ -494,9 +451,6 @@ fun EditFoodDialog(
     var name by remember { mutableStateOf(food["name"].toString()) }
     var grams by remember { mutableStateOf(food["grams"].toString()) }
     var calories by remember { mutableStateOf(food["calories"].toString()) }
-    //var mealType by remember { mutableStateOf(food["mealType"].toString()) }
-    var expanded by remember { mutableStateOf(false) }
-    //val mealTypes = listOf("Desayuno", "Almuerzo", "Cena", "Snack")
     var showError by remember { mutableStateOf(false) }
 
     AlertDialog(
@@ -533,28 +487,6 @@ fun EditFoodDialog(
                     keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
                     isError = calories.isEmpty()
                 )
-                /*Box(modifier = Modifier.fillMaxWidth()) {
-                    TextButton(onClick = { expanded = true }) {
-                        Text(text = mealType)
-                        Icon(imageVector = Icons.Default.ArrowDropDown, contentDescription = "Dropdown Arrow")
-                    }
-
-                    DropdownMenu(
-                        expanded = expanded,
-                        onDismissRequest = { expanded = false }
-                    ) {
-                        mealTypes.forEach { option ->
-                            DropdownMenuItem(
-                                text = { Text(option) },
-                                onClick = {
-                                    mealType = option
-                                    expanded = false
-                                    showError = false
-                                }
-                            )
-                        }
-                    }
-                }*/
                 if (showError) {
                     Text(
                         text = "Todos los campos son obligatorios.",
@@ -571,7 +503,6 @@ fun EditFoodDialog(
                     updatedFood["name"] = name
                     updatedFood["grams"] = grams
                     updatedFood["calories"] = calories
-                    //updatedFood["mealType"] = mealType
                     onConfirm(updatedFood)
                 } else {
                     showError = true

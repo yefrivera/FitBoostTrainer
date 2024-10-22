@@ -11,8 +11,13 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import edu.unicauca.fitboosttrainer.navigation.NavigationFunction
+import edu.unicauca.fitboosttrainer.ui.screens.HomeScreen
+import edu.unicauca.fitboosttrainer.ui.screens.home.Home
 import edu.unicauca.fitboosttrainer.ui.theme.FitBoostTrainerTheme
 
 
@@ -20,8 +25,6 @@ import edu.unicauca.fitboosttrainer.ui.theme.FitBoostTrainerTheme
 class MainActivity : ComponentActivity() {
 
     @OptIn(ExperimentalMaterial3Api::class)
-
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -30,12 +33,9 @@ class MainActivity : ComponentActivity() {
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                 ) {
-                    val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
-                    val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
-                    var navController = rememberNavController()
                     NavigationFunction()
-
-
+                    //Home(drawerState = rememberDrawerState(initialValue = DrawerValue.Closed), navController = NavHostController(
+                        //LocalContext.current), scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(), viewModel())
                 }
             }
         }

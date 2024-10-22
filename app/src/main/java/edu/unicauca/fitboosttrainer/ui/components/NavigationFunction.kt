@@ -7,16 +7,20 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import edu.unicauca.fitboosttrainer.LoginScreen
+import edu.unicauca.fitboosttrainer.R
 import edu.unicauca.fitboosttrainer.ui.components.DrawerContent
 import edu.unicauca.fitboosttrainer.ui.components.InitialScreen
 import edu.unicauca.fitboosttrainer.ui.screens.*
 import edu.unicauca.fitboosttrainer.ui.screens.CreationRoutine.CreateRoutineScreen
+import edu.unicauca.fitboosttrainer.ui.screens.calorias.CaloriasScreen
+import edu.unicauca.fitboosttrainer.ui.screens.home.Home
 import edu.unicauca.fitboosttrainer.ui.screens.singIn.MeasuresScreen
 import edu.unicauca.fitboosttrainer.ui.screens.singIn.SingInDataScreen
 
@@ -74,10 +78,10 @@ fun NavigationFunction() {
             // Pantalla de inicio (Home) con drawer
             composable("home") {
                 Home(
-                    userName = "John",
                     drawerState = drawerState,
                     navController = navController,
-                    scrollBehavior = scrollBehavior
+                    scrollBehavior = scrollBehavior,
+                    homeViewModel = viewModel()
                 )
             }
 
@@ -146,6 +150,14 @@ fun NavigationFunction() {
                     navController = navController,
                     drawerState = drawerState
                 )
+            }
+
+            composable("RegisterDoneScreen") {
+                CompletedScreen(congratsText = stringResource(R.string.register_done),navController = navController)
+            }
+
+            composable("RoutineCreationDoneScreen") {
+                CompletedScreen(congratsText = stringResource(R.string.routine_done),navController = navController)
             }
 
 
