@@ -13,6 +13,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import edu.unicauca.fitboosttrainer.R
@@ -23,6 +24,8 @@ import edu.unicauca.fitboosttrainer.ui.theme.FitBoostTrainerTheme
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SingInDataScreen(navController: NavHostController) {
+    val viewModel: SingInDataViewModel = viewModel()
+    val uiState by viewModel.uiState.collectAsState()
 
     Scaffold(
         topBar ={
@@ -31,26 +34,12 @@ fun SingInDataScreen(navController: NavHostController) {
             )
         }
     ) { innerPadding ->
-            Registro(innerPadding=innerPadding, navController=navController)
+            Registro(innerPadding = innerPadding, navController = navController, uiState = uiState, viewModel = viewModel)
     }
 }
 
 @Composable
-fun Registro(innerPadding: PaddingValues, navController: NavHostController) {
-
-    var name by remember { mutableStateOf("") }
-    var email by remember { mutableStateOf("") }
-    var password by remember { mutableStateOf("") }
-    var day by remember { mutableStateOf("") }
-    var month by remember { mutableStateOf("") }
-    var year by remember { mutableStateOf("") }
-    var height by remember { mutableStateOf("") }
-    var weight by remember { mutableStateOf("") }
-
-    // Dropdown menu states
-    var trainingFrequency by remember { mutableStateOf("") }
-    var trainingGoal by remember { mutableStateOf("") }
-
+fun Registro(innerPadding: PaddingValues, navController: NavHostController, uiState: SingInDataUIState, viewModel: SingInDataViewModel) {
     val frequencyOptions = listOf("1 a 2 días", "3 a 4 días", "5 a 6 días", "Todos los días")
     val goalOptions = listOf("Perder peso", "Ganar masa muscular", "Crear hábitos saludables")
 
@@ -68,9 +57,13 @@ fun Registro(innerPadding: PaddingValues, navController: NavHostController) {
         // Nombre
         Spacer(modifier = Modifier.height(espaciado))
         OutlinedTextField(
-            value = name,
-            onValueChange = { name = it },
+            value = uiState.name,
+            onValueChange = { viewModel.updateField("name", it) },
             label = { Text(stringResource(R.string.nombre)) },
+            keyboardOptions = KeyboardOptions(
+                keyboardType = KeyboardType.Text,
+                imeAction = ImeAction.Done
+            ),
             singleLine = true,
             modifier = Modifier.fillMaxWidth()
         )
@@ -78,9 +71,13 @@ fun Registro(innerPadding: PaddingValues, navController: NavHostController) {
         // Correo
         Spacer(modifier = Modifier.height(espaciado))
         OutlinedTextField(
-            value = email,
-            onValueChange = { email = it },
+            value = uiState.email,
+            onValueChange = { viewModel.updateField("email", it) },
             label = { Text(stringResource(R.string.correo)) },
+            keyboardOptions = KeyboardOptions(
+                keyboardType = KeyboardType.Email,
+                imeAction = ImeAction.Done
+            ),
             singleLine = true,
             modifier = Modifier.fillMaxWidth()
         )
@@ -88,10 +85,14 @@ fun Registro(innerPadding: PaddingValues, navController: NavHostController) {
         // Contraseña
         Spacer(modifier = Modifier.height(espaciado))
         OutlinedTextField(
-            value = password,
-            onValueChange = { password = it },
+            value = uiState.password,
+            onValueChange = { viewModel.updateField("password", it) },
             label = { Text(stringResource(R.string.contrasena)) },
             singleLine = true,
+            keyboardOptions = KeyboardOptions(
+                keyboardType = KeyboardType.Password,
+                imeAction = ImeAction.Done
+            ),
             modifier = Modifier.fillMaxWidth(),
             visualTransformation = PasswordVisualTransformation() // Para ocultar la contraseña
         )
@@ -104,10 +105,10 @@ fun Registro(innerPadding: PaddingValues, navController: NavHostController) {
             modifier = Modifier.fillMaxWidth()
         ) {
             OutlinedTextField(
-                value = day,
+                value = uiState.day,
                 onValueChange = {
                     if (it.length <= 2) {
-                        day = it
+                        viewModel.updateField("day", it)
                     } },
                 label = { Text("DD") },
                 keyboardOptions = KeyboardOptions(
@@ -118,10 +119,10 @@ fun Registro(innerPadding: PaddingValues, navController: NavHostController) {
                 modifier = Modifier.weight(1f)
             )
             OutlinedTextField(
-                value = month,
+                value = uiState.month,
                 onValueChange = {
                     if (it.length <= 2) {
-                        month = it
+                        viewModel.updateField("month", it)
                     } },
                 label = { Text("MM")},
                 keyboardOptions = KeyboardOptions(
@@ -132,10 +133,10 @@ fun Registro(innerPadding: PaddingValues, navController: NavHostController) {
 
             )
             OutlinedTextField(
-                value = year,
+                value = uiState.year,
                 onValueChange = {
                     if (it.length <= 4) {
-                        year = it
+                        viewModel.updateField("year", it)
                     } },
                 label = { Text("YYYY") },
                 keyboardOptions = KeyboardOptions(
@@ -156,10 +157,11 @@ fun Registro(innerPadding: PaddingValues, navController: NavHostController) {
             modifier = Modifier.fillMaxWidth()
         ) {
             OutlinedTextField(
-                value = height,
+                value = uiState.height,
                 onValueChange = {
                     if (it.length <= 3) {
-                    height = it }},
+                        viewModel.updateField("height", it)}
+                    },
                 label = { Text(stringResource(R.string.altura)) },
                 keyboardOptions = KeyboardOptions(
                     keyboardType = KeyboardType.Number,
@@ -168,10 +170,10 @@ fun Registro(innerPadding: PaddingValues, navController: NavHostController) {
                 modifier = Modifier.weight(1f)
             )
             OutlinedTextField(
-                value = weight,
+                value = uiState.weight,
                 onValueChange = {
                     if (it.length <= 3) {
-                        weight = it
+                        viewModel.updateField("weight", it)
                     }
                 },
                 label = { Text(stringResource(R.string.pesoKg)) },
@@ -188,8 +190,8 @@ fun Registro(innerPadding: PaddingValues, navController: NavHostController) {
         DropdownMenuField(
             label = "¿Cuántas veces a la semana desea entrenar?",
             options = frequencyOptions,
-            selectedOption = trainingFrequency,
-            onOptionSelected = { trainingFrequency = it }
+            selectedOption = uiState.trainingFrequency,
+            onOptionSelected = { viewModel.updateField("training", it) }
         )
 
         // ¿Cuál es su meta de entrenamiento?
@@ -197,8 +199,8 @@ fun Registro(innerPadding: PaddingValues, navController: NavHostController) {
         DropdownMenuField(
             label = "¿Cuál es su meta de entrenamiento?",
             options = goalOptions,
-            selectedOption = trainingGoal,
-            onOptionSelected = { trainingGoal = it }
+            selectedOption = uiState.trainingGoal,
+            onOptionSelected = { viewModel.updateField("trainingGoal", it) }
         )
 
         // Botón Siguiente
