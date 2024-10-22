@@ -7,11 +7,13 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.res.stringResource
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import edu.unicauca.fitboosttrainer.LoginScreen
+import edu.unicauca.fitboosttrainer.R
 import edu.unicauca.fitboosttrainer.ui.components.DrawerContent
 import edu.unicauca.fitboosttrainer.ui.components.InitialScreen
 import edu.unicauca.fitboosttrainer.ui.screens.*
@@ -144,6 +146,14 @@ fun NavigationFunction() {
                     navController = navController,
                     drawerState = drawerState
                 )
+            }
+
+            composable("RegisterDoneScreen") {
+                CompletedScreen(congratsText = stringResource(R.string.register_done),navController = navController)
+            }
+
+            composable("RoutineCreationDoneScreen") {
+                CompletedScreen(congratsText = stringResource(R.string.routine_done),navController = navController)
             }
 
 
