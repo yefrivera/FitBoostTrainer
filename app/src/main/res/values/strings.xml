@@ -106,5 +106,7 @@
     <string name="pantorrillaDer">Pantorrilla Derecha</string>
     <string name="infomedidas">Todas las medidas se toman en contorno</string>
     <string name="iniciando_sesion">Iniciando Sesion</string>
+    <string name="routine_done">¡Rutina creada con éxito!</string>
+    <string name="register_done">¡Registro Exitoso!</string>
 
 </resources>

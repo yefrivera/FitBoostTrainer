@@ -7,17 +7,17 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.compose.ui.res.stringResource
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import edu.unicauca.fitboosttrainer.LoginScreen
+import edu.unicauca.fitboosttrainer.R
 import edu.unicauca.fitboosttrainer.ui.components.DrawerContent
 import edu.unicauca.fitboosttrainer.ui.components.InitialScreen
 import edu.unicauca.fitboosttrainer.ui.screens.*
 import edu.unicauca.fitboosttrainer.ui.screens.CreationRoutine.CreateRoutineScreen
-import edu.unicauca.fitboosttrainer.ui.screens.CreationRoutine.RoutineSummaryScreen
 import edu.unicauca.fitboosttrainer.ui.screens.singIn.MeasuresScreen
 import edu.unicauca.fitboosttrainer.ui.screens.singIn.SingInDataScreen
 
@@ -96,8 +96,7 @@ fun NavigationFunction() {
                 CaloriasScreen(
                     scrollBehavior = scrollBehavior,
                     drawerState = drawerState,
-                    navController = navController,
-                    viewModel = viewModel()
+                    navController = navController
                 )
             }
 
@@ -149,8 +148,12 @@ fun NavigationFunction() {
                 )
             }
 
-            composable("routineSummary") {
-                RoutineSummaryScreen(navController = navController)
+            composable("RegisterDoneScreen") {
+                CompletedScreen(congratsText = stringResource(R.string.register_done),navController = navController)
+            }
+
+            composable("RoutineCreationDoneScreen") {
+                CompletedScreen(congratsText = stringResource(R.string.routine_done),navController = navController)
             }
 
 
