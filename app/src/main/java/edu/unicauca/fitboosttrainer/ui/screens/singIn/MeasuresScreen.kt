@@ -269,7 +269,7 @@ fun RegistroMedidas(innerPadding: PaddingValues, navController: NavHostControlle
         // Botón Siguiente
         Spacer(modifier = Modifier.height(espaciado))
         Button(
-            onClick = { navController.navigate("home")},
+            onClick = { navController.navigate("RegisterDoneScreen")},
             modifier = Modifier.fillMaxWidth()
         ) {
             Text(text = "Finalizar")

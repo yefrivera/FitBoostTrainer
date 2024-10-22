@@ -49,6 +49,7 @@ fun HomeScreen(
     drawerState: DrawerState
 ) {
 
+
     var selectedNavItem by remember { mutableStateOf(BottomNavItem.RUTINAS) }
 
     Scaffold(
@@ -150,7 +151,9 @@ fun ScrollContent2(innerPadding: PaddingValues, navController: NavHostController
                 Text(text = " + Crear Rutinas")
             }
             Button(
-                onClick = { navController.navigate("savedRoutine")  },
+                onClick = {
+                    navController.navigate("savedRoutine")
+                          },
                 shape = MaterialTheme.shapes.small,
             ) {
                 Text(text = stringResource(R.string.saved_routines))

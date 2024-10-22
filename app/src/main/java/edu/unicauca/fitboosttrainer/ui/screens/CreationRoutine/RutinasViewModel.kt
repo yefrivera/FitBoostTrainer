@@ -4,8 +4,13 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.google.firebase.firestore.FirebaseFirestore
+
 import edu.unicauca.fitboosttrainer.data.Exercise
 import edu.unicauca.fitboosttrainer.data.ExerciseData
+import edu.unicauca.fitboosttrainer.data.Routine
+import kotlinx.coroutines.launch
 
 
 class RoutineViewModel : ViewModel() {
@@ -13,12 +18,14 @@ class RoutineViewModel : ViewModel() {
     var uiState by mutableStateOf(RoutineUiState())
         private set
 
-    var searchExercise by mutableStateOf("")
-        private set
-    var routineName by mutableStateOf("")
-        private set
-    var seriesNumber by mutableStateOf("")
-        private set
+    private val firestore = FirebaseFirestore.getInstance()
+
+    //var searchExercise by mutableStateOf("")
+        //private set
+    //var routineName by mutableStateOf("")
+        //private set
+    //var seriesNumber by mutableStateOf("")
+        //private set
 
     // Método para actualizar el nombre de la rutina
     fun onRoutineNameChange(newName: String) {
@@ -55,9 +62,35 @@ class RoutineViewModel : ViewModel() {
         )
     }
 
-    // Método para agregar un ejercicio seleccionado
+        // Método para agregar un ejercicio seleccionado
     fun addExercise(exercise: Exercise) {
         uiState = uiState.copy(selectedExercises = uiState.selectedExercises + exercise)
+    }
+
+    // Guardar rutina en Firebase
+    fun saveRoutine(name: String, series: Int) {
+        val newRoutine = Routine(
+            name = name,
+            series = series,
+            exercises = uiState.selectedExercises
+        )
+
+        viewModelScope.launch {
+            firestore.collection("rutinasGuardadas")
+                .add(newRoutine)
+                .addOnSuccessListener {
+                    // Acciones en caso de éxito, como resetear la UI
+                }
+                .addOnFailureListener { exception ->
+                    // Manejo de errores
+                }
+        }
+    }
+
+    fun removeExercise(exercise: Exercise) {
+        uiState = uiState.copy(
+            selectedExercises = uiState.selectedExercises.filter { it != exercise }
+        )
     }
 }
 
