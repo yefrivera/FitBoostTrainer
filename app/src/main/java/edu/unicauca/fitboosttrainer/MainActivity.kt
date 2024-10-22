@@ -14,7 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.rememberNavController
 import edu.unicauca.fitboosttrainer.navigation.NavigationFunction
-import edu.unicauca.fitboosttrainer.ui.screens.CaloriasScreen
+import edu.unicauca.fitboosttrainer.ui.screens.calorias.CaloriasScreen
 import edu.unicauca.fitboosttrainer.ui.theme.FitBoostTrainerTheme
 
 
@@ -32,16 +32,9 @@ class MainActivity : ComponentActivity() {
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                 ) {
-                    val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
-                    val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
-                    var navController = rememberNavController()
-                    //NavigationFunction()
-                    CaloriasScreen(
-                        scrollBehavior = scrollBehavior,
-                        drawerState = drawerState,
-                        navController = navController,
-                        viewModel = viewModel()
-                    )
+
+                    NavigationFunction()
+
 
                 }
             }

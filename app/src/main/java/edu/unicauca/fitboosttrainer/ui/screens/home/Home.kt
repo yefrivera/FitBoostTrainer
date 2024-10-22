@@ -1,12 +1,9 @@
-package edu.unicauca.fitboosttrainer.ui.screens
+package edu.unicauca.fitboosttrainer.ui.screens.home
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.AddCircle
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -17,18 +14,15 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
 import edu.unicauca.fitboosttrainer.R
 import edu.unicauca.fitboosttrainer.ui.components.BottomNavItem
 import edu.unicauca.fitboosttrainer.ui.components.BottomNavigation
@@ -37,10 +31,11 @@ import edu.unicauca.fitboosttrainer.ui.theme.FitBoostTrainerTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun Home(userName: String,
-         drawerState: DrawerState,
-         navController: NavHostController,
-         scrollBehavior: TopAppBarScrollBehavior
+fun Home(
+    drawerState: DrawerState,
+    navController: NavHostController,
+    scrollBehavior: TopAppBarScrollBehavior,
+    homeViewModel: HomeViewModel = viewModel() // Agregamos el ViewModel aquí
 ) {
     var selectedNavItem by remember { mutableStateOf(BottomNavItem.HOME) }
 
@@ -68,14 +63,12 @@ fun Home(userName: String,
                 .padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
+            // Usamos los valores observados desde el ViewModel
             Text(
-                text = "Hola, $userName \n¿Listo para entrenar hoy?",
+                text = "Hola, ${homeViewModel.userName.value} \n¿Listo para entrenar hoy?",
                 fontSize = 28.sp,
-                //fontWeight = FontWeight.Bold,
                 modifier = Modifier.padding(bottom = 8.dp)
             )
-            //Spacer(modifier = Modifier.height(16.dp))
-
             Box(modifier = Modifier.fillMaxWidth()) {
                 Image(
                     painter = painterResource(id = R.drawable.logo),
@@ -87,61 +80,19 @@ fun Home(userName: String,
                 )
             }
 
-            //Spacer(modifier = Modifier.height(16.dp))
+            ProgressSummary(
+                caloriesBurned = homeViewModel.caloriesBurned.value,
+                completedWorkouts = homeViewModel.completedWorkouts.value,
+                totalWorkouts = homeViewModel.totalWorkouts.value
+            )
 
-            RoutineSection()
-            ProgressSummary()
             NewWorkoutButton(navController)
         }
     }
 }
 
 @Composable
-fun SectionItem(icon: ImageVector, title: String, backgroundColor: Color) {
-    Card(
-        shape = RoundedCornerShape(8.dp),
-        colors = CardDefaults.cardColors(containerColor = backgroundColor),
-        modifier = Modifier
-            .size(100.dp)
-            .clickable { /* Navegar a la sección */ }
-    ) {
-        Column(
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center,
-            modifier = Modifier.fillMaxSize()
-        ) {
-            Icon(icon, contentDescription = title, modifier = Modifier.size(40.dp), tint = Color.Black)
-            Spacer(modifier = Modifier.height(8.dp))
-            Text(text = title, fontSize = 14.sp, fontWeight = FontWeight.SemiBold)
-        }
-    }
-}
-
-@Composable
-fun RoutineSection() {
-    Card(
-        shape = RoundedCornerShape(8.dp),
-        elevation = CardDefaults.cardElevation(4.dp),
-        modifier = Modifier.fillMaxWidth()
-    ) {
-        Column(modifier = Modifier.padding(16.dp)) {
-            Text(text = "Próximas Rutinas", fontSize = 18.sp, fontWeight = FontWeight.Bold)
-            Spacer(modifier = Modifier.height(8.dp))
-            Row(horizontalArrangement = Arrangement.SpaceBetween, modifier = Modifier.fillMaxWidth()) {
-                Text(text = "Rutina de Fuerza Máxima", fontSize = 16.sp)
-                Text(text = "Mañana", fontSize = 14.sp, color = Color.Gray)
-            }
-            Spacer(modifier = Modifier.height(4.dp))
-            Row(horizontalArrangement = Arrangement.SpaceBetween, modifier = Modifier.fillMaxWidth()) {
-                Text(text = "Entrenamiento de Cardio", fontSize = 16.sp)
-                Text(text = "En 2 días", fontSize = 14.sp, color = Color.Gray)
-            }
-        }
-    }
-}
-
-@Composable
-fun ProgressSummary() {
+fun ProgressSummary(caloriesBurned: Int, completedWorkouts: Int, totalWorkouts: Int) {
     Card(
         shape = RoundedCornerShape(8.dp),
         elevation = CardDefaults.cardElevation(4.dp),
@@ -152,12 +103,12 @@ fun ProgressSummary() {
             Spacer(modifier = Modifier.height(8.dp))
             Row(horizontalArrangement = Arrangement.SpaceBetween, modifier = Modifier.fillMaxWidth()) {
                 Text(text = "Calorías quemadas esta semana", fontSize = 16.sp)
-                Text(text = "1500 kcal", fontSize = 16.sp, fontWeight = FontWeight.SemiBold)
+                Text(text = "$caloriesBurned kcal", fontSize = 16.sp, fontWeight = FontWeight.SemiBold)
             }
             Spacer(modifier = Modifier.height(8.dp))
             Row(horizontalArrangement = Arrangement.SpaceBetween, modifier = Modifier.fillMaxWidth()) {
                 Text(text = "Entrenamientos completados", fontSize = 16.sp)
-                Text(text = "3/5", fontSize = 16.sp, fontWeight = FontWeight.SemiBold)
+                Text(text = "$completedWorkouts/$totalWorkouts", fontSize = 16.sp, fontWeight = FontWeight.SemiBold)
             }
         }
     }
@@ -166,7 +117,7 @@ fun ProgressSummary() {
 @Composable
 fun NewWorkoutButton(navController: NavHostController) {
     Button(
-        onClick = { navController.navigate("crearRutinasHome")},
+        onClick = { navController.navigate("crearRutinasHome") },
         modifier = Modifier
             .fillMaxWidth()
             .padding(vertical = 16.dp),
@@ -181,6 +132,6 @@ fun NewWorkoutButton(navController: NavHostController) {
 @Composable
 fun HomePreview() {
     FitBoostTrainerTheme {
-        Home(userName = "John", drawerState = rememberDrawerState(initialValue = DrawerValue.Closed), navController = NavHostController(LocalContext.current),scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior())
+        Home(drawerState = rememberDrawerState(initialValue = DrawerValue.Closed), navController = NavHostController(LocalContext.current), scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior())
     }
 }

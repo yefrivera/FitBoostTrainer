@@ -1,4 +1,4 @@
-package edu.unicauca.fitboosttrainer.ui.components
+package edu.unicauca.fitboosttrainer.ui.screens.calorias
 
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
@@ -14,6 +14,7 @@ class FoodViewModel : ViewModel() {
     //var mealType = mutableStateOf("Desayuno")
 
     var addedFoods = mutableStateListOf<Map<String, Any>>()
+    var suggestions = mutableStateListOf<Map<String, Any>>()
 
     private val db = FirebaseFirestore.getInstance()
     private var firestoreListener: ListenerRegistration? = null
@@ -27,10 +28,12 @@ class FoodViewModel : ViewModel() {
 
     fun setFoodName(newName: String) {
         foodName.value = newName
+        fetchFoodSuggestions(newName)
     }
 
     fun setFoodGrams(newGrams: String) {
         foodGrams.value = newGrams
+        calculateCalories()
     }
 
     fun setFoodCalories(newCalories: String) {
@@ -84,6 +87,13 @@ class FoodViewModel : ViewModel() {
             }
     }
 
+    private fun calculateCalories() {
+        val grams = foodGrams.value.toIntOrNull() ?: 100
+        val baseCalories = suggestions.firstOrNull { it["name"] == foodName.value }?.get("calories").toString().toIntOrNull() ?: 0
+        val updatedCalories = (baseCalories * grams) / 100
+        foodCalories.value = updatedCalories.toString()
+    }
+
     fun updateFoodInFirebase(updatedFood: Map<String, Any>) {
         val documentId = updatedFood["id"].toString()
         db.collection("comidas")
@@ -123,4 +133,33 @@ class FoodViewModel : ViewModel() {
     fun updateDailyGoalCalories(newGoal: Int) {
         dailyGoalCalories.value = newGoal
     }
+
+    // Buscar sugerencias de comida por nombre
+    private fun fetchFoodSuggestions(query: String) {
+        if (query.isEmpty()) {
+            suggestions.clear()
+            return
+        }
+
+        db.collection("comidasGuardadas")
+            .whereGreaterThanOrEqualTo("name", query)
+            .whereLessThanOrEqualTo("name", "$query\uf8ff")
+            .get()
+            .addOnSuccessListener { documents ->
+                suggestions.clear()
+                for (document in documents) {
+                    suggestions.add(document.data)
+                }
+            }
+            .addOnFailureListener {
+                suggestions.clear()
+            }
+    }
+
+    fun selectSuggestedFood(food: Map<String, Any>) {
+        foodName.value = food["name"].toString()
+        foodGrams.value = "100" // Siempre es 100 gramos por defecto
+        foodCalories.value = food["calories"].toString()
+    }
 }
+
