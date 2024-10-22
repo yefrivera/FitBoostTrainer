@@ -7,6 +7,7 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
@@ -94,7 +95,8 @@ fun NavigationFunction() {
                 CaloriasScreen(
                     scrollBehavior = scrollBehavior,
                     drawerState = drawerState,
-                    navController = navController
+                    navController = navController,
+                    viewModel = viewModel()
                 )
             }
 
