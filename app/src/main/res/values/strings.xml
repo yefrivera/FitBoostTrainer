@@ -105,5 +105,6 @@
     <string name="pantorrillaIzq">Pantorrilla Izquierda</string>
     <string name="pantorrillaDer">Pantorrilla Derecha</string>
     <string name="infomedidas">Todas las medidas se toman en contorno</string>
+    <string name="iniciando_sesion">Iniciando Sesion</string>
 
 </resources>

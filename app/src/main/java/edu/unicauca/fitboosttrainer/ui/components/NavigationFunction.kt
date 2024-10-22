@@ -16,8 +16,8 @@ import edu.unicauca.fitboosttrainer.ui.components.DrawerContent
 import edu.unicauca.fitboosttrainer.ui.components.InitialScreen
 import edu.unicauca.fitboosttrainer.ui.screens.*
 import edu.unicauca.fitboosttrainer.ui.screens.CreationRoutine.CreateRoutineScreen
-import edu.unicauca.fitboosttrainer.ui.screens.SingIn.RegistrerMessureScreen
-import edu.unicauca.fitboosttrainer.ui.screens.SingIn.SingInDataScreen
+import edu.unicauca.fitboosttrainer.ui.screens.singIn.MeasuresScreen
+import edu.unicauca.fitboosttrainer.ui.screens.singIn.SingInDataScreen
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -67,7 +67,7 @@ fun NavigationFunction() {
 
             // Pantalla registro de medidas (sin drawer)
             composable("RegistrerMessureScreen") {
-                RegistrerMessureScreen(navController = navController)
+                MeasuresScreen(navController = navController)
             }
 
             // Pantalla de inicio (Home) con drawer

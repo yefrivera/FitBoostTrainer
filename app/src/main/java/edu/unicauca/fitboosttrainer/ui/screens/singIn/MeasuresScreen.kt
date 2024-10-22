@@ -1,4 +1,4 @@
-package edu.unicauca.fitboosttrainer.ui.screens.SingIn
+package edu.unicauca.fitboosttrainer.ui.screens.singIn
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
@@ -20,10 +20,8 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -33,6 +31,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import edu.unicauca.fitboosttrainer.R
@@ -42,7 +41,9 @@ import edu.unicauca.fitboosttrainer.ui.theme.FitBoostTrainerTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun RegistrerMessureScreen(navController: NavHostController) {
+fun MeasuresScreen(navController: NavHostController) {
+    val viewModel: MeasuresViewModel = viewModel()
+    val uiState by viewModel.uiState.collectAsState()
 
     Scaffold(
         topBar ={
@@ -51,23 +52,12 @@ fun RegistrerMessureScreen(navController: NavHostController) {
             )
         }
     ) { innerPadding ->
-        RegistroMedidas(innerPadding=innerPadding)
+        RegistroMedidas(innerPadding = innerPadding, navController = navController, uiState = uiState, viewModel = viewModel)
     }
 }
 
 @Composable
-fun RegistroMedidas(innerPadding: PaddingValues) {
-
-    var hombro by remember { mutableStateOf("") }
-    var bicepIzq by remember { mutableStateOf("") }
-    var cintura by remember { mutableStateOf("") }
-    var cadera by remember { mutableStateOf("") }
-    var pantorrillaIzq by remember { mutableStateOf("") }
-    var musloIzq by remember { mutableStateOf("") }
-    var pecho by remember { mutableStateOf("") }
-    var bicepDer by remember { mutableStateOf("") }
-    var musloDer by remember { mutableStateOf("") }
-    var pantorrillaDer by remember { mutableStateOf("") }
+fun RegistroMedidas(innerPadding: PaddingValues, navController: NavHostController,  uiState: MeasuresUIState, viewModel: MeasuresViewModel) {
     val espaciado = 20.dp
     val scrollState = rememberScrollState()
 
@@ -105,10 +95,10 @@ fun RegistroMedidas(innerPadding: PaddingValues) {
                 modifier = Modifier.fillMaxWidth()
             ) {
                 OutlinedTextField(
-                    value = hombro,
+                    value = uiState.hombro,
                     onValueChange = {
                         if (it.length <= 3) {
-                            hombro = it
+                            viewModel.updateMeasure("hombro", it)
                         }
                     },
                     label = { Text(stringResource(R.string.hombro)) },
@@ -119,10 +109,10 @@ fun RegistroMedidas(innerPadding: PaddingValues) {
                     modifier = Modifier.weight(1f)
                 )
                 OutlinedTextField(
-                    value = pecho,
+                    value = uiState.pecho,
                     onValueChange = {
                         if (it.length <= 3) {
-                            pecho = it
+                            viewModel.updateMeasure("pecho", it)
                         }
                     },
                     label = { Text(stringResource(R.string.ce_chest)) },
@@ -139,10 +129,10 @@ fun RegistroMedidas(innerPadding: PaddingValues) {
                 modifier = Modifier.fillMaxWidth()
             ) {
                 OutlinedTextField(
-                    value = bicepIzq,
+                    value = uiState.bicepIzq,
                     onValueChange = {
                         if (it.length <= 2) {
-                            bicepIzq= it
+                            viewModel.updateMeasure("bicepIzq", it)
                         }
                     },
                     label = { Text(stringResource(R.string.BicepIzq)) },
@@ -153,10 +143,10 @@ fun RegistroMedidas(innerPadding: PaddingValues) {
                     modifier = Modifier.weight(1f)
                 )
                 OutlinedTextField(
-                    value = bicepDer,
+                    value = uiState.bicepDer,
                     onValueChange = {
                         if (it.length <= 2) {
-                            bicepDer = it
+                            viewModel.updateMeasure("bicepDer", it)
                         }
                     },
                     label = { Text(stringResource(R.string.bicepDer)) },
@@ -174,10 +164,10 @@ fun RegistroMedidas(innerPadding: PaddingValues) {
                 modifier = Modifier.fillMaxWidth()
             ) {
                 OutlinedTextField(
-                    value = cintura,
+                    value = uiState.cintura,
                     onValueChange = {
                         if (it.length <= 3) {
-                            cintura = it
+                            viewModel.updateMeasure("cintura", it)
                         }
                     },
                     label = { Text(stringResource(R.string.cintura))},
@@ -188,10 +178,10 @@ fun RegistroMedidas(innerPadding: PaddingValues) {
                     modifier = Modifier.weight(1f)
                 )
                 OutlinedTextField(
-                    value = cadera,
+                    value = uiState.cadera,
                     onValueChange = {
                         if (it.length <= 3) {
-                            cadera = it
+                            viewModel.updateMeasure("cadera", it)
                         }
                     },
                     label = { Text(stringResource(R.string.cadera)) },
@@ -208,10 +198,10 @@ fun RegistroMedidas(innerPadding: PaddingValues) {
                 modifier = Modifier.fillMaxWidth()
             ) {
                 OutlinedTextField(
-                    value = musloIzq,
+                    value = uiState.musloIzq,
                     onValueChange = {
                         if (it.length <= 2) {
-                            musloIzq = it
+                           viewModel.updateMeasure("musloIzq", it)
                         }
                     },
                     label = { Text(stringResource(R.string.musloIzq)) },
@@ -223,10 +213,10 @@ fun RegistroMedidas(innerPadding: PaddingValues) {
 
                 )
                 OutlinedTextField(
-                    value = musloDer,
+                    value = uiState.musloDer,
                     onValueChange = {
                         if (it.length <= 2) {
-                            musloDer = it
+                            viewModel.updateMeasure("musloDer", it)
                         }
                     },
                     label = { Text(stringResource(R.string.musloDer)) },
@@ -244,10 +234,10 @@ fun RegistroMedidas(innerPadding: PaddingValues) {
                 modifier = Modifier.fillMaxWidth()
             ) {
                 OutlinedTextField(
-                    value = pantorrillaIzq,
+                    value = uiState.pantorrillaIzq,
                     onValueChange = {
                         if (it.length <= 2) {
-                            pantorrillaIzq = it
+                            viewModel.updateMeasure("pantorrillaIzq", it)
                         }
                     },
                     label = { Text(stringResource(R.string.pantorrillaIzq)) },
@@ -258,10 +248,10 @@ fun RegistroMedidas(innerPadding: PaddingValues) {
                     modifier = Modifier.weight(1f)
                 )
                 OutlinedTextField(
-                    value = pantorrillaDer,
+                    value = uiState.pantorrillaDer,
                     onValueChange = {
                         if (it.length <= 2) {
-                            pantorrillaDer = it
+                            viewModel.updateMeasure("pantorrillaDer", it)
                         }
                     },
                     label = { Text(stringResource(R.string.pantorrillaDer)) },
@@ -279,7 +269,7 @@ fun RegistroMedidas(innerPadding: PaddingValues) {
         // Botón Siguiente
         Spacer(modifier = Modifier.height(espaciado))
         Button(
-            onClick = { /* Lógica del botón */ },
+            onClick = { navController.navigate("home")},
             modifier = Modifier.fillMaxWidth()
         ) {
             Text(text = "Finalizar")
@@ -288,10 +278,11 @@ fun RegistroMedidas(innerPadding: PaddingValues) {
 }
 
 
+
 @Preview(showBackground = true)
 @Composable
-fun RegistrerMessureScreenPreview() {
+fun MeasuresScreenPreview() {
     FitBoostTrainerTheme {
-        RegistrerMessureScreen(navController= rememberNavController())
+        MeasuresScreen(navController= rememberNavController())
     }
 }
