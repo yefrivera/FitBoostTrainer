@@ -19,6 +19,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import edu.unicauca.fitboosttrainer.ui.components.TopBarTitle
+//import edu.unicauca.fitboosttrainer.ui.screens.logIn.AuthManager
 import edu.unicauca.fitboosttrainer.ui.screens.logIn.LoginUIState
 import edu.unicauca.fitboosttrainer.ui.screens.logIn.LoginViewModel
 import edu.unicauca.fitboosttrainer.ui.theme.FitBoostTrainerTheme
