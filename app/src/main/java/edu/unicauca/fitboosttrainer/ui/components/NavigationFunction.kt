@@ -177,7 +177,6 @@ fun NavigationFunction() {
                 CompletedScreen(congratsText = stringResource(R.string.routine_done),navController = navController)
             }
 
-
         }
     }
 }

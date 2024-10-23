@@ -17,7 +17,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.lifecycle.viewmodel.compose.viewModel
-import edu.unicauca.fitboosttrainer.R
 import edu.unicauca.fitboosttrainer.ui.components.BottomNavItem
 import edu.unicauca.fitboosttrainer.ui.components.BottomNavigation
 import edu.unicauca.fitboosttrainer.ui.components.MainTopAppBarAlt
@@ -35,13 +34,12 @@ fun RoutineDetailScreen(
         viewModel.loadRoutineExercises(routineId)
     }
     var selectedNavItem by remember { mutableStateOf(BottomNavItem.RUTINAS) }
-    val exercises = viewModel.exercises
-    val isLoading = viewModel.isLoading
+    val routineName = viewModel.routineName
 
     Scaffold(
         topBar = {
             MainTopAppBarAlt(
-                title = stringResource(R.string.saved_routines),
+                title = routineName,
                 scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(),
                 drawerState = drawerState,
                 onBackClick = { navController.popBackStack() }
@@ -54,34 +52,84 @@ fun RoutineDetailScreen(
                 navController = navController
             )
         }
-    ) { paddingValues ->
-        if (isLoading) {
-            // Mostrar indicador de carga mientras se obtienen los ejercicios
-            Box(
+    ) { innerPadding -> paddingExercise(innerPadding = innerPadding, viewModel = viewModel, navController = navController)}
+
+}
+
+@Composable
+fun paddingExercise(innerPadding: PaddingValues,
+                    viewModel: RoutineDetailViewModel = viewModel(),
+                    navController: NavHostController
+) {
+    val exercises = viewModel.exercises
+    val isLoading = viewModel.isLoading
+
+    var completedCount by remember { mutableStateOf(0) }
+
+    val progress = if (exercises.isNotEmpty()) completedCount.toFloat() / exercises.size else 0f
+
+    if (isLoading) {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(innerPadding),
+            contentAlignment = Alignment.Center
+        ) {
+            CircularProgressIndicator()
+        }
+    } else {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(innerPadding)
+        ) {
+            // Barra de progreso
+            LinearProgressIndicator(
+                progress = { progress },
                 modifier = Modifier
-                    .fillMaxSize()
-                    .padding(paddingValues),
-                contentAlignment = Alignment.Center
-            ) {
-                CircularProgressIndicator()
-            }
-        } else {
-            // Mostrar la lista de ejercicios una vez cargados
+                    .fillMaxWidth()
+                    .padding(16.dp),
+            )
+
             LazyColumn(
-                contentPadding = paddingValues,
-                modifier = Modifier.fillMaxSize()
+                contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp),
+                modifier = Modifier.weight(1f)
             ) {
                 items(exercises) { exercise ->
-                    ExerciseItemCard(exercise)
+                    ExerciseItemCard(
+                        exercise = exercise,
+                        onCheckedChange = { isChecked ->
+                            if (isChecked) {
+                                completedCount++
+                            } else {
+                                completedCount--
+                            }
+                        }
+                    )
                 }
+            }
+            // Botón para finalizar rutina
+            Button(
+                onClick = {
+                    navController.navigate("trainCompletedScreen")
+                },
+                enabled = completedCount == exercises.size,  // Se habilita solo cuando todos los ejercicios están completados
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp)
+            ) {
+                Text(text = "Finalizar rutina")
             }
         }
     }
 }
 
+
 @Composable
 fun ExerciseItemCard(
-    exercise: Exercise) {
+    exercise: Exercise,
+    onCheckedChange: (Boolean) -> Unit
+) {
     var isChecked by remember { mutableStateOf(false) }
 
     Card(
@@ -91,10 +139,10 @@ fun ExerciseItemCard(
         shape = RoundedCornerShape(8.dp)
     ) {
         Row(
+            verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(16.dp),
-            verticalAlignment = Alignment.CenterVertically
+                .padding(16.dp)
         ) {
             Image(
                 painter = painterResource(id = exercise.imageRes),
@@ -104,12 +152,15 @@ fun ExerciseItemCard(
             )
             Spacer(modifier = Modifier.width(16.dp))
             Column(modifier = Modifier.weight(1f)) {
-                Text(text = stringResource(id =exercise.name), fontWeight = FontWeight.Bold, fontSize = 18.sp)
+                Text(text = stringResource(id = exercise.name), fontWeight = FontWeight.Bold, fontSize = 18.sp)
                 Text(text = "Categoría: ${stringResource(id = exercise.category)}", fontSize = 14.sp)
             }
             Checkbox(
                 checked = isChecked,
-                onCheckedChange = { isChecked = it }
+                onCheckedChange = { checked ->
+                    isChecked = checked
+                    onCheckedChange(checked)  // Llamar al callback
+                }
             )
         }
     }

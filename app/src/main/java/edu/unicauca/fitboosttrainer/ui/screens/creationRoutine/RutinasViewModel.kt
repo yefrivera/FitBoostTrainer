@@ -38,7 +38,6 @@ class RoutineViewModel : ViewModel() {
         _uiState.value = _uiState.value.copy(searchExercise = newSearch)
         filterExercises(newSearch)
     }
-
     // Filtra los ejercicios de acuerdo al texto de búsqueda
     private fun filterExercises(query: String) {
         // Como los ejercicios tienen `@StringRes`, necesitamos comparar los recursos de forma adecuada.

@@ -24,6 +24,9 @@ class RoutineDetailViewModel : ViewModel() {
     var exercises by mutableStateOf<List<Exercise>>(emptyList())
         private set
 
+    var routineName by mutableStateOf("") // Nombre de la rutina
+        private set
+
     var isLoading by mutableStateOf(true) // Estado de carga
         private set
 
@@ -33,6 +36,9 @@ class RoutineDetailViewModel : ViewModel() {
             try {
                 isLoading = true  // Empieza la carga
                 val routineDoc = firestore.collection("rutinasGuardadas").document(routineId).get().await()
+
+                // Obtener el nombre de la rutina
+                routineName = routineDoc.getString("name") ?: "Rutina"
 
                 val exercisesList = routineDoc.get("exercises") as List<Map<String, Any>>
 
