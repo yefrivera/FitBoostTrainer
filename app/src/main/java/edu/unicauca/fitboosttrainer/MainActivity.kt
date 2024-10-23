@@ -17,7 +17,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import edu.unicauca.fitboosttrainer.navigation.NavigationFunction
 import edu.unicauca.fitboosttrainer.ui.screens.HomeScreen
-import edu.unicauca.fitboosttrainer.ui.screens.home.Home
+
 import edu.unicauca.fitboosttrainer.ui.theme.FitBoostTrainerTheme
 
 
@@ -33,7 +33,18 @@ class MainActivity : ComponentActivity() {
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                 ) {
+                    val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
+                    val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
+                    var navController = rememberNavController()
                     NavigationFunction()
+                    /*CaloriasScreen(
+                        scrollBehavior = scrollBehavior,
+                        drawerState = drawerState,
+                        navController = navController,
+                        viewModel = viewModel()
+                    )*/
+
+                    //NavigationFunction()
                     //Home(drawerState = rememberDrawerState(initialValue = DrawerValue.Closed), navController = NavHostController(
                         //LocalContext.current), scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(), viewModel())
                 }

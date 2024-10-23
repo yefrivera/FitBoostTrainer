@@ -90,7 +90,7 @@ dependencies {
     implementation("com.google.firebase:firebase-analytics-ktx")
 
     //autenticación
-    //implementation("com.google.firebase:firebase-auth-ktx")
+    implementation("com.google.firebase:firebase-auth-ktx")
 
     //firebase cloud firestore
     //implementation("com.google.firebase:firebase-database-ktx")
