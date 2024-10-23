@@ -20,10 +20,9 @@ import edu.unicauca.fitboosttrainer.ui.components.InitialScreen
 import edu.unicauca.fitboosttrainer.ui.screens.*
 import edu.unicauca.fitboosttrainer.ui.screens.CreationRoutine.CreateRoutineScreen
 import edu.unicauca.fitboosttrainer.ui.screens.calorias.CaloriasScreen
-import edu.unicauca.fitboosttrainer.ui.screens.fuerzaMaxima.FuerzaMaximaScreen
 import edu.unicauca.fitboosttrainer.ui.screens.home.Home
-//import edu.unicauca.fitboosttrainer.ui.screens.singIn.MeasuresScreen
-//import edu.unicauca.fitboosttrainer.ui.screens.singIn.SingInDataScreen
+import edu.unicauca.fitboosttrainer.ui.screens.singIn.MeasuresScreen
+import edu.unicauca.fitboosttrainer.ui.screens.singIn.SingInDataScreen
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -67,14 +66,14 @@ fun NavigationFunction() {
             }
 
             //Pantalla SingIn (sin drawer)
-            /*composable("singIn") {
+            composable("singIn") {
                 SingInDataScreen(navController = navController)
             }
 
             // Pantalla registro de medidas (sin drawer)
             composable("RegistrerMessureScreen") {
                 MeasuresScreen(navController = navController)
-            }*/
+            }
 
             // Pantalla de inicio (Home) con drawer
             composable("home") {
@@ -119,9 +118,7 @@ fun NavigationFunction() {
                 FuerzaMaximaScreen(
                     navController = navController,
                     drawerState = drawerState,
-                    scrollBehavior = scrollBehavior,
-                    viewModel = viewModel()
-
+                    scrollBehavior = scrollBehavior
                 )
             }
 

@@ -1,48 +1,43 @@
-package edu.unicauca.fitboosttrainer.ui.screens.CreationRoutine
+package edu.unicauca.fitboosttrainer.ui.screens.creationRoutine
 
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.firestore.FirebaseFirestore
-
 import edu.unicauca.fitboosttrainer.data.Exercise
 import edu.unicauca.fitboosttrainer.data.ExerciseData
 import edu.unicauca.fitboosttrainer.data.Routine
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
 
 class RoutineViewModel : ViewModel() {
     // Mantiene el estado de la UI
-    var uiState by mutableStateOf(RoutineUiState())
-        private set
+    private val _uiState = MutableStateFlow(RoutineUiState())
+    val uiState: StateFlow<RoutineUiState> = _uiState.asStateFlow()
 
     private val firestore = FirebaseFirestore.getInstance()
 
-    //var searchExercise by mutableStateOf("")
-        //private set
-    //var routineName by mutableStateOf("")
-        //private set
-    //var seriesNumber by mutableStateOf("")
-        //private set
+    // Guardar temporalmente la rutina creada
+    var currentRoutine: Routine? = null
+        private set
 
     // Método para actualizar el nombre de la rutina
     fun onRoutineNameChange(newName: String) {
-        uiState = uiState.copy(routineName = newName)
+        _uiState.value = _uiState.value.copy(routineName = newName)
     }
 
     // Método para actualizar el número de series
     fun onSeriesNumberChange(newSeries: String) {
-        uiState = uiState.copy(seriesNumber = newSeries)
+        _uiState.value = _uiState.value.copy(seriesNumber = newSeries)
     }
 
     // Método para actualizar el texto de búsqueda
     fun onSearchExerciseChange(newSearch: String) {
-        uiState = uiState.copy(searchExercise = newSearch)
+        _uiState.value = _uiState.value.copy(searchExercise = newSearch)
         filterExercises(newSearch)
     }
-
     // Filtra los ejercicios de acuerdo al texto de búsqueda
     private fun filterExercises(query: String) {
         // Como los ejercicios tienen `@StringRes`, necesitamos comparar los recursos de forma adecuada.
@@ -50,7 +45,7 @@ class RoutineViewModel : ViewModel() {
         // usando `query.lowercase()` y luego comparar los nombres traducidos en la UI.
 
         // Actualiza el estado con los ejercicios filtrados
-        uiState = uiState.copy(
+        _uiState.value = _uiState.value.copy(
             filteredExercises = if (query.isEmpty()) {
                 ExerciseData
             } else {
@@ -64,7 +59,7 @@ class RoutineViewModel : ViewModel() {
 
         // Método para agregar un ejercicio seleccionado
     fun addExercise(exercise: Exercise) {
-        uiState = uiState.copy(selectedExercises = uiState.selectedExercises + exercise)
+            _uiState.value = _uiState.value.copy(selectedExercises = _uiState.value.selectedExercises + exercise)
     }
 
     // Guardar rutina en Firebase
@@ -72,7 +67,7 @@ class RoutineViewModel : ViewModel() {
         val newRoutine = Routine(
             name = name,
             series = series,
-            exercises = uiState.selectedExercises
+            exercises = _uiState.value.selectedExercises
         )
 
         viewModelScope.launch {
@@ -87,9 +82,19 @@ class RoutineViewModel : ViewModel() {
         }
     }
 
+    // Guardar la rutina antes de navegar a la pantalla de resumen
+    fun saveRoutineData(name: String, series: Int) {
+        currentRoutine = Routine(
+            name = name,
+            series = series,
+            exercises = _uiState.value.selectedExercises
+        )
+        println("Rutina guardada: $currentRoutine")
+    }
+
     fun removeExercise(exercise: Exercise) {
-        uiState = uiState.copy(
-            selectedExercises = uiState.selectedExercises.filter { it != exercise }
+        _uiState.value = _uiState.value.copy(
+            selectedExercises = _uiState.value.selectedExercises.filter { it != exercise }
         )
     }
 }

@@ -1,4 +1,4 @@
-package edu.unicauca.fitboosttrainer.ui.screens.CreationRoutine
+package edu.unicauca.fitboosttrainer.ui.screens.creationRoutine
 
 import edu.unicauca.fitboosttrainer.data.Exercise
 import edu.unicauca.fitboosttrainer.data.ExerciseData
