@@ -1,4 +1,4 @@
-package edu.unicauca.fitboosttrainer.ui.screens.CreationRoutine
+package edu.unicauca.fitboosttrainer.ui.screens.creationRoutine
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -6,7 +6,6 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.firestore.FirebaseFirestore
-
 import edu.unicauca.fitboosttrainer.data.Exercise
 import edu.unicauca.fitboosttrainer.data.ExerciseData
 import edu.unicauca.fitboosttrainer.data.Routine
@@ -20,12 +19,9 @@ class RoutineViewModel : ViewModel() {
 
     private val firestore = FirebaseFirestore.getInstance()
 
-    //var searchExercise by mutableStateOf("")
-        //private set
-    //var routineName by mutableStateOf("")
-        //private set
-    //var seriesNumber by mutableStateOf("")
-        //private set
+    // Guardar temporalmente la rutina creada
+    var currentRoutine: Routine? = null
+        private set
 
     // Método para actualizar el nombre de la rutina
     fun onRoutineNameChange(newName: String) {
@@ -85,6 +81,16 @@ class RoutineViewModel : ViewModel() {
                     // Manejo de errores
                 }
         }
+    }
+
+    // Guardar la rutina antes de navegar a la pantalla de resumen
+    fun saveRoutineData(name: String, series: Int) {
+        currentRoutine = Routine(
+            name = name,
+            series = series,
+            exercises = uiState.selectedExercises
+        )
+        println("Rutina guardada: $currentRoutine")
     }
 
     fun removeExercise(exercise: Exercise) {

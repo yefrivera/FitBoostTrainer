@@ -1,4 +1,4 @@
-package edu.unicauca.fitboosttrainer.ui.screens.CreationRoutine
+package edu.unicauca.fitboosttrainer.ui.screens.creationRoutine
 
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
@@ -38,6 +38,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import edu.unicauca.fitboosttrainer.R
@@ -52,7 +53,7 @@ fun CreateRoutineScreen(
     scrollBehavior: TopAppBarScrollBehavior,
     drawerState: DrawerState,
     navController: NavHostController,
-    viewModel: RoutineViewModel = androidx.lifecycle.viewmodel.compose.viewModel() // Instancia del ViewModel
+    viewModel: RoutineViewModel = viewModel()
 ) {
 
     var selectedNavItem by remember { mutableStateOf(BottomNavItem.RUTINAS) }
@@ -171,12 +172,12 @@ private fun ScrollContent(
                 // Guardar rutina en Firebase
                 val series = uiState.seriesNumber.toIntOrNull() ?: 0
                 viewModel.saveRoutine(uiState.routineName, series)
-                //navController.navigate("routineSummary")
+                navController.navigate("routineSummary")
             },
             shape = RoundedCornerShape(8.dp),
             modifier = Modifier.height(48.dp).align(Alignment.CenterHorizontally)
         ) {
-            Text(text = "Finalizar", color = Color.White)
+            Text(text = "Ver Resumen", color = Color.White)
         }
     }
 }
@@ -225,10 +226,12 @@ fun PreviewCreateRoutineScreen() {
         val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
         val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
         val navController = rememberNavController()
+        val viewModel: RoutineViewModel = viewModel()
         CreateRoutineScreen(
             scrollBehavior = scrollBehavior,
             drawerState = drawerState,
-            navController = navController
+            navController = navController,
+            viewModel = viewModel
         )
     }
 }

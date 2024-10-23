@@ -1,4 +1,4 @@
-package edu.unicauca.fitboosttrainer.ui.screens.CreationRoutine
+package edu.unicauca.fitboosttrainer.ui.screens.creationRoutine
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -25,7 +25,7 @@ fun RoutineSummaryScreen(
     navController: NavHostController,
     viewModel: RoutineViewModel = viewModel()
 ) {
-    val uiState = viewModel.uiState
+    val currentRoutine = viewModel.currentRoutine
 
     Column(
         modifier = Modifier
@@ -36,22 +36,32 @@ fun RoutineSummaryScreen(
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        // Lista de ejercicios seleccionados
-        LazyColumn(modifier = Modifier.weight(1f)) {
-            items(uiState.selectedExercises) { exercise ->
-                SelectedExerciseItem(
-                    exercise = exercise,
-                    onRemoveExercise = { viewModel.removeExercise(exercise) }
-                )
+        // Mostrar la rutina si está disponible
+        if (currentRoutine != null) {
+            Text(text = "Nombre: ${currentRoutine.name}")
+            Text(text = "Número de series: ${currentRoutine.series}")
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            // Mostrar la lista de ejercicios seleccionados
+            LazyColumn(modifier = Modifier.weight(1f)) {
+                items(currentRoutine.exercises) { exercise ->
+                    SelectedExerciseItem(
+                        exercise = exercise,
+                        onRemoveExercise = { viewModel.removeExercise(exercise) }
+                    )
+                }
             }
+        } else {
+            // Mensaje de error si no hay rutina guardada
+            Text(text = "No hay rutina disponible", modifier = Modifier.align(Alignment.CenterHorizontally))
         }
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        // Botón para finalizar
+        // Botón para finalizar y regresar
         Button(
             onClick = {
-                // Volver o realizar acciones finales
                 navController.popBackStack()
             },
             modifier = Modifier.align(Alignment.CenterHorizontally)

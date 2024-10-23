@@ -1,4 +1,4 @@
-package edu.unicauca.fitboosttrainer.navigation
+package edu.unicauca.fitboosttrainer.ui.components
 
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -14,10 +14,11 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import edu.unicauca.fitboosttrainer.LoginScreen
 import edu.unicauca.fitboosttrainer.R
-import edu.unicauca.fitboosttrainer.ui.components.DrawerContent
-import edu.unicauca.fitboosttrainer.ui.components.InitialScreen
 import edu.unicauca.fitboosttrainer.ui.screens.*
-import edu.unicauca.fitboosttrainer.ui.screens.CreationRoutine.CreateRoutineScreen
+import edu.unicauca.fitboosttrainer.ui.screens.creationRoutine.CreateRoutineScreen
+import edu.unicauca.fitboosttrainer.ui.screens.creationRoutine.RoutineSummaryScreen
+
+import edu.unicauca.fitboosttrainer.ui.screens.savedRoutines.SavedRoutinesScreen
 import edu.unicauca.fitboosttrainer.ui.screens.singIn.MeasuresScreen
 import edu.unicauca.fitboosttrainer.ui.screens.singIn.SingInDataScreen
 
@@ -139,6 +140,13 @@ fun NavigationFunction() {
                     scrollBehavior = scrollBehavior
                 )
             }
+
+            composable("sumaryRoutine"){
+                RoutineSummaryScreen(
+                    navController = navController
+                )
+            }
+
 
             // Pantalla de Rutinas Guardadas con drawer
             composable("savedRoutine") {
