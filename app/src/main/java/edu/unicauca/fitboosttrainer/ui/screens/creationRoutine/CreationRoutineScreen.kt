@@ -14,7 +14,6 @@ import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.DrawerState
-import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -23,7 +22,6 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarScrollBehavior
-import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -37,15 +35,12 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
 import edu.unicauca.fitboosttrainer.R
 import edu.unicauca.fitboosttrainer.ui.components.BottomNavItem
 import edu.unicauca.fitboosttrainer.ui.components.BottomNavigation
 import edu.unicauca.fitboosttrainer.ui.components.MainTopAppBarAlt
-import edu.unicauca.fitboosttrainer.ui.theme.FitBoostTrainerTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -53,9 +48,10 @@ fun CreateRoutineScreen(
     scrollBehavior: TopAppBarScrollBehavior,
     drawerState: DrawerState,
     navController: NavHostController,
-    viewModel: RoutineViewModel = viewModel()
+    routineViewModel: RoutineViewModel = viewModel()
 ) {
 
+    val uiState by routineViewModel.uiState.collectAsState()
     var selectedNavItem by remember { mutableStateOf(BottomNavItem.RUTINAS) }
 
     Scaffold(
@@ -78,8 +74,9 @@ fun CreateRoutineScreen(
     ) { innerPadding ->
         ScrollContent(
             innerPadding = innerPadding,
-            viewModel = viewModel,
-            navController = navController
+            viewModel = routineViewModel,
+            navController = navController,
+            uiState = uiState
         )
     }
 }
@@ -88,9 +85,9 @@ fun CreateRoutineScreen(
 private fun ScrollContent(
     navController: NavHostController,
     innerPadding: PaddingValues,
-    viewModel: RoutineViewModel
+    viewModel: RoutineViewModel,
+    uiState: RoutineUiState
 ) {
-    val uiState = viewModel.uiState
 
     Column(
         modifier = Modifier
@@ -172,7 +169,7 @@ private fun ScrollContent(
                 // Guardar rutina en Firebase
                 val series = uiState.seriesNumber.toIntOrNull() ?: 0
                 viewModel.saveRoutine(uiState.routineName, series)
-                navController.navigate("routineSummary")
+                //navController.navigate("routineSummary")
             },
             shape = RoundedCornerShape(8.dp),
             modifier = Modifier.height(48.dp).align(Alignment.CenterHorizontally)
@@ -215,23 +212,5 @@ fun ExerciseItem(
                 Icon(Icons.Default.Add, contentDescription = "Agregar")
             }
         }
-    }
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Preview(showBackground = true)
-@Composable
-fun PreviewCreateRoutineScreen() {
-    FitBoostTrainerTheme {
-        val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
-        val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
-        val navController = rememberNavController()
-        val viewModel: RoutineViewModel = viewModel()
-        CreateRoutineScreen(
-            scrollBehavior = scrollBehavior,
-            drawerState = drawerState,
-            navController = navController,
-            viewModel = viewModel
-        )
     }
 }

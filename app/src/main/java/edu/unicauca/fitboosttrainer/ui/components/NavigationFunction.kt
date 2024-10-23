@@ -15,11 +15,12 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import edu.unicauca.fitboosttrainer.LoginScreen
 import edu.unicauca.fitboosttrainer.R
-import edu.unicauca.fitboosttrainer.ui.components.DrawerContent
-import edu.unicauca.fitboosttrainer.ui.components.InitialScreen
 import edu.unicauca.fitboosttrainer.ui.screens.*
+import edu.unicauca.fitboosttrainer.ui.screens.calorias.CaloriasScreen
 import edu.unicauca.fitboosttrainer.ui.screens.creationRoutine.CreateRoutineScreen
 import edu.unicauca.fitboosttrainer.ui.screens.creationRoutine.RoutineSummaryScreen
+import edu.unicauca.fitboosttrainer.ui.screens.home.Home
+import edu.unicauca.fitboosttrainer.ui.screens.routineDetail.RoutineDetailScreen
 import edu.unicauca.fitboosttrainer.ui.screens.savedRoutines.SavedRoutinesScreen
 import edu.unicauca.fitboosttrainer.ui.screens.singIn.MeasuresScreen
 import edu.unicauca.fitboosttrainer.ui.screens.singIn.SingInDataScreen
@@ -156,6 +157,15 @@ fun NavigationFunction() {
                 SavedRoutinesScreen(
                     navController = navController,
                     drawerState = drawerState
+                )
+            }
+
+            composable("routineDetail/{routineId}") { backStackEntry ->
+                val routineId = backStackEntry.arguments?.getString("routineId") ?: ""
+                RoutineDetailScreen(
+                    navController = navController,
+                    drawerState = drawerState,
+                    routineId = routineId
                 )
             }
 

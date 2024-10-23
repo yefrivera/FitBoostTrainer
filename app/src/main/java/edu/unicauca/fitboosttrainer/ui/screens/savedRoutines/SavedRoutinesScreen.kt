@@ -1,5 +1,6 @@
 package edu.unicauca.fitboosttrainer.ui.screens.savedRoutines
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -68,12 +69,12 @@ fun SavedRoutinesScreen(
         }
     ) {
         innerPadding ->
-        ScrollContent(innerPadding = innerPadding, viewModel = viewModel)
+        ScrollContent(innerPadding = innerPadding, viewModel = viewModel, navController = navController)
     }
 }
 
 @Composable
-private fun ScrollContent(innerPadding: PaddingValues, viewModel: SavedRoutineViewModel = viewModel()) {
+private fun ScrollContent(innerPadding: PaddingValues, viewModel: SavedRoutineViewModel = viewModel(),navController: NavHostController) {
     val savedRoutines = viewModel.savedRoutines
     val isLoading = viewModel.isLoading
 
@@ -90,7 +91,10 @@ private fun ScrollContent(innerPadding: PaddingValues, viewModel: SavedRoutineVi
                 modifier = Modifier.fillMaxSize()
             ) {
                 items(savedRoutines) { routine ->
-                    SavedRoutineCard(routine = routine)
+                    SavedRoutineCard(routine = routine, onClick = {
+                        // Navegar a la pantalla de detalles con el ID de la rutina
+                        navController.navigate("routineDetail/${routine.id}")
+                    })
                 }
             }
         }
@@ -98,11 +102,14 @@ private fun ScrollContent(innerPadding: PaddingValues, viewModel: SavedRoutineVi
 }
 
 @Composable
-fun SavedRoutineCard(routine: SavedRoutine) {
+fun SavedRoutineCard(routine: SavedRoutine,
+                     onClick: () -> Unit
+) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
             .padding(8.dp)
+            .clickable {onClick()}
     ) {
         Column(
             modifier = Modifier
