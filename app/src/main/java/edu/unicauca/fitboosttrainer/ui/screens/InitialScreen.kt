@@ -5,7 +5,9 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.ClickableText
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
@@ -41,8 +43,10 @@ fun InitialScreen(navController: NavHostController) {
     )
 
     Column(
-        horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = Modifier.fillMaxSize().padding(16.dp)
+        modifier = Modifier
+            .fillMaxSize()
+            .verticalScroll(rememberScrollState())
+            .padding(16.dp)
     ) {
 
         Text(
@@ -52,7 +56,7 @@ fun InitialScreen(navController: NavHostController) {
                 fontWeight = FontWeight.Bold,
                 textAlign = TextAlign.Center
             ),
-            modifier = Modifier.padding(top = 42.dp)
+            //modifier = Modifier.padding(top = 42.dp)
         )
 
         Text(
