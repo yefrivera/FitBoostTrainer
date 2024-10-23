@@ -1,4 +1,4 @@
-package edu.unicauca.fitboosttrainer.ui.screens
+package edu.unicauca.fitboosttrainer.ui.screens.calorias
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.border
@@ -15,20 +15,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.font.FontStyle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
 import edu.unicauca.fitboosttrainer.ui.components.BottomNavItem
 import edu.unicauca.fitboosttrainer.ui.components.BottomNavigation
-import edu.unicauca.fitboosttrainer.ui.components.FoodViewModel
 import edu.unicauca.fitboosttrainer.ui.components.MainTopAppBarAlt
 import androidx.compose.material3.SnackbarHostState
-import androidx.compose.material3.SnackbarResult
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.input.KeyboardType
@@ -36,8 +32,8 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
-import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardCapitalization
 import kotlinx.coroutines.delay
 
 
@@ -225,11 +221,14 @@ fun EditDailyGoalDialog(
     )
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AddFoodSection(viewModel: FoodViewModel, snackbarHostState: SnackbarHostState, coroutineScope: CoroutineScope) {
     val keyboardController = LocalSoftwareKeyboardController.current
     val gramsFocusRequester = remember { FocusRequester() }
     val caloriesFocusRequester = remember { FocusRequester() }
+
+    var showSuggestions by remember { mutableStateOf(false) }
 
     Card(
         modifier = Modifier.fillMaxWidth(),
@@ -239,21 +238,51 @@ fun AddFoodSection(viewModel: FoodViewModel, snackbarHostState: SnackbarHostStat
         Column(modifier = Modifier.padding(16.dp)) {
             Text(text = "Agregar Comida", style = MaterialTheme.typography.titleLarge)
             Spacer(modifier = Modifier.height(8.dp))
-
-            OutlinedTextField(
-                value = viewModel.foodName.value,
-                onValueChange = { viewModel.setFoodName(it) },
-                label = { Text("Comida", fontStyle = FontStyle.Italic) },
-                leadingIcon = { Icon(imageVector = Icons.Default.Add, contentDescription = "Comida") },
-                modifier = Modifier.fillMaxWidth(),
-                keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Next),
-                keyboardActions = KeyboardActions(onNext = {
-                    gramsFocusRequester.requestFocus()
-                })
-            )
+            ExposedDropdownMenuBox(
+                expanded = showSuggestions,
+                onExpandedChange = {
+                    showSuggestions = !showSuggestions
+                }
+            ) {
+                OutlinedTextField(
+                    value = viewModel.foodName.value,
+                    onValueChange = {
+                        viewModel.setFoodName(it)
+                        showSuggestions = it.isNotEmpty() && viewModel.suggestions.isNotEmpty()
+                    },
+                    label = { Text("Comida", fontStyle = FontStyle.Italic) },
+                    leadingIcon = { Icon(imageVector = Icons.Default.Add, contentDescription = "Comida") },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .menuAnchor(),
+                    keyboardOptions = KeyboardOptions.Default.copy(
+                        imeAction = ImeAction.Next,
+                        capitalization = KeyboardCapitalization.Sentences
+                    ),
+                    keyboardActions = KeyboardActions(onNext = {
+                        gramsFocusRequester.requestFocus()
+                    })
+                )
+                ExposedDropdownMenu(
+                    expanded = showSuggestions,
+                    onDismissRequest = { showSuggestions = false }
+                ) {
+                    viewModel.suggestions.forEach { suggestion ->
+                        DropdownMenuItem(
+                            text = { Text(suggestion["name"].toString()) },
+                            onClick = {
+                                viewModel.selectSuggestedFood(suggestion)
+                                showSuggestions = false
+                                gramsFocusRequester.requestFocus()
+                            }
+                        )
+                    }
+                }
+            }
 
             Spacer(modifier = Modifier.height(8.dp))
 
+            // Campo de Gramos
             OutlinedTextField(
                 value = viewModel.foodGrams.value,
                 onValueChange = { viewModel.setFoodGrams(it) },
@@ -273,6 +302,7 @@ fun AddFoodSection(viewModel: FoodViewModel, snackbarHostState: SnackbarHostStat
 
             Spacer(modifier = Modifier.height(8.dp))
 
+            // Campo de Calorías
             OutlinedTextField(
                 value = viewModel.foodCalories.value,
                 onValueChange = { viewModel.setFoodCalories(it) },
@@ -290,8 +320,6 @@ fun AddFoodSection(viewModel: FoodViewModel, snackbarHostState: SnackbarHostStat
                 })
             )
 
-            //Spacer(modifier = Modifier.height(8.dp))
-            //DropdownMenuExample(viewModel)
             Spacer(modifier = Modifier.height(8.dp))
 
             Button(onClick = {
@@ -319,38 +347,6 @@ fun AddFoodSection(viewModel: FoodViewModel, snackbarHostState: SnackbarHostStat
         }
     }
 }
-
-/*@Composable
-fun DropdownMenuExample(viewModel: FoodViewModel) {
-    var expanded by remember { mutableStateOf(false) }
-
-    Box {
-        TextButton(onClick = { expanded = true }) {
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                Text(text = viewModel.mealType.value)
-                Icon(imageVector = Icons.Default.ArrowDropDown, contentDescription = "Dropdown Arrow")
-            }
-        }
-        DropdownMenu(expanded = expanded, onDismissRequest = { expanded = false }) {
-            DropdownMenuItem(text = { Text("Desayuno") }, onClick = {
-                viewModel.setMealType("Desayuno")
-                expanded = false
-            })
-            DropdownMenuItem(text = { Text("Almuerzo") }, onClick = {
-                viewModel.setMealType("Almuerzo")
-                expanded = false
-            })
-            DropdownMenuItem(text = { Text("Cena") }, onClick = {
-                viewModel.setMealType("Cena")
-                expanded = false
-            })
-            DropdownMenuItem(text = { Text("Snack") }, onClick = {
-                viewModel.setMealType("Snack")
-                expanded = false
-            })
-        }
-    }
-}*/
 
 @Composable
 fun AddedFoodsSection(viewModel: FoodViewModel) {
@@ -385,12 +381,6 @@ fun AddedFoodsSection(viewModel: FoodViewModel) {
                                 .padding(16.dp),
                             verticalArrangement = Arrangement.SpaceBetween
                         ) {
-                            /*Text(
-                                text = "${food["mealType"].toString()}",
-                                modifier = Modifier
-                                    .padding(4.dp)
-                                    .align(Alignment.CenterHorizontally)
-                            )*/
                             Row(
                                 modifier = Modifier.fillMaxWidth(),
                                 horizontalArrangement = Arrangement.SpaceBetween
@@ -461,9 +451,6 @@ fun EditFoodDialog(
     var name by remember { mutableStateOf(food["name"].toString()) }
     var grams by remember { mutableStateOf(food["grams"].toString()) }
     var calories by remember { mutableStateOf(food["calories"].toString()) }
-    //var mealType by remember { mutableStateOf(food["mealType"].toString()) }
-    var expanded by remember { mutableStateOf(false) }
-    //val mealTypes = listOf("Desayuno", "Almuerzo", "Cena", "Snack")
     var showError by remember { mutableStateOf(false) }
 
     AlertDialog(
@@ -500,28 +487,6 @@ fun EditFoodDialog(
                     keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
                     isError = calories.isEmpty()
                 )
-                /*Box(modifier = Modifier.fillMaxWidth()) {
-                    TextButton(onClick = { expanded = true }) {
-                        Text(text = mealType)
-                        Icon(imageVector = Icons.Default.ArrowDropDown, contentDescription = "Dropdown Arrow")
-                    }
-
-                    DropdownMenu(
-                        expanded = expanded,
-                        onDismissRequest = { expanded = false }
-                    ) {
-                        mealTypes.forEach { option ->
-                            DropdownMenuItem(
-                                text = { Text(option) },
-                                onClick = {
-                                    mealType = option
-                                    expanded = false
-                                    showError = false
-                                }
-                            )
-                        }
-                    }
-                }*/
                 if (showError) {
                     Text(
                         text = "Todos los campos son obligatorios.",
@@ -538,7 +503,6 @@ fun EditFoodDialog(
                     updatedFood["name"] = name
                     updatedFood["grams"] = grams
                     updatedFood["calories"] = calories
-                    //updatedFood["mealType"] = mealType
                     onConfirm(updatedFood)
                 } else {
                     showError = true
