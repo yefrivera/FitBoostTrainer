@@ -33,10 +33,7 @@ fun BottomNavigation(
     NavigationBar {
         NavigationBarItem(
             icon = {
-                Icon(
-                    imageVector = Icons.Default.Home,
-                    contentDescription = null
-                )
+                Icon(painter = painterResource(id = R.drawable.ic_home), contentDescription = null)
             },
             label = {
                 Text(stringResource(R.string.home))
@@ -47,10 +44,7 @@ fun BottomNavigation(
         )
         NavigationBarItem(
             icon = {
-                Icon(
-                    imageVector = Icons.Default.AccountCircle,
-                    contentDescription = null
-                )
+                Icon(painter = painterResource(id = R.drawable.ic_dumbbell), contentDescription = null)
             },
             label = {
                 Text(stringResource(R.string.rutinas))
@@ -61,10 +55,7 @@ fun BottomNavigation(
         )
         NavigationBarItem(
             icon = {
-                Icon(
-                    imageVector = Icons.Default.Face,
-                    contentDescription = null
-                )
+                Icon(painter = painterResource(id = R.drawable.ic_food), contentDescription = null)
             },
             label = {
                 Text(stringResource(R.string.alimentacion))
@@ -75,10 +66,7 @@ fun BottomNavigation(
         )
         NavigationBarItem(
             icon = {
-                Icon(
-                    imageVector = Icons.Default.DateRange,
-                    contentDescription = null
-                )
+                Icon(painter = painterResource(id = R.drawable.ic_stats), contentDescription = null)
             },
             label = {
                 Text(stringResource(R.string.estadisticas))

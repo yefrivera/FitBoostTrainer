@@ -12,7 +12,7 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.rememberNavController
-import edu.unicauca.fitboosttrainer.ui.components.NavigationFunction
+import edu.unicauca.fitboosttrainer.navigation.NavigationFunction
 import edu.unicauca.fitboosttrainer.ui.theme.FitBoostTrainerTheme
 
 
@@ -30,9 +30,7 @@ class MainActivity : ComponentActivity() {
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                 ) {
-                    val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
-                    val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
-                    var navController = rememberNavController()
+
                     NavigationFunction()
 
 

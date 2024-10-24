@@ -19,15 +19,17 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.material3.Text
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import edu.unicauca.fitboosttrainer.ui.components.MainTopAppBarAlt
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.compose.rememberNavController
-import edu.unicauca.fitboosttrainer.ui.theme.FitBoostTrainerTheme
 import androidx.compose.material3.Card
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.compose.rememberNavController
+import edu.unicauca.fitboosttrainer.R
+import edu.unicauca.fitboosttrainer.ui.theme.FitBoostTrainerTheme
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -39,6 +41,9 @@ fun FuerzaMaximaScreen(
 ) {
     var selectedNavItem by remember { mutableStateOf(BottomNavItem.RUTINAS) }
     val uiState by viewModel.uiState.collectAsState()
+
+    val snackbarHostState = remember { SnackbarHostState() }
+    val coroutineScope = rememberCoroutineScope()
 
     Scaffold(
         topBar = {
@@ -55,7 +60,8 @@ fun FuerzaMaximaScreen(
                 onItemSelected = { selectedNavItem = it },
                 navController = navController
             )
-        }
+        },
+        snackbarHost = { SnackbarHost(hostState = snackbarHostState) }
     ) { paddingValues ->
         Column(
             modifier = Modifier
@@ -70,7 +76,6 @@ fun FuerzaMaximaScreen(
                 modifier = Modifier.padding(bottom = 8.dp)
             )
 
-            // Lista de ejercicios
             uiState.exercises.forEach { exercise ->
                 ExerciseItem(
                     exercise = exercise,
@@ -86,7 +91,16 @@ fun FuerzaMaximaScreen(
             Spacer(modifier = Modifier.height(16.dp))
 
             Button(
-                onClick = { navController.navigate("trainCompletedScreen") },
+                onClick = {
+                    coroutineScope.launch {
+                        if (viewModel.isWorkoutComplete()) {
+                            viewModel.sendWorkoutToFirebase()
+                            navController.navigate("trainCompletedScreen")
+                        } else {
+                            snackbarHostState.showSnackbar("Aún no has completado tu entrenamiento")
+                        }
+                    }
+                },
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp),
@@ -191,19 +205,5 @@ fun ExerciseItem(
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
-@Preview(showBackground = true)
-@Composable
-fun FuerzaMaximaScreenPreview() {
-    FitBoostTrainerTheme {
-        val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
-        val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
-        val navController = rememberNavController()
-        FuerzaMaximaScreen(
-            scrollBehavior = scrollBehavior,
-            drawerState = drawerState,
-            navController = navController,
-            viewModel = FuerzaMaximaViewModel()
-        )
-    }
-}
+
+

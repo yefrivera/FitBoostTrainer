@@ -96,6 +96,9 @@ dependencies {
     //implementation("com.google.firebase:firebase-database-ktx")
     implementation("com.google.firebase:firebase-firestore-ktx")
 
+    implementation ("androidx.lifecycle:lifecycle-viewmodel-compose:2.4.0")
+    implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.0")
+
 
 
 }

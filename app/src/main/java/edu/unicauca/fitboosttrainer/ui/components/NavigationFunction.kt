@@ -18,11 +18,17 @@ import edu.unicauca.fitboosttrainer.R
 import edu.unicauca.fitboosttrainer.ui.components.DrawerContent
 import edu.unicauca.fitboosttrainer.ui.components.InitialScreen
 import edu.unicauca.fitboosttrainer.ui.screens.*
-import edu.unicauca.fitboosttrainer.ui.screens.CreationRoutine.CreateRoutineScreen
+import edu.unicauca.fitboosttrainer.ui.screens.alimentacion.AlimentacionScreen
+import edu.unicauca.fitboosttrainer.ui.screens.creationRoutine.CreateRoutineScreen
 import edu.unicauca.fitboosttrainer.ui.screens.calorias.CaloriasScreen
+import edu.unicauca.fitboosttrainer.ui.screens.fuerzaMaxima.FuerzaMaximaScreen
+import edu.unicauca.fitboosttrainer.ui.screens.fuerzaMaxima.FuerzaMaximaViewModel
+import edu.unicauca.fitboosttrainer.ui.screens.fullBody.FullBodyScreen
 import edu.unicauca.fitboosttrainer.ui.screens.home.Home
+import edu.unicauca.fitboosttrainer.ui.screens.savedRoutines.SavedRoutinesScreen
 import edu.unicauca.fitboosttrainer.ui.screens.singIn.MeasuresScreen
 import edu.unicauca.fitboosttrainer.ui.screens.singIn.SingInDataScreen
+import edu.unicauca.fitboosttrainer.ui.screens.trainCompleted.TrainCompletedScreen
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -30,6 +36,9 @@ fun NavigationFunction() {
     val navController = rememberNavController()
     val drawerState = rememberDrawerState(DrawerValue.Closed)
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
+
+    // Proveer el ViewModel a nivel de navegación
+    val fuerzaMaximaViewModel: FuerzaMaximaViewModel = viewModel()
 
     // Lista de pantallas donde NO quieres que el drawer se muestre
     val screensWithoutDrawer = listOf(
@@ -113,12 +122,13 @@ fun NavigationFunction() {
                 )
             }
 
-            // Pantalla de Fuerza Máxima con drawer
+            // Pantalla de Fuerza Máxima con drawer, pasando el ViewModel
             composable("fuerzaMaximaScreen") {
                 FuerzaMaximaScreen(
                     navController = navController,
                     drawerState = drawerState,
-                    scrollBehavior = scrollBehavior
+                    scrollBehavior = scrollBehavior,
+                    viewModel = fuerzaMaximaViewModel // Pasar el mismo ViewModel
                 )
             }
 
@@ -159,7 +169,6 @@ fun NavigationFunction() {
             composable("RoutineCreationDoneScreen") {
                 CompletedScreen(congratsText = stringResource(R.string.routine_done),navController = navController)
             }
-
 
         }
     }
