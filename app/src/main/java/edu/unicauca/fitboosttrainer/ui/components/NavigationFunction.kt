@@ -1,5 +1,6 @@
 package edu.unicauca.fitboosttrainer.ui.components
 
+import android.content.Context
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ModalNavigationDrawer
@@ -13,15 +14,13 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import edu.unicauca.fitboosttrainer.LoginScreen
+import edu.unicauca.fitboosttrainer.ui.screens.logIn.LoginScreen
 import edu.unicauca.fitboosttrainer.R
 import edu.unicauca.fitboosttrainer.ui.screens.*
 import edu.unicauca.fitboosttrainer.ui.screens.calorias.CaloriasScreen
 import edu.unicauca.fitboosttrainer.ui.screens.creationRoutine.CreateRoutineScreen
 import edu.unicauca.fitboosttrainer.ui.screens.creationRoutine.RoutineSummaryScreen
 import edu.unicauca.fitboosttrainer.ui.screens.home.Home
-import edu.unicauca.fitboosttrainer.ui.screens.logIn.AuthManager
-//import edu.unicauca.fitboosttrainer.ui.screens.logIn.AuthManager
 import edu.unicauca.fitboosttrainer.ui.screens.routineDetail.RoutineDetailScreen
 import edu.unicauca.fitboosttrainer.ui.screens.savedRoutines.SavedRoutinesScreen
 import edu.unicauca.fitboosttrainer.ui.screens.singIn.MeasuresScreen
@@ -33,7 +32,7 @@ fun NavigationFunction() {
     val navController = rememberNavController()
     val drawerState = rememberDrawerState(DrawerValue.Closed)
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
-    val authManager: AuthManager = AuthManager()
+
 
     // Lista de pantallas donde NO quieres que el drawer se muestre
     val screensWithoutDrawer = listOf(
@@ -61,7 +60,7 @@ fun NavigationFunction() {
 
             // Pantalla de Bienvenida (sin drawer)
             composable("welcome") {
-                InitialScreen(navController = navController, auth = authManager)
+                InitialScreen(navController = navController)
             }
 
             // Pantalla de Login (sin drawer)

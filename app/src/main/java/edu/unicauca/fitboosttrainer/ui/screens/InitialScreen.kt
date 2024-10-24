@@ -1,13 +1,8 @@
 package edu.unicauca.fitboosttrainer.ui.components
 
-import android.content.Context
-import android.os.Bundle
-import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
+
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.text.ClickableText
-import androidx.compose.material.*
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -15,10 +10,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.scale
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
@@ -31,24 +22,17 @@ import androidx.compose.ui.zIndex
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import edu.unicauca.fitboosttrainer.R
-import edu.unicauca.fitboosttrainer.ui.screens.logIn.AuthManager
-import edu.unicauca.fitboosttrainer.ui.screens.logIn.AuthResult
 import edu.unicauca.fitboosttrainer.ui.theme.FitBoostTrainerTheme
-import kotlinx.coroutines.launch
+
 
 @Composable
-fun InitialScreen(navController: NavHostController, auth: AuthManager) {
+fun InitialScreen(navController: NavHostController) {
     var imageIndex by remember { mutableStateOf(0) }
     val images = listOf(
         painterResource(id = R.drawable.image1),
         painterResource(id = R.drawable.image2),
         painterResource(id = R.drawable.image3)
     )
-
-    val scope = rememberCoroutineScope()
-    val context = LocalContext.current
-    val auth = AuthManager()
-    val navigation = rememberNavController()
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -138,10 +122,7 @@ fun InitialScreen(navController: NavHostController, auth: AuthManager) {
         Spacer(modifier = Modifier.height(12.dp))
 
         Button(
-            onClick = {
-                scope.launch {
-                    incognitoSingIn(auth, navigation)
-                }
+            onClick = { navController.navigate("home")
             },
             modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp)
         ) {
@@ -150,23 +131,13 @@ fun InitialScreen(navController: NavHostController, auth: AuthManager) {
     }
 }
 
-private suspend fun incognitoSingIn(auth: AuthManager, navigation: NavHostController) {
-    when (val result = auth.singInAnonymously()) {
-        is AuthResult.Success -> {
-            navigation.navigate("home")
-        }
-        is AuthResult.Error -> {
-
-        }
-    }
-}
 
 
 @Preview(showBackground = true)
 @Composable
 fun InitialScreenPreview() {
     FitBoostTrainerTheme  {
-        //InitialScreen(navController= rememberNavController())
+        InitialScreen(navController= rememberNavController())
     }
 }
 
