@@ -35,13 +35,13 @@ fun SingInDataScreen(navController: NavHostController, viewModel: SignInViewMode
             )
         }
     ) { innerPadding ->
-            Registro(innerPadding = innerPadding, navController = navController)
+            Registro(innerPadding = innerPadding, navController = navController, viewModel = viewModel)
 
     }
 }
 
 @Composable
-fun Registro(innerPadding: PaddingValues, navController: NavHostController) {
+fun Registro(innerPadding: PaddingValues, navController: NavHostController, viewModel: SignInViewModel) {
     val frequencyOptions = listOf("1 a 2 días", "3 a 4 días", "5 a 6 días", "Todos los días")
     val goalOptions = listOf("Perder peso", "Ganar masa muscular", "Crear hábitos saludables")
     var email by remember { mutableStateOf("") }
@@ -51,7 +51,7 @@ fun Registro(innerPadding: PaddingValues, navController: NavHostController) {
     var month by remember { mutableStateOf(0) }
     var year by remember { mutableStateOf(0) }
     var height by remember { mutableStateOf(0) }
-    var weight by remember { mutableStateOf(0.0) }
+    var weight by remember { mutableStateOf(0) }
     var trainingFrequency by remember { mutableStateOf("") }
     var trainingGoal by remember { mutableStateOf("") }
     var hombro by remember { mutableStateOf(0) }
@@ -197,7 +197,7 @@ fun Registro(innerPadding: PaddingValues, navController: NavHostController) {
                 value = weight.toString(),
                 onValueChange = {
                     if (it.length <= 3) {
-                        weight= it.toDouble()
+                        weight= it.toInt()
                     }
                 },
                 label = { Text(stringResource(R.string.pesoKg)) },
@@ -227,7 +227,7 @@ fun Registro(innerPadding: PaddingValues, navController: NavHostController) {
             onOptionSelected = { trainingGoal= it }
         )
 
-        // Botón Siguiente
+
         Spacer(modifier = Modifier.height(espaciado))
         Image(
             painter = painterResource(id = R.drawable.medidassombra),
@@ -428,7 +428,28 @@ fun Registro(innerPadding: PaddingValues, navController: NavHostController) {
         Spacer(modifier = Modifier.height(espaciado))
         Button(
             onClick = {
-
+                viewModel.registerUser(
+                    email = email,
+                    password = password,
+                    name = name,
+                    day = day,
+                    month = month,
+                    year = year,
+                    height = height,
+                    weight = weight,
+                    trainingFrequency = trainingFrequency,
+                    trainingGoal = trainingGoal,
+                    hombro = hombro,
+                    pecho = pecho,
+                    bicepIzq = bicepIzq,
+                    bicepDer = bicepDer,
+                    cintura = cintura,
+                    cadera = cadera,
+                    musloIzq = musloIzq,
+                    musloDer = musloDer,
+                    pantorrillaIzq = pantorrillaIzq,
+                    pantorrillaDer = pantorrillaDer
+                )
 
             },
             modifier = Modifier.fillMaxWidth()
