@@ -13,4 +13,9 @@ val ExerciseData = listOf(
         Exercise(R.string.bd_bench_press, R.string.ce_chest, R.drawable.banca)
 )
 
-data class Exercise(@StringRes val nameExercise: Int, @StringRes val categoryExercise: Int, @DrawableRes val imageRes: Int)
+data class Exercise(@StringRes val name: Int = 0,
+                      @StringRes val category: Int = 0,
+                      @DrawableRes val imageRes: Int = 0,
+                      val numSeries :Int = 0,
+                      val numReps: Int = 0,
+                      val weight :String = "")
