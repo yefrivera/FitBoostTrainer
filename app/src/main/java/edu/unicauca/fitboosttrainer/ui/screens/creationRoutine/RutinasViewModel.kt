@@ -94,7 +94,7 @@ class RoutineViewModel : ViewModel() {
     }
 
     // Limpiar los campos del modal
-    private fun resetModalFields() {
+    fun resetModalFields() {
         modalSeries = ""
         modalReps = ""
         modalWeight = ""
