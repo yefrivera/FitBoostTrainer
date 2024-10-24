@@ -116,11 +116,6 @@ fun SavedRoutineCard(routine: SavedRoutine,
                 fontSize = 20.sp,
                 fontWeight = FontWeight.Bold
             )
-            Spacer(modifier = Modifier.height(8.dp))
-            Text(
-                text = "Número de series: ${routine.series}",
-                fontSize = 16.sp
-            )
         }
     }
 }

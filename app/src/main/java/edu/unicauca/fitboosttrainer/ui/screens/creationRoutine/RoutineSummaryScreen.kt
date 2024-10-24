@@ -39,7 +39,6 @@ fun RoutineSummaryScreen(
         // Mostrar la rutina si está disponible
         if (currentRoutine != null) {
             Text(text = "Nombre: ${currentRoutine.name}")
-            Text(text = "Número de series: ${currentRoutine.series}")
 
             Spacer(modifier = Modifier.height(16.dp))
 
@@ -48,7 +47,7 @@ fun RoutineSummaryScreen(
                 items(currentRoutine.exercises) { exercise ->
                     SelectedExerciseItem(
                         exercise = exercise,
-                        onRemoveExercise = { viewModel.removeExercise(exercise) }
+                        onRemoveExercise = {  }
                     )
                 }
             }
@@ -88,8 +87,8 @@ fun SelectedExerciseItem(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Column(modifier = Modifier.weight(1f)) {
-                Text(text = exercise.nameExercise.toString() , fontSize = 18.sp)
-                Text(text = "Categoría: ${exercise.categoryExercise}", fontSize = 14.sp)
+                Text(text = exercise.name.toString() , fontSize = 18.sp)
+                Text(text = "Categoría: ${exercise.category}", fontSize = 14.sp)
             }
             IconButton(onClick = onRemoveExercise) {
                 Icon(imageVector = Icons.Default.Delete, contentDescription = "Eliminar")
