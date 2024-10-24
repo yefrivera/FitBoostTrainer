@@ -58,6 +58,7 @@ fun InicioSesion(innerPadding: PaddingValues, navController: NavHostController, 
             )
         }
 
+
         OutlinedTextField(
             value = email,
             onValueChange = { email = it },
@@ -92,18 +93,19 @@ fun InicioSesion(innerPadding: PaddingValues, navController: NavHostController, 
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Text(stringResource(R.string.iniciar_sesion))
-            }
-        }
+         }
 
-        Spacer(modifier = Modifier.height(16.dp))
         Text(stringResource(R.string.no_cuenta))
         Spacer(modifier = Modifier.height(8.dp))
 
         Button(
-            onClick = {navController.navigate("signUp") },
+            onClick = {navController.navigate("singIn") },
             modifier = Modifier.fillMaxWidth()
         ) {
             Text(stringResource(R.string.registrarse))
         }
+
     }
+
+}
 
