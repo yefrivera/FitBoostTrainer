@@ -1,12 +1,8 @@
 package edu.unicauca.fitboosttrainer.ui.components
 
-import android.os.Bundle
-import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
+
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.text.ClickableText
-import androidx.compose.material.*
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -14,9 +10,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.scale
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
@@ -30,6 +23,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import edu.unicauca.fitboosttrainer.R
 import edu.unicauca.fitboosttrainer.ui.theme.FitBoostTrainerTheme
+
 
 @Composable
 fun InitialScreen(navController: NavHostController) {
@@ -128,13 +122,16 @@ fun InitialScreen(navController: NavHostController) {
         Spacer(modifier = Modifier.height(12.dp))
 
         Button(
-            onClick = { /* Acción para ver más */ },
+            onClick = { navController.navigate("home")
+            },
             modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp)
         ) {
             Text(text = stringResource(id = R.string.dr_mas))
         }
     }
 }
+
+
 
 @Preview(showBackground = true)
 @Composable

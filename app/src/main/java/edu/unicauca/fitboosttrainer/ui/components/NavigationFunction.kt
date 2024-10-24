@@ -1,5 +1,6 @@
 package edu.unicauca.fitboosttrainer.ui.components
 
+import android.content.Context
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ModalNavigationDrawer
@@ -13,7 +14,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import edu.unicauca.fitboosttrainer.LoginScreen
+import edu.unicauca.fitboosttrainer.ui.screens.logIn.LoginScreen
 import edu.unicauca.fitboosttrainer.R
 import edu.unicauca.fitboosttrainer.ui.screens.*
 import edu.unicauca.fitboosttrainer.ui.screens.calorias.CaloriasScreen
@@ -31,6 +32,7 @@ fun NavigationFunction() {
     val navController = rememberNavController()
     val drawerState = rememberDrawerState(DrawerValue.Closed)
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
+
 
     // Lista de pantallas donde NO quieres que el drawer se muestre
     val screensWithoutDrawer = listOf(
