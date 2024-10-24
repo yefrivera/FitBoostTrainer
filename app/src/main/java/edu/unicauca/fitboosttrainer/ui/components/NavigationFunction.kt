@@ -19,7 +19,6 @@ import edu.unicauca.fitboosttrainer.R
 import edu.unicauca.fitboosttrainer.ui.screens.*
 import edu.unicauca.fitboosttrainer.ui.screens.calorias.CaloriasScreen
 import edu.unicauca.fitboosttrainer.ui.screens.creationRoutine.CreateRoutineScreen
-import edu.unicauca.fitboosttrainer.ui.screens.creationRoutine.RoutineSummaryScreen
 import edu.unicauca.fitboosttrainer.ui.screens.home.Home
 import edu.unicauca.fitboosttrainer.ui.screens.routineDetail.RoutineDetailScreen
 import edu.unicauca.fitboosttrainer.ui.screens.savedRoutines.SavedRoutinesScreen
@@ -146,13 +145,6 @@ fun NavigationFunction() {
                     scrollBehavior = scrollBehavior
                 )
             }
-
-            composable("sumaryRoutine"){
-                RoutineSummaryScreen(
-                    navController = navController
-                )
-            }
-
 
             // Pantalla de Rutinas Guardadas con drawer
             composable("savedRoutine") {

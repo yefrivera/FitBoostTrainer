@@ -12,7 +12,6 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Search
-import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.DrawerState
@@ -59,6 +58,8 @@ fun CreateRoutineScreen(
 
     val uiState by routineViewModel.uiState.collectAsState()
     var selectedNavItem by remember { mutableStateOf(BottomNavItem.RUTINAS) }
+    var showModal by remember { mutableStateOf(false) }
+    var showEditDialog by remember { mutableStateOf(false) }
 
     Scaffold(
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
@@ -82,9 +83,42 @@ fun CreateRoutineScreen(
             innerPadding = innerPadding,
             viewModel = routineViewModel,
             navController = navController,
-            uiState = uiState
+            uiState = uiState,
+            showModal = showModal,
+            onShowModalChange = { showModal = it }
+        )
+
+        // Mostrar el modal con el resumen de la rutina
+        RoutineSummaryModal(
+            isVisible = showModal,
+            exercises = uiState.selectedExercises,
+            onDismiss = { showModal = false },
+            onRemoveExercise = { exercise -> routineViewModel.removeExercise(exercise) },
+            onEditExercise = { exercise -> routineViewModel.loadExerciseForEditing(exercise)
+                showEditDialog = true }
+        )
+        // Modal para editar ejercicios
+        ExerciseDetailsModal(
+            isVisible = showEditDialog,
+            exercise = routineViewModel.editingExercise,
+            modalSeries = routineViewModel.modalSeries,
+            modalReps = routineViewModel.modalReps,
+            modalWeight = routineViewModel.modalWeight,
+            onSeriesChange = routineViewModel::onSeriesChange,
+            onRepsChange = routineViewModel::onRepsChange,
+            onWeightChange = routineViewModel::onWeightChange,
+            onConfirm = {
+                routineViewModel.updateExercise()
+                showEditDialog = false
+            },
+            onDismiss = {
+                showEditDialog = false
+                routineViewModel.resetModalFields()
+            },
+            isFormComplete = routineViewModel.areModalFieldsComplete()
         )
     }
+
 }
 
 @Composable
@@ -92,11 +126,14 @@ private fun ScrollContent(
     navController: NavHostController,
     innerPadding: PaddingValues,
     viewModel: RoutineViewModel,
-    uiState: RoutineUiState
+    uiState: RoutineUiState,
+    showModal: Boolean,
+    onShowModalChange: (Boolean) -> Unit
 ) {
     // Estado para controlar la visibilidad del modal y el ejercicio seleccionado
     var showDialog by remember { mutableStateOf(false) }
     var selectedExercise by remember { mutableStateOf<Exercise?>(null) }
+
 
     Column(
         modifier = Modifier
@@ -158,24 +195,40 @@ private fun ScrollContent(
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        // Botón Finalizar
-        Button(
-            onClick = {
-                // Guardar rutina en Firebase y limpiar el estado
-                viewModel.saveRoutine(uiState.routineName)
-                viewModel.clearRoutineFields()
-            },
-            enabled = uiState.routineName.isNotEmpty() && uiState.selectedExercises.isNotEmpty(),
-            shape = RoundedCornerShape(8.dp),
-            modifier = Modifier.height(48.dp).align(Alignment.CenterHorizontally)
-        ) {
-            Text(text = "Ver Resumen", color = Color.White)
+        Row(
+            modifier = Modifier.align(Alignment.CenterHorizontally)
+        ){
+
+            Button(
+                onClick = {
+                    onShowModalChange(true)
+                },
+                enabled = uiState.routineName.isNotEmpty() && uiState.selectedExercises.isNotEmpty(),
+                shape = RoundedCornerShape(8.dp),
+                modifier = Modifier.height(48.dp).padding(end = 8.dp)
+            ) {
+                Text(text = "Ver Resumen")
+            }
+
+            Button(
+                onClick = {
+                    viewModel.saveRoutine(uiState.routineName)
+                },
+                enabled = uiState.routineName.isNotEmpty() && uiState.selectedExercises.isNotEmpty(),
+                shape = RoundedCornerShape(8.dp),
+                modifier = Modifier.height(48.dp)
+            ) {
+                Text(text = "Finalizar")
+            }
         }
+
     }
-    val context = LocalContext.current.applicationContext
+
+    val context = LocalContext.current
     // Invocar el componente `ExerciseDetailsModal`
     ExerciseDetailsModal(
         isVisible = showDialog,
+        exercise = viewModel.editingExercise,
         modalSeries = viewModel.modalSeries,
         modalReps = viewModel.modalReps,
         modalWeight = viewModel.modalWeight,
