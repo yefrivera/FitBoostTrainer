@@ -108,5 +108,17 @@
     <string name="iniciando_sesion">Iniciando Sesion</string>
     <string name="routine_done">¡Rutina creada con éxito!</string>
     <string name="register_done">¡Registro Exitoso!</string>
+    <string name="series_and_reps">Series y reps</string>
+    <string name="end_routine">Finalizar rutina</string>
+    <string name="add">Añadir</string>
+    <string name="cancel">Cancelar</string>
+    <string name="selected_exercises">Ejercicios seleccionados:</string>
+    <string name="add_details_exercise">Agregar detalles del ejercicio</string>
+    <string name="number_of_series">Número de series</string>
+    <string name="number_of_reps">Número de repeticiones</string>
+    <string name="weight">Peso (kg)</string>
+    <string name="name_routine">Nombre de la rutina</string>
+    <string name="example_routine">Ej: Rutina de pierna</string>
+    <string name="exercise_added">Ejercicio Añadido</string>
 
 </resources>

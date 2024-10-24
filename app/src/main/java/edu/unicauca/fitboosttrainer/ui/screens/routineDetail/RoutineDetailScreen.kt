@@ -17,6 +17,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.lifecycle.viewmodel.compose.viewModel
+import edu.unicauca.fitboosttrainer.R
+import edu.unicauca.fitboosttrainer.data.Exercise
 import edu.unicauca.fitboosttrainer.ui.components.BottomNavItem
 import edu.unicauca.fitboosttrainer.ui.components.BottomNavigation
 import edu.unicauca.fitboosttrainer.ui.components.MainTopAppBarAlt
@@ -118,7 +120,7 @@ fun paddingExercise(innerPadding: PaddingValues,
                     .fillMaxWidth()
                     .padding(16.dp)
             ) {
-                Text(text = "Finalizar rutina")
+                Text(text = stringResource(R.string.end_routine))
             }
         }
     }
@@ -153,7 +155,9 @@ fun ExerciseItemCard(
             Spacer(modifier = Modifier.width(16.dp))
             Column(modifier = Modifier.weight(1f)) {
                 Text(text = stringResource(id = exercise.name), fontWeight = FontWeight.Bold, fontSize = 18.sp)
-                Text(text = "Categoría: ${stringResource(id = exercise.category)}", fontSize = 14.sp)
+                Text(text = "${stringResource(R.string.series_and_reps)}: ${exercise.numSeries} x ${exercise.numReps}", fontSize = 14.sp)
+                Text(text = "Peso: ${exercise.weight}", fontSize = 14.sp)
+
             }
             Checkbox(
                 checked = isChecked,

@@ -11,8 +11,7 @@ import kotlinx.coroutines.tasks.await
 
 data class SavedRoutine(
     val id: String = "",
-    val name: String = "",
-    val series: Int = 0
+    val name: String = ""
 )
 
 class SavedRoutineViewModel : ViewModel() {
@@ -43,10 +42,9 @@ class SavedRoutineViewModel : ViewModel() {
                     SavedRoutine(
                         id = doc.id,
                         name = doc.getString("name") ?: "",
-                        series = doc.getLong("series")?.toInt() ?: 0
+                        //series = doc.getLong("series")?.toInt() ?: 0
                     )
                 }
-
                 savedRoutines = routines
             } catch (e: Exception) {
                 // Manejo de errores si es necesario

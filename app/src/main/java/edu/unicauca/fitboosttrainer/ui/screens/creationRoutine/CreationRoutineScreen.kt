@@ -1,5 +1,6 @@
 package edu.unicauca.fitboosttrainer.ui.screens.creationRoutine
 
+import android.widget.Toast
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.compose.foundation.Image
@@ -11,6 +12,7 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Search
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.DrawerState
@@ -28,6 +30,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -38,9 +41,12 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import edu.unicauca.fitboosttrainer.R
+import edu.unicauca.fitboosttrainer.data.Exercise
 import edu.unicauca.fitboosttrainer.ui.components.BottomNavItem
 import edu.unicauca.fitboosttrainer.ui.components.BottomNavigation
+import edu.unicauca.fitboosttrainer.ui.components.ExerciseDetailsModal
 import edu.unicauca.fitboosttrainer.ui.components.MainTopAppBarAlt
+
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -88,6 +94,9 @@ private fun ScrollContent(
     viewModel: RoutineViewModel,
     uiState: RoutineUiState
 ) {
+    // Estado para controlar la visibilidad del modal y el ejercicio seleccionado
+    var showDialog by remember { mutableStateOf(false) }
+    var selectedExercise by remember { mutableStateOf<Exercise?>(null) }
 
     Column(
         modifier = Modifier
@@ -114,8 +123,12 @@ private fun ScrollContent(
         OutlinedTextField(
             value = uiState.routineName,
             onValueChange = { viewModel.onRoutineNameChange(it) },
-            label = { Text("Nombre de la rutina") },
-            placeholder = { Text("Ej: Rutina de pierna") },
+            label = { Text(stringResource(R.string.name_routine)) },
+            placeholder = { Text(stringResource(R.string.example_routine)) },
+            keyboardOptions = KeyboardOptions(
+                keyboardType = KeyboardType.Text,
+                imeAction = ImeAction.Done
+            ),
             modifier = Modifier.fillMaxWidth()
         )
         Spacer(modifier = Modifier.height(16.dp))
@@ -125,59 +138,65 @@ private fun ScrollContent(
             modifier = Modifier.weight(1f)
         ) {
             items(uiState.filteredExercises) { item ->
-                // Aquí es donde puedes usar `stringResource()` para realizar comparaciones
-                val exerciseName = stringResource(id = item.nameExercise)
-
-                if (exerciseName.contains(uiState.searchExercise, ignoreCase = true)) {
-                    ExerciseItem(
-                        nameExercise = item.nameExercise,
-                        categoryExercise = item.categoryExercise,
-                        imageRes = item.imageRes,
-                        onAddExercise = {
-                            viewModel.addExercise(item)
-                        }
-                    )
-                }
+                ExerciseItem(
+                    nameExercise = item.name,
+                    categoryExercise = item.category,
+                    imageRes = item.imageRes,
+                    onAddExercise = {
+                        // Mostrar el diálogo cuando se presiona agregar
+                        selectedExercise = item
+                        showDialog = true
+                    }
+                )
             }
         }
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        // Número de series
-        OutlinedTextField(
-            value = uiState.seriesNumber,
-            onValueChange = { viewModel.onSeriesNumberChange(it) },
-            label = { Text("Número de series a realizar") },
-            placeholder = { Text("Ej: 3-4") },
-            keyboardOptions = KeyboardOptions(
-                keyboardType = KeyboardType.Number,
-                imeAction = ImeAction.Done
-            ),
-            modifier = Modifier.fillMaxWidth()
-        )
-
-        Spacer(modifier = Modifier.height(16.dp))
-
         // Mostrar número de ejercicios seleccionados
-        Text(text = "Ejercicios seleccionados: ${uiState.selectedExercises.size}")
+        Text(text = "${stringResource(R.string.selected_exercises)} ${uiState.selectedExercises.size}")
 
         Spacer(modifier = Modifier.height(16.dp))
 
         // Botón Finalizar
         Button(
             onClick = {
-                // Guardar rutina en Firebase
-                val series = uiState.seriesNumber.toIntOrNull() ?: 0
-                viewModel.saveRoutine(uiState.routineName, series)
-                //navController.navigate("routineSummary")
+                // Guardar rutina en Firebase y limpiar el estado
+                viewModel.saveRoutine(uiState.routineName)
+                viewModel.clearRoutineFields()
             },
+            enabled = uiState.routineName.isNotEmpty() && uiState.selectedExercises.isNotEmpty(),
             shape = RoundedCornerShape(8.dp),
             modifier = Modifier.height(48.dp).align(Alignment.CenterHorizontally)
         ) {
             Text(text = "Ver Resumen", color = Color.White)
         }
     }
+    val context = LocalContext.current.applicationContext
+    // Invocar el componente `ExerciseDetailsModal`
+    ExerciseDetailsModal(
+        isVisible = showDialog,
+        modalSeries = viewModel.modalSeries,
+        modalReps = viewModel.modalReps,
+        modalWeight = viewModel.modalWeight,
+        onSeriesChange = viewModel::onSeriesChange,
+        onRepsChange = viewModel::onRepsChange,
+        onWeightChange = viewModel::onWeightChange,
+        onConfirm = {
+            selectedExercise?.let {
+                viewModel.addExerciseWithDetails(it)
+            }
+            showDialog = false
+            Toast.makeText(context,"Ejericio añadido", Toast.LENGTH_SHORT).show()
+        },
+        onDismiss = {
+            showDialog = false
+            viewModel.resetModalFields()
+        },
+        isFormComplete = viewModel.areModalFieldsComplete()
+    )
 }
+
 
 @Composable
 fun ExerciseItem(
