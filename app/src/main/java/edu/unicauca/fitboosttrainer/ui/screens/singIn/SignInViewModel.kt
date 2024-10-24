@@ -12,6 +12,25 @@ class SignInViewModel: ViewModel() {
     private val auth: FirebaseAuth = Firebase.auth
     private val loading = MutableLiveData(false)
     val errorMessage = MutableLiveData("")
+    val userID = auth.currentUser?.uid
+
+    fun registerUser(
+        email: String, password: String, name: String, day: Int, month: Int, year: Int, height: Int,
+        weight: Int, trainingFrequency: String, trainingGoal: String, hombro: Int, pecho: Int,
+        bicepIzq: Int, bicepDer: Int, cintura: Int, cadera: Int, musloIzq: Int, musloDer: Int,
+        pantorrillaIzq: Int, pantorrillaDer: Int
+    ) {
+        createUserEmailAndPassword(email, password) { isSuccess ->
+            if (isSuccess) {
+                // Si la creación del usuario es exitosa, crea el perfil del usuario en Firestore
+                createUser(userID, name,day, month, year, height, weight, trainingFrequency, trainingGoal,
+                    hombro, pecho, bicepIzq, bicepDer, cintura, cadera, musloIzq, musloDer,
+                    pantorrillaIzq, pantorrillaDer)
+            }
+        }
+    }
+
+
 
     fun createUserEmailAndPassword(email: String, password: String, onResult: (Boolean) -> Unit) {
         if (loading.value == false) {
@@ -35,13 +54,13 @@ class SignInViewModel: ViewModel() {
     }
 
     private fun createUser(
-        userID: String,
+        userID: String?,
         name: String,
         day: Int,
         month: Int,
         year: Int,
         height: Int,
-        weight: Double,
+        weight: Int,
         trainingFrequency: String,
         trainingGoal: String,
         hombro: Int,
@@ -55,7 +74,7 @@ class SignInViewModel: ViewModel() {
         pantorrillaIzq: Int,
         pantorrillaDer: Int
     ){
-        val userID = auth.currentUser?.uid
+
         val user = User (
             userID = userID.toString(),
             name = name,

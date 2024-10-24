@@ -7,7 +7,7 @@ data class User(
     val month: Int,
     val year: Int,
     val height: Int,
-    val weight: Double,
+    val weight: Int,
     val trainingFrequency: String,
     val trainingGoal: String,
     val hombro: Int,
