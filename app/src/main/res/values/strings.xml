@@ -120,5 +120,9 @@
     <string name="name_routine">Nombre de la rutina</string>
     <string name="example_routine">Ej: Rutina de pierna</string>
     <string name="exercise_added">Ejercicio Añadido</string>
+    <string name="modificar">Modificar</string>
+    <string name="category_exercise">Categoria:</string>
+    <string name="series">Series:</string>
+    <string name="reps">Reps:</string>
 
 </resources>

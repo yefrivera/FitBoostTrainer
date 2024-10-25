@@ -6,20 +6,20 @@ data class User(
     val day: Int,
     val month: Int,
     val year: Int,
-    val height: Int,
-    val weight: Int,
+    val height: List<Int>,
+    val weight: List<Int>,
     val trainingFrequency: String,
     val trainingGoal: String,
-    val hombro: Int,
-    val pecho: Int,
-    val bicepIzq: Int,
-    val bicepDer: Int,
-    val cintura: Int,
-    val cadera: Int,
-    val musloIzq: Int,
-    val musloDer: Int,
-    val pantorrillaIzq: Int,
-    val pantorrillaDer: Int
+    val hombro: List<Int>,
+    val pecho: List<Int>,
+    val bicepIzq: List<Int>,
+    val bicepDer: List<Int>,
+    val cintura: List<Int>,
+    val cadera: List<Int>,
+    val musloIzq: List<Int>,
+    val musloDer: List<Int>,
+    val pantorrillaIzq: List<Int>,
+    val pantorrillaDer: List<Int>
 ){
     fun toMap(): MutableMap<String, Any>{
         return mutableMapOf(

@@ -503,12 +503,3 @@ fun DropdownMenuField(
         }
     }
 }
-
-
-@Preview(showBackground = true)
-@Composable
-fun SingInDataScreenPreview() {
-    FitBoostTrainerTheme {
-        SingInDataScreen(navController= rememberNavController())
-    }
-}

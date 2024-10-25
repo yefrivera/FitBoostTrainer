@@ -13,10 +13,13 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import edu.unicauca.fitboosttrainer.R
+import edu.unicauca.fitboosttrainer.data.Exercise
+
 @Composable
 fun ExerciseDetailsModal(
     isVisible: Boolean,               // Estado para mostrar el modal
     modalSeries: String,              // Campo para series
+    exercise: Exercise?,              // Ejercicio que se va a editar (puede ser null si es nuevo)
     modalReps: String,                // Campo para repeticiones
     modalWeight: String,              // Campo para peso
     onSeriesChange: (String) -> Unit, // Función para cambiar series
@@ -71,7 +74,7 @@ fun ExerciseDetailsModal(
                     onClick = onConfirm,       // Llamar a onConfirm cuando se agrega el ejercicio
                     enabled = isFormComplete    // Habilitar solo si el formulario está completo
                 ) {
-                    Text(stringResource(R.string.add))
+                    Text(stringResource(R.string.modificar))
                 }
             },
             dismissButton = {
