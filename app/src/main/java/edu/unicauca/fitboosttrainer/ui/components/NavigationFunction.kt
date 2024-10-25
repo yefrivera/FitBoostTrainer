@@ -1,5 +1,6 @@
 package edu.unicauca.fitboosttrainer.ui.components
 
+import android.content.Context
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ModalNavigationDrawer
@@ -19,6 +20,8 @@ import edu.unicauca.fitboosttrainer.ui.screens.*
 import edu.unicauca.fitboosttrainer.ui.screens.alimentacion.AlimentacionScreen
 import edu.unicauca.fitboosttrainer.ui.screens.calorias.CaloriasScreen
 import edu.unicauca.fitboosttrainer.ui.screens.creationRoutine.CreateRoutineScreen
+import edu.unicauca.fitboosttrainer.ui.screens.editRoutine.EditRoutineScreen
+import edu.unicauca.fitboosttrainer.ui.screens.creationRoutine.RoutineSummaryModal
 import edu.unicauca.fitboosttrainer.ui.screens.fuerzaMaxima.FuerzaMaximaScreen
 import edu.unicauca.fitboosttrainer.ui.screens.fullBody.FullBodyScreen
 import edu.unicauca.fitboosttrainer.ui.screens.home.Home
@@ -37,6 +40,8 @@ fun NavigationFunction() {
     val drawerState = rememberDrawerState(DrawerValue.Closed)
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
 
+
+    // Lista de pantallas donde NO quieres que el drawer se muestre
     val screensWithoutDrawer = listOf(
         "welcome",
         "LoginScreen",
@@ -180,6 +185,14 @@ fun NavigationFunction() {
                 )
             }
 
+            composable("editRoutine/{routineId}") { backStackEntry ->
+                val routineId = backStackEntry.arguments?.getString("routineId") ?: ""
+                EditRoutineScreen(
+                    navController = navController,
+                    drawerState = drawerState,
+                    routineId = routineId
+                )
+            }
 
         }
     }
