@@ -107,6 +107,7 @@ fun ProgresoScreen(
                     if (inputValue.isNotEmpty()) {
                         viewModel.addValueToMeasure(inputValue.toInt())
                         inputValue = ""
+
                     }
                 },
                 modifier = Modifier.fillMaxWidth()

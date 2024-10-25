@@ -24,6 +24,7 @@ import edu.unicauca.fitboosttrainer.ui.screens.creationRoutine.RoutineSummaryMod
 import edu.unicauca.fitboosttrainer.ui.screens.fuerzaMaxima.FuerzaMaximaScreen
 import edu.unicauca.fitboosttrainer.ui.screens.fullBody.FullBodyScreen
 import edu.unicauca.fitboosttrainer.ui.screens.home.Home
+import edu.unicauca.fitboosttrainer.ui.screens.progreso.ProgresoScreen
 import edu.unicauca.fitboosttrainer.ui.screens.routineDetail.RoutineDetailScreen
 import edu.unicauca.fitboosttrainer.ui.screens.savedRoutines.SavedRoutinesScreen
 //import edu.unicauca.fitboosttrainer.ui.screens.singIn.MeasuresScreen
@@ -76,11 +77,6 @@ fun NavigationFunction() {
             composable("singIn") {
                 SingInDataScreen(navController = navController)
             }
-
-            // Pantalla registro de medidas (sin drawer)
-            /*composable("RegistrerMessureScreen") {
-                MeasuresScreen(navController = navController)
-            }*/
 
             // Pantalla de inicio (Home) con drawer
             composable("home") {
@@ -150,6 +146,13 @@ fun NavigationFunction() {
                     scrollBehavior = scrollBehavior
                 )
             }
+            composable("progresoScreen") {
+                ProgresoScreen(
+                    navController = navController,
+                    drawerState = drawerState
+                )
+            }
+
 
             /*composable("sumaryRoutine"){
                 RoutineSummaryScreen(
