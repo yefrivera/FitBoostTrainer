@@ -177,6 +177,14 @@ fun NavigationFunction() {
                 CreditosScreen(navController = navController)
             }
 
+            composable("progresoScreen") {
+                ProgresoScreen(
+                    navController = navController,
+                    drawerState = drawerState
+                )
+            }
+
+
         }
     }
 }
