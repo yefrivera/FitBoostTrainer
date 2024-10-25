@@ -25,15 +25,13 @@ class SavedRoutineViewModel : ViewModel() {
         private set
 
     init {
-        // Cargar las rutinas al inicializar el ViewModel
         loadSavedRoutines()
     }
 
-    // Función para cargar las rutinas guardadas del usuario
-    fun loadSavedRoutines() {
+    private fun loadSavedRoutines() {
         viewModelScope.launch {
             try {
-                isLoading = true  // Comienza la carga
+                isLoading = true
                 val routinesSnapshot = firestore.collection("rutinasGuardadas")
                     .get()
                     .await()
@@ -41,15 +39,29 @@ class SavedRoutineViewModel : ViewModel() {
                 val routines = routinesSnapshot.documents.map { doc ->
                     SavedRoutine(
                         id = doc.id,
-                        name = doc.getString("name") ?: "",
-                        //series = doc.getLong("series")?.toInt() ?: 0
+                        name = doc.getString("name") ?: ""
                     )
                 }
                 savedRoutines = routines
             } catch (e: Exception) {
-                // Manejo de errores si es necesario
+
             } finally {
-                isLoading = false  // Termina la carga
+                isLoading = false
+            }
+        }
+    }
+
+
+    // Función para eliminar rutina y recargar la lista
+    fun deleteRoutine(routineId: String) {
+        viewModelScope.launch {
+            try {
+
+                firestore.collection("rutinasGuardadas").document(routineId).delete().await()
+                loadSavedRoutines()
+
+            } catch (e: Exception) {
+
             }
         }
     }

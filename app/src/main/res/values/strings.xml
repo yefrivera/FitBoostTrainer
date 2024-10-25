@@ -124,5 +124,11 @@
     <string name="category_exercise">Categoria:</string>
     <string name="series">Series:</string>
     <string name="reps">Reps:</string>
+    <string name="show_summary">Ver Resumen</string>
+    <string name="end">Finalizar</string>
+    <string name="deleted_routine">Eliminar rutina</string>
+    <string name="deleted">Eliminar</string>
+    <string name="edit_routine">Editar Rutina</string>
+    <string name="saved_changes">Guardar Cambios</string>
 
 </resources>

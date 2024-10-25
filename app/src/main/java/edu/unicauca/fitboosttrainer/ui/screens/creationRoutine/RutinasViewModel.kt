@@ -100,16 +100,6 @@ class RoutineViewModel : ViewModel() {
     }
 
 
-    // Editar un ejercicio existente
-    /*
-    fun editExercise(oldExercise: Exercise, newExercise: Exercise) {
-        _uiState.value = _uiState.value.copy(
-            selectedExercises = _uiState.value.selectedExercises.map {
-                if (it == oldExercise) newExercise else it
-            }
-        )
-    }
-  */
     // Método para eliminar un ejercicio de la rutina temporal
     fun removeExercise(exercise: Exercise) {
         _uiState.value = _uiState.value.copy(

@@ -84,7 +84,6 @@ fun CreateRoutineScreen(
             viewModel = routineViewModel,
             navController = navController,
             uiState = uiState,
-            showModal = showModal,
             onShowModalChange = { showModal = it }
         )
 
@@ -127,7 +126,6 @@ private fun ScrollContent(
     innerPadding: PaddingValues,
     viewModel: RoutineViewModel,
     uiState: RoutineUiState,
-    showModal: Boolean,
     onShowModalChange: (Boolean) -> Unit
 ) {
     // Estado para controlar la visibilidad del modal y el ejercicio seleccionado
@@ -207,7 +205,7 @@ private fun ScrollContent(
                 shape = RoundedCornerShape(8.dp),
                 modifier = Modifier.height(48.dp).padding(end = 8.dp)
             ) {
-                Text(text = "Ver Resumen")
+                Text(text = stringResource(R.string.show_summary))
             }
 
             Button(
@@ -218,7 +216,7 @@ private fun ScrollContent(
                 shape = RoundedCornerShape(8.dp),
                 modifier = Modifier.height(48.dp)
             ) {
-                Text(text = "Finalizar")
+                Text(text = stringResource(R.string.end))
             }
         }
 

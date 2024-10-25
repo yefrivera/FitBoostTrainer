@@ -19,6 +19,7 @@ import edu.unicauca.fitboosttrainer.R
 import edu.unicauca.fitboosttrainer.ui.screens.*
 import edu.unicauca.fitboosttrainer.ui.screens.calorias.CaloriasScreen
 import edu.unicauca.fitboosttrainer.ui.screens.creationRoutine.CreateRoutineScreen
+import edu.unicauca.fitboosttrainer.ui.screens.editRoutine.EditRoutineScreen
 import edu.unicauca.fitboosttrainer.ui.screens.home.Home
 import edu.unicauca.fitboosttrainer.ui.screens.routineDetail.RoutineDetailScreen
 import edu.unicauca.fitboosttrainer.ui.screens.savedRoutines.SavedRoutinesScreen
@@ -157,6 +158,15 @@ fun NavigationFunction() {
             composable("routineDetail/{routineId}") { backStackEntry ->
                 val routineId = backStackEntry.arguments?.getString("routineId") ?: ""
                 RoutineDetailScreen(
+                    navController = navController,
+                    drawerState = drawerState,
+                    routineId = routineId
+                )
+            }
+
+            composable("editRoutine/{routineId}") { backStackEntry ->
+                val routineId = backStackEntry.arguments?.getString("routineId") ?: ""
+                EditRoutineScreen(
                     navController = navController,
                     drawerState = drawerState,
                     routineId = routineId
