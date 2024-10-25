@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -37,6 +38,15 @@ fun Home(
     scrollBehavior: TopAppBarScrollBehavior,
     homeViewModel: HomeViewModel = viewModel()
 ) {
+    // Usar los valores observados para mostrar las calorías y entrenamientos
+    val userName by homeViewModel.userName.collectAsState()
+    val dailyGoalCalories by homeViewModel.dailyGoalCalories.collectAsState()
+    val totalCalories by homeViewModel.totalCalories.collectAsState()
+    val completedWorkouts by homeViewModel.completedWorkouts.collectAsState()
+    val totalWorkouts by homeViewModel.totalWorkouts.collectAsState()
+
+
+
     var selectedNavItem by remember { mutableStateOf(BottomNavItem.HOME) }
 
     Scaffold(
@@ -63,12 +73,12 @@ fun Home(
                 .padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            // Usamos los valores observados desde el ViewModel
             Text(
-                text = "Hola, ${homeViewModel.userName.value} \n¿Listo para entrenar hoy?",
+                text = "Hola, $userName \n¿Listo para entrenar hoy?",
                 fontSize = 28.sp,
                 modifier = Modifier.padding(bottom = 8.dp)
             )
+
             Box(modifier = Modifier.fillMaxWidth()) {
                 Image(
                     painter = painterResource(id = R.drawable.logo),
@@ -80,10 +90,12 @@ fun Home(
                 )
             }
 
+            // Usar los valores observados para mostrar el progreso
             ProgressSummary(
-                caloriesBurned = homeViewModel.caloriesBurned.value,
-                completedWorkouts = homeViewModel.completedWorkouts.value,
-                totalWorkouts = homeViewModel.totalWorkouts.value
+                dailyGoalCalories = dailyGoalCalories,
+                totalCalories = totalCalories,
+                completedWorkouts = completedWorkouts,
+                totalWorkouts = totalWorkouts
             )
 
             NewWorkoutButton(navController)
@@ -92,7 +104,7 @@ fun Home(
 }
 
 @Composable
-fun ProgressSummary(caloriesBurned: Int, completedWorkouts: Int, totalWorkouts: Int) {
+fun ProgressSummary(dailyGoalCalories: Int, totalCalories: Int, completedWorkouts: Int, totalWorkouts: Int) {
     Card(
         shape = RoundedCornerShape(8.dp),
         elevation = CardDefaults.cardElevation(4.dp),
@@ -101,11 +113,19 @@ fun ProgressSummary(caloriesBurned: Int, completedWorkouts: Int, totalWorkouts: 
         Column(modifier = Modifier.padding(16.dp)) {
             Text(text = "Tu Progreso", fontSize = 18.sp, fontWeight = FontWeight.Bold)
             Spacer(modifier = Modifier.height(8.dp))
+
             Row(horizontalArrangement = Arrangement.SpaceBetween, modifier = Modifier.fillMaxWidth()) {
-                Text(text = "Calorías quemadas esta semana", fontSize = 16.sp)
-                Text(text = "$caloriesBurned kcal", fontSize = 16.sp, fontWeight = FontWeight.SemiBold)
+                Text(text = "Objetivo calórico diario", fontSize = 16.sp)
+                Text(text = "$dailyGoalCalories kcal", fontSize = 16.sp, fontWeight = FontWeight.SemiBold)
             }
+
+            Row(horizontalArrangement = Arrangement.SpaceBetween, modifier = Modifier.fillMaxWidth()) {
+                Text(text = "Calorías consumidas", fontSize = 16.sp)
+                Text(text = "$totalCalories kcal", fontSize = 16.sp, fontWeight = FontWeight.SemiBold)
+            }
+
             Spacer(modifier = Modifier.height(8.dp))
+
             Row(horizontalArrangement = Arrangement.SpaceBetween, modifier = Modifier.fillMaxWidth()) {
                 Text(text = "Entrenamientos completados", fontSize = 16.sp)
                 Text(text = "$completedWorkouts/$totalWorkouts", fontSize = 16.sp, fontWeight = FontWeight.SemiBold)
@@ -113,6 +133,8 @@ fun ProgressSummary(caloriesBurned: Int, completedWorkouts: Int, totalWorkouts: 
         }
     }
 }
+
+
 
 @Composable
 fun NewWorkoutButton(navController: NavHostController) {

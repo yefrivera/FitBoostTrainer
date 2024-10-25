@@ -69,8 +69,8 @@
 
     <string name="alimentacion_title">Alimentación</string>
     <string name="seguimiento_calorico">Seguimiento calórico</string>
-    <string name="endulza">Endulza tus días</string>
-    <string name="dessert">Postres saludables y fáciles de hacer</string>
+    <string name="title_food">¿No sabes qué comer?</string>
+    <string name="desc_food">Tenemos sugerencias especiales para tí y a tus objetivos</string>
     <string name="snack">Snacks Saludables</string>
     <string name="desayuno">Desayuno</string>
     <string name="almuerzo">Almuerzo</string>

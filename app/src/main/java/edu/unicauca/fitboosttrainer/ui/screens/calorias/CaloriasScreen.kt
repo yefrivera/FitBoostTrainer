@@ -1,6 +1,5 @@
 package edu.unicauca.fitboosttrainer.ui.screens.calorias
 
-import android.annotation.SuppressLint
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
@@ -26,6 +25,7 @@ import edu.unicauca.fitboosttrainer.ui.components.BottomNavigation
 import edu.unicauca.fitboosttrainer.ui.components.MainTopAppBarAlt
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.input.KeyboardType
 import kotlinx.coroutines.CoroutineScope
@@ -34,6 +34,9 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.compose.rememberNavController
+import edu.unicauca.fitboosttrainer.ui.screens.home.HomeViewModel
 import kotlinx.coroutines.delay
 
 
@@ -45,15 +48,21 @@ fun CaloriasScreen(
     navController: NavHostController,
     viewModel: FoodViewModel = viewModel()
 ) {
-    val selectedItem = remember { mutableStateOf(BottomNavItem.ALIMENTACION) }
+    val uiState = viewModel.uiState.value
+
     val snackbarHostState = remember { SnackbarHostState() }
     val coroutineScope = rememberCoroutineScope()
+    val selectedItem = remember { mutableStateOf(BottomNavItem.ALIMENTACION) }
+
+    LaunchedEffect(Unit) {
+        viewModel.fetchDailyGoalCalories()  // Cargar la meta diaria al iniciar la pantalla
+    }
 
     Scaffold(
         topBar = {
             MainTopAppBarAlt(
                 title = "Calorías",
-                scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(),
+                scrollBehavior = scrollBehavior,
                 drawerState = drawerState,
                 onBackClick = { navController.popBackStack() }
             )
@@ -74,34 +83,34 @@ fun CaloriasScreen(
                 .verticalScroll(rememberScrollState())
                 .padding(16.dp)
         ) {
-            DailyGoalSection(viewModel)
+            DailyGoalSection(uiState, viewModel)  // Ya no pasamos homeViewModel
             Spacer(modifier = Modifier.height(16.dp))
-            AddFoodSection(viewModel, snackbarHostState, coroutineScope)
+            AddFoodSection(viewModel, snackbarHostState, coroutineScope, uiState)
             Spacer(modifier = Modifier.height(16.dp))
-            AddedFoodsSection(viewModel)
+            AddedFoodsSection(uiState, viewModel)
         }
     }
 }
 
-@SuppressLint("CoroutineCreationDuringComposition")
 @Composable
-fun DailyGoalSection(viewModel: FoodViewModel) {
+fun DailyGoalSection(uiState: CaloriasUIState, viewModel: FoodViewModel) {
     var showEditDialog by remember { mutableStateOf(false) }
     var showWarning by remember { mutableStateOf(false) }
     val coroutineScope = rememberCoroutineScope()
-
-    val progress = (viewModel.totalCalories.value / viewModel.dailyGoalCalories.value.toFloat()).coerceIn(0f, 1f)
-    val barColor = if (viewModel.totalCalories.value > viewModel.dailyGoalCalories.value) {
+    val progress = (uiState.totalCalories / uiState.dailyGoalCalories.toFloat()).coerceIn(0f, 1f)
+    val barColor = if (uiState.totalCalories > uiState.dailyGoalCalories) {
         MaterialTheme.colorScheme.error
     } else {
         MaterialTheme.colorScheme.primary
     }
 
-    if (viewModel.totalCalories.value > viewModel.dailyGoalCalories.value && !showWarning) {
+    if (uiState.totalCalories > uiState.dailyGoalCalories && !showWarning) {
         showWarning = true
-        coroutineScope.launch {
-            delay(3000)
-            showWarning = false
+        LaunchedEffect(Unit) {
+            coroutineScope.launch {
+                delay(3000)
+                showWarning = false
+            }
         }
     }
 
@@ -113,7 +122,7 @@ fun DailyGoalSection(viewModel: FoodViewModel) {
         Column(modifier = Modifier.padding(16.dp)) {
             Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.fillMaxWidth()) {
                 Text(
-                    text = "Meta Diaria: ${viewModel.dailyGoalCalories.value} kcal",
+                    text = "Meta Diaria: ${uiState.dailyGoalCalories} kcal",
                     style = MaterialTheme.typography.titleLarge
                 )
                 Spacer(modifier = Modifier.weight(1f))
@@ -125,7 +134,7 @@ fun DailyGoalSection(viewModel: FoodViewModel) {
             Spacer(modifier = Modifier.height(16.dp))
 
             Row(verticalAlignment = Alignment.CenterVertically) {
-                Text(text = "${viewModel.totalCalories.value} kcal")
+                Text(text = "${uiState.totalCalories} kcal")
                 Spacer(modifier = Modifier.width(8.dp))
 
                 LinearProgressIndicator(
@@ -139,7 +148,7 @@ fun DailyGoalSection(viewModel: FoodViewModel) {
                 )
 
                 Spacer(modifier = Modifier.width(8.dp))
-                Text(text = "${viewModel.dailyGoalCalories.value} kcal")
+                Text(text = "${uiState.dailyGoalCalories} kcal")
             }
 
             if (showWarning) {
@@ -155,14 +164,16 @@ fun DailyGoalSection(viewModel: FoodViewModel) {
 
     if (showEditDialog) {
         EditDailyGoalDialog(
-            currentGoal = viewModel.dailyGoalCalories.value,
+            currentGoal = uiState.dailyGoalCalories,
             onConfirm = { newGoal ->
-                viewModel.updateDailyGoalCalories(newGoal)
-                showEditDialog = false
+                showEditDialog = false  // Cerrar el diálogo inmediatamente
+                coroutineScope.launch {
+                    //viewModel.addDailyGoalToFirebase(newGoal)  // Guardar la nueva meta en Firebase
+                }
             },
-            onCancel = {
-                showEditDialog = false
-            }
+            onCancel = { showEditDialog = false },  // Asegurarse de cerrar el diálogo si se cancela
+            viewModel = viewModel,
+            coroutineScope = coroutineScope
         )
     }
 }
@@ -171,7 +182,9 @@ fun DailyGoalSection(viewModel: FoodViewModel) {
 fun EditDailyGoalDialog(
     currentGoal: Int,
     onConfirm: (Int) -> Unit,
-    onCancel: () -> Unit
+    onCancel: () -> Unit,
+    viewModel: FoodViewModel, // Cambia para pasar el viewModel
+    coroutineScope: CoroutineScope
 ) {
     var newGoal by remember { mutableStateOf(currentGoal.toString()) }
     var showError by remember { mutableStateOf(false) }
@@ -205,7 +218,12 @@ fun EditDailyGoalDialog(
             Button(onClick = {
                 val newGoalInt = newGoal.toIntOrNull()
                 if (newGoalInt != null && newGoalInt > 0) {
-                    onConfirm(newGoalInt)
+                    // Guardar en Firebase a través del ViewModel
+                    coroutineScope.launch {
+                        viewModel.addDailyGoalToFirebase(newGoalInt)
+                    }
+
+                    onConfirm(newGoalInt) // Actualiza la UI
                 } else {
                     showError = true
                 }
@@ -223,12 +241,17 @@ fun EditDailyGoalDialog(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AddFoodSection(viewModel: FoodViewModel, snackbarHostState: SnackbarHostState, coroutineScope: CoroutineScope) {
+fun AddFoodSection(
+    viewModel: FoodViewModel,
+    snackbarHostState: SnackbarHostState,
+    coroutineScope: CoroutineScope,
+    uiState: CaloriasUIState
+) {
     val keyboardController = LocalSoftwareKeyboardController.current
     val gramsFocusRequester = remember { FocusRequester() }
     val caloriesFocusRequester = remember { FocusRequester() }
-
     var showSuggestions by remember { mutableStateOf(false) }
+
 
     Card(
         modifier = Modifier.fillMaxWidth(),
@@ -238,17 +261,16 @@ fun AddFoodSection(viewModel: FoodViewModel, snackbarHostState: SnackbarHostStat
         Column(modifier = Modifier.padding(16.dp)) {
             Text(text = "Agregar Comida", style = MaterialTheme.typography.titleLarge)
             Spacer(modifier = Modifier.height(8.dp))
+
             ExposedDropdownMenuBox(
                 expanded = showSuggestions,
-                onExpandedChange = {
-                    showSuggestions = !showSuggestions
-                }
+                onExpandedChange = { showSuggestions = !showSuggestions }
             ) {
                 OutlinedTextField(
-                    value = viewModel.foodName.value,
+                    value = uiState.foodName,
                     onValueChange = {
                         viewModel.setFoodName(it)
-                        showSuggestions = it.isNotEmpty() && viewModel.suggestions.isNotEmpty()
+                        showSuggestions = it.isNotEmpty() && uiState.suggestions.isNotEmpty()
                     },
                     label = { Text("Comida", fontStyle = FontStyle.Italic) },
                     leadingIcon = { Icon(imageVector = Icons.Default.Add, contentDescription = "Comida") },
@@ -259,15 +281,14 @@ fun AddFoodSection(viewModel: FoodViewModel, snackbarHostState: SnackbarHostStat
                         imeAction = ImeAction.Next,
                         capitalization = KeyboardCapitalization.Sentences
                     ),
-                    keyboardActions = KeyboardActions(onNext = {
-                        gramsFocusRequester.requestFocus()
-                    })
+                    keyboardActions = KeyboardActions(onNext = { gramsFocusRequester.requestFocus() })
                 )
+
                 ExposedDropdownMenu(
                     expanded = showSuggestions,
                     onDismissRequest = { showSuggestions = false }
                 ) {
-                    viewModel.suggestions.forEach { suggestion ->
+                    uiState.suggestions.forEach { suggestion ->
                         DropdownMenuItem(
                             text = { Text(suggestion["name"].toString()) },
                             onClick = {
@@ -282,9 +303,8 @@ fun AddFoodSection(viewModel: FoodViewModel, snackbarHostState: SnackbarHostStat
 
             Spacer(modifier = Modifier.height(8.dp))
 
-            // Campo de Gramos
             OutlinedTextField(
-                value = viewModel.foodGrams.value,
+                value = uiState.foodGrams,
                 onValueChange = { viewModel.setFoodGrams(it) },
                 label = { Text("Cantidad (Gramos)", fontStyle = FontStyle.Italic) },
                 leadingIcon = { Icon(imageVector = Icons.Default.Add, contentDescription = "Gramos") },
@@ -295,16 +315,13 @@ fun AddFoodSection(viewModel: FoodViewModel, snackbarHostState: SnackbarHostStat
                     keyboardType = KeyboardType.Number,
                     imeAction = ImeAction.Next
                 ),
-                keyboardActions = KeyboardActions(onNext = {
-                    caloriesFocusRequester.requestFocus()
-                })
+                keyboardActions = KeyboardActions(onNext = { caloriesFocusRequester.requestFocus() })
             )
 
             Spacer(modifier = Modifier.height(8.dp))
 
-            // Campo de Calorías
             OutlinedTextField(
-                value = viewModel.foodCalories.value,
+                value = uiState.foodCalories,
                 onValueChange = { viewModel.setFoodCalories(it) },
                 label = { Text("Calorías (kcal)", fontStyle = FontStyle.Italic) },
                 leadingIcon = { Icon(imageVector = Icons.Default.Add, contentDescription = "Calorías") },
@@ -322,26 +339,23 @@ fun AddFoodSection(viewModel: FoodViewModel, snackbarHostState: SnackbarHostStat
 
             Spacer(modifier = Modifier.height(8.dp))
 
-            Button(onClick = {
-                coroutineScope.launch {
-                    if (viewModel.foodName.value.isEmpty() ||
-                        viewModel.foodGrams.value.isEmpty() ||
-                        viewModel.foodCalories.value.isEmpty()) {
-                        keyboardController?.hide()
-
-                        snackbarHostState.showSnackbar("Por favor, diligencie todos los campos")
-                    } else {
-                        val isSuccess = viewModel.addFoodToFirebase()
-                        if (isSuccess) {
-                            viewModel.clearFields()
+            Button(
+                onClick = {
+                    coroutineScope.launch {
+                        if (uiState.foodName.isEmpty() ||
+                            uiState.foodGrams.isEmpty() ||
+                            uiState.foodCalories.isEmpty()) {
+                            keyboardController?.hide()
+                            snackbarHostState.showSnackbar("Por favor, diligencie todos los campos")
+                        } else {
+                            viewModel.addFoodToFirebase()
                             keyboardController?.hide()
                             snackbarHostState.showSnackbar("Comida agregada correctamente")
-                        } else {
-                            snackbarHostState.showSnackbar("Error al agregar la comida")
                         }
                     }
-                }
-            }, modifier = Modifier.align(Alignment.CenterHorizontally)) {
+                },
+                modifier = Modifier.align(Alignment.CenterHorizontally)
+            ) {
                 Text(text = "+ Añadir")
             }
         }
@@ -349,7 +363,7 @@ fun AddFoodSection(viewModel: FoodViewModel, snackbarHostState: SnackbarHostStat
 }
 
 @Composable
-fun AddedFoodsSection(viewModel: FoodViewModel) {
+fun AddedFoodsSection(uiState: CaloriasUIState, viewModel: FoodViewModel) {
     var foodToEdit by remember { mutableStateOf<Map<String, Any>?>(null) }
     var showEditDialog by remember { mutableStateOf(false) }
     var foodToDelete by remember { mutableStateOf<Map<String, Any>?>(null) }
@@ -364,10 +378,10 @@ fun AddedFoodsSection(viewModel: FoodViewModel) {
             Text(text = "Comidas Agregadas", style = MaterialTheme.typography.titleLarge)
             Spacer(modifier = Modifier.height(8.dp))
 
-            if (viewModel.addedFoods.isEmpty()) {
+            if (uiState.addedFoods.isEmpty()) {
                 Text("No hay alimentos agregados")
             } else {
-                viewModel.addedFoods.forEach { food ->
+                uiState.addedFoods.forEach { food ->
                     Card(
                         modifier = Modifier
                             .fillMaxWidth()
@@ -385,7 +399,7 @@ fun AddedFoodsSection(viewModel: FoodViewModel) {
                                 modifier = Modifier.fillMaxWidth(),
                                 horizontalArrangement = Arrangement.SpaceBetween
                             ) {
-                                Text(text = "${food["name"].toString()}", modifier = Modifier.padding(2.dp))
+                                Text(text = food["name"].toString(), modifier = Modifier.padding(2.dp))
                                 Text(text = "${food["grams"].toString()} gr", modifier = Modifier.padding(2.dp))
                                 Text(text = "${food["calories"].toString()} kcal", modifier = Modifier.padding(2.dp))
                             }
@@ -413,6 +427,7 @@ fun AddedFoodsSection(viewModel: FoodViewModel) {
             }
         }
     }
+
     if (showDeleteDialog && foodToDelete != null) {
         DeleteConfirmationDialog(
             onConfirm = {
@@ -426,6 +441,7 @@ fun AddedFoodsSection(viewModel: FoodViewModel) {
             }
         )
     }
+
     if (showEditDialog && foodToEdit != null) {
         EditFoodDialog(
             food = foodToEdit!!,
@@ -498,7 +514,7 @@ fun EditFoodDialog(
         },
         confirmButton = {
             Button(onClick = {
-                if (name.isNotEmpty() && grams.isNotEmpty() && calories.isNotEmpty() /*&& mealType.isNotEmpty()*/) {
+                if (name.isNotEmpty() && grams.isNotEmpty() && calories.isNotEmpty()) {
                     val updatedFood = food.toMutableMap()
                     updatedFood["name"] = name
                     updatedFood["grams"] = grams
@@ -537,3 +553,4 @@ fun DeleteConfirmationDialog(onConfirm: () -> Unit, onCancel: () -> Unit) {
         }
     )
 }
+

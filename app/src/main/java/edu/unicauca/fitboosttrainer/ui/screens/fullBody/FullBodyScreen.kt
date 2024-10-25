@@ -1,4 +1,4 @@
-package edu.unicauca.fitboosttrainer.ui.screens
+package edu.unicauca.fitboosttrainer.ui.screens.fullBody
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -6,35 +6,34 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowForward
 import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import edu.unicauca.fitboosttrainer.R
-import edu.unicauca.fitboosttrainer.ui.components.BottomNavItem
 import edu.unicauca.fitboosttrainer.ui.components.BottomNavigation
 import edu.unicauca.fitboosttrainer.ui.components.MainTopAppBarAlt
-import edu.unicauca.fitboosttrainer.ui.theme.FitBoostTrainerTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FullBodyScreen(
     scrollBehavior: TopAppBarScrollBehavior,
     drawerState: DrawerState,
-    navController: NavHostController
+    navController: NavHostController,
+    viewModel: FullBodyViewModel = viewModel() // ViewModel inyectado
 ) {
-    var selectedNavItem by remember { mutableStateOf(BottomNavItem.RUTINAS) }
+    val selectedNavItem = viewModel.selectedNavItem.value // Observar el estado
 
     Scaffold(
         topBar = {
             MainTopAppBarAlt(
                 title = "Full Body",
-                scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(),
+                scrollBehavior = scrollBehavior,
                 drawerState = drawerState,
                 onBackClick = { navController.popBackStack() }
             )
@@ -42,7 +41,7 @@ fun FullBodyScreen(
         bottomBar = {
             BottomNavigation(
                 selectedItem = selectedNavItem,
-                onItemSelected = { selectedNavItem = it },
+                onItemSelected = { viewModel.selectNavItem(it) }, // Actualizar el estado desde el ViewModel
                 navController = navController
             )
         }
@@ -86,8 +85,7 @@ fun RoutineItem(title: String, description: String, onClick: () -> Unit) {
         modifier = Modifier
             .fillMaxWidth()
             .padding(vertical = 8.dp)
-            .clickable(onClick = onClick),
-        //colors = CardDefaults.cardColors(containerColor =  Color(0xFFDDE3E7))
+            .clickable(onClick = onClick)
     ) {
         Row(
             modifier = Modifier
@@ -105,13 +103,11 @@ fun RoutineItem(title: String, description: String, onClick: () -> Unit) {
                 Text(
                     text = description,
                     style = MaterialTheme.typography.bodyMedium,
-                    //color = Color.Gray
                 )
             }
             Icon(
                 imageVector = Icons.Default.ArrowForward,
-                contentDescription = "Ir a detalles de rutina",
-                //tint = Color.Gray
+                contentDescription = "Ir a detalles de rutina"
             )
         }
     }
@@ -124,6 +120,5 @@ fun FullBodyScreenPreview() {
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
     val navController = rememberNavController()
-    FullBodyScreen(scrollBehavior = scrollBehavior, drawerState = drawerState, navController= navController)
-
+    FullBodyScreen(scrollBehavior = scrollBehavior, drawerState = drawerState, navController = navController)
 }
