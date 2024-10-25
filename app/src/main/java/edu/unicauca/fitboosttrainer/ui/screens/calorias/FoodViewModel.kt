@@ -1,156 +1,123 @@
 package edu.unicauca.fitboosttrainer.ui.screens.calorias
 
-import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
-import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.ListenerRegistration
-import kotlinx.coroutines.tasks.await
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
-class FoodViewModel : ViewModel() {
-    var foodName = mutableStateOf("")
-    var foodGrams = mutableStateOf("")
-    var foodCalories = mutableStateOf("")
+class FoodViewModel(
+    private val foodDB: FoodDB = FoodDB()
+) : ViewModel() {
 
-    var addedFoods = mutableStateListOf<Map<String, Any>>()
-    var suggestions = mutableStateListOf<Map<String, Any>>()
-    private val db = FirebaseFirestore.getInstance()
-    private var firestoreListener: ListenerRegistration? = null
-    var dailyGoalCalories = mutableStateOf(1000)
-    var totalCalories = mutableStateOf(0)
+    var uiState = mutableStateOf(CaloriasUIState())
+        private set
 
     init {
         fetchAddedFoods()
     }
 
     fun setFoodName(newName: String) {
-        foodName.value = newName
+        uiState.value = uiState.value.copy(foodName = newName)
         fetchFoodSuggestions(newName)
     }
 
     fun setFoodGrams(newGrams: String) {
-        foodGrams.value = newGrams
+        uiState.value = uiState.value.copy(foodGrams = newGrams)
         calculateCalories()
     }
 
     fun setFoodCalories(newCalories: String) {
-        foodCalories.value = newCalories
+        uiState.value = uiState.value.copy(foodCalories = newCalories)
     }
 
     fun clearFields() {
-        foodName.value = ""
-        foodGrams.value = ""
-        foodCalories.value = ""
+        uiState.value = uiState.value.copy(foodName = "", foodGrams = "", foodCalories = "")
     }
 
-    suspend fun addFoodToFirebase(): Boolean {
-        val foodData = hashMapOf(
-            "name" to foodName.value,
-            "grams" to foodGrams.value,
-            "calories" to foodCalories.value,
-            //"mealType" to mealType.value
-        )
-
-        return try {
-            db.collection("comidas")
-                .add(foodData)
-                .await()
-            true
-        } catch (e: Exception) {
-            false
+    fun addFoodToFirebase() {
+        CoroutineScope(Dispatchers.IO).launch {
+            val foodData = mapOf(
+                "name" to uiState.value.foodName,
+                "grams" to uiState.value.foodGrams,
+                "calories" to uiState.value.foodCalories
+            )
+            val isSuccess = foodDB.addFood(foodData)
+            if (isSuccess) {
+                clearFields()
+            }
         }
     }
 
     private fun fetchAddedFoods() {
-        firestoreListener = db.collection("comidas")
-            .addSnapshotListener { snapshots, e ->
-                if (e != null) return@addSnapshotListener
-                addedFoods.clear()
-                var total = 0
-
-                snapshots?.documents?.forEach { document ->
-                    document.data?.let { food ->
-                        addedFoods.add(food.plus("id" to document.id))
-                        total += (food["calories"].toString().toIntOrNull() ?: 0)
-                    }
-                }
-
-                totalCalories.value = total
-            }
+        foodDB.fetchAddedFoods { foods ->
+            val totalCalories = foods.sumOf { it["calories"].toString().toIntOrNull() ?: 0 }
+            uiState.value = uiState.value.copy(addedFoods = foods, totalCalories = totalCalories)
+        }
     }
 
     private fun calculateCalories() {
-        val grams = foodGrams.value.toIntOrNull() ?: 100
-        val baseCalories = suggestions.firstOrNull { it["name"] == foodName.value }?.get("calories").toString().toIntOrNull() ?: 0
+        val grams = uiState.value.foodGrams.toIntOrNull() ?: 100
+        val baseCalories = uiState.value.suggestions.firstOrNull { it["name"] == uiState.value.foodName }?.get("calories").toString().toIntOrNull() ?: 0
         val updatedCalories = (baseCalories * grams) / 100
-        foodCalories.value = updatedCalories.toString()
+        uiState.value = uiState.value.copy(foodCalories = updatedCalories.toString())
     }
 
     fun updateFoodInFirebase(updatedFood: Map<String, Any>) {
-        val documentId = updatedFood["id"].toString()
-        db.collection("comidas")
-            .document(documentId)
-            .update(
-                "name", updatedFood["name"].toString(),
-                "grams", updatedFood["grams"].toString(),
-                "calories", updatedFood["calories"].toString(),
-            )
-            .addOnSuccessListener {
-                val index = addedFoods.indexOfFirst { it["id"] == documentId }
-                if (index != -1) {
-                    addedFoods[index] = updatedFood
-                }
+        foodDB.updateFoodInFirebase(updatedFood) {
+            val updatedList = uiState.value.addedFoods.map {
+                if (it["id"] == updatedFood["id"]) updatedFood else it
             }
+            uiState.value = uiState.value.copy(addedFoods = updatedList)
+        }
     }
 
     fun deleteFoodFromFirebase(food: Map<String, Any>) {
-        val documentId = food["id"].toString()
-        db.collection("comidas")
-            .document(documentId)
-            .delete()
-            .addOnSuccessListener {
-                addedFoods.remove(food)
-            }
-            .addOnFailureListener {
+        val foodId = food["id"].toString()
+        foodDB.deleteFoodFromFirebase(foodId) {
+            val updatedList = uiState.value.addedFoods.filter { it["id"] != foodId }
+            uiState.value = uiState.value.copy(addedFoods = updatedList)
+        }
+    }
 
+    // Buscar sugerencias de comida
+    private fun fetchFoodSuggestions(query: String) {
+        foodDB.fetchFoodSuggestions(query) { suggestions ->
+            uiState.value = uiState.value.copy(suggestions = suggestions)
+        }
+    }
+
+    fun selectSuggestedFood(food: Map<String, Any>) {
+        uiState.value = uiState.value.copy(
+            foodName = food["name"].toString(),
+            foodGrams = "100",
+            foodCalories = food["calories"].toString()
+        )
+    }
+
+    fun updateDailyGoalCalories(newGoal: Int) {
+        uiState.value = uiState.value.copy(dailyGoalCalories = newGoal)
+    }
+
+    fun addDailyGoalToFirebase(newGoal: Int) {
+        CoroutineScope(Dispatchers.IO).launch {
+            val isSuccess = foodDB.addDailyGoalToFirebase(newGoal)
+            if (isSuccess) {
+                updateDailyGoalCalories(newGoal)
             }
+        }
+    }
+
+    fun fetchDailyGoalCalories() {
+        CoroutineScope(Dispatchers.IO).launch {
+            foodDB.fetchDailyGoalFromFirebase { dailyGoal ->
+                uiState.value = uiState.value.copy(dailyGoalCalories = dailyGoal)
+            }
+        }
     }
 
     override fun onCleared() {
         super.onCleared()
-        firestoreListener?.remove()
-    }
-
-    fun updateDailyGoalCalories(newGoal: Int) {
-        dailyGoalCalories.value = newGoal
-    }
-
-    // Buscar sugerencias de comida por nombre
-    private fun fetchFoodSuggestions(query: String) {
-        if (query.isEmpty()) {
-            suggestions.clear()
-            return
-        }
-
-        db.collection("comidasGuardadas")
-            .whereGreaterThanOrEqualTo("name", query)
-            .whereLessThanOrEqualTo("name", "$query\uf8ff")
-            .get()
-            .addOnSuccessListener { documents ->
-                suggestions.clear()
-                for (document in documents) {
-                    suggestions.add(document.data)
-                }
-            }
-            .addOnFailureListener {
-                suggestions.clear()
-            }
-    }
-
-    fun selectSuggestedFood(food: Map<String, Any>) {
-        foodName.value = food["name"].toString()
-        foodGrams.value = "100"
-        foodCalories.value = food["calories"].toString()
+        foodDB.removeListener()
     }
 }
-

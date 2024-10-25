@@ -17,14 +17,20 @@ import androidx.navigation.compose.rememberNavController
 import edu.unicauca.fitboosttrainer.ui.screens.logIn.LoginScreen
 import edu.unicauca.fitboosttrainer.R
 import edu.unicauca.fitboosttrainer.ui.screens.*
+import edu.unicauca.fitboosttrainer.ui.screens.alimentacion.AlimentacionScreen
 import edu.unicauca.fitboosttrainer.ui.screens.calorias.CaloriasScreen
 import edu.unicauca.fitboosttrainer.ui.screens.creationRoutine.CreateRoutineScreen
 import edu.unicauca.fitboosttrainer.ui.screens.editRoutine.EditRoutineScreen
+import edu.unicauca.fitboosttrainer.ui.screens.creationRoutine.RoutineSummaryModal
+import edu.unicauca.fitboosttrainer.ui.screens.fuerzaMaxima.FuerzaMaximaScreen
+import edu.unicauca.fitboosttrainer.ui.screens.fullBody.FullBodyScreen
 import edu.unicauca.fitboosttrainer.ui.screens.home.Home
+import edu.unicauca.fitboosttrainer.ui.screens.progreso.ProgresoScreen
 import edu.unicauca.fitboosttrainer.ui.screens.routineDetail.RoutineDetailScreen
 import edu.unicauca.fitboosttrainer.ui.screens.savedRoutines.SavedRoutinesScreen
-import edu.unicauca.fitboosttrainer.ui.screens.singIn.MeasuresScreen
+//import edu.unicauca.fitboosttrainer.ui.screens.singIn.MeasuresScreen
 import edu.unicauca.fitboosttrainer.ui.screens.singIn.SingInDataScreen
+import edu.unicauca.fitboosttrainer.ui.screens.trainCompleted.TrainCompletedScreen
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -71,11 +77,6 @@ fun NavigationFunction() {
             //Pantalla SingIn (sin drawer)
             composable("singIn") {
                 SingInDataScreen(navController = navController)
-            }
-
-            // Pantalla registro de medidas (sin drawer)
-            composable("RegistrerMessureScreen") {
-                MeasuresScreen(navController = navController)
             }
 
             // Pantalla de inicio (Home) con drawer
@@ -146,6 +147,20 @@ fun NavigationFunction() {
                     scrollBehavior = scrollBehavior
                 )
             }
+            composable("progresoScreen") {
+                ProgresoScreen(
+                    navController = navController,
+                    drawerState = drawerState
+                )
+            }
+
+
+            /*composable("sumaryRoutine"){
+                RoutineSummaryScreen(
+                    navController = navController
+                )
+            }*/
+
 
             // Pantalla de Rutinas Guardadas con drawer
             composable("savedRoutine") {

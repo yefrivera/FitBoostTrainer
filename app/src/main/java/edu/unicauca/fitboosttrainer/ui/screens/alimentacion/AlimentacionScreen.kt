@@ -1,4 +1,4 @@
-package edu.unicauca.fitboosttrainer.ui.screens
+package edu.unicauca.fitboosttrainer.ui.screens.alimentacion
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
@@ -12,6 +12,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
@@ -21,7 +22,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import edu.unicauca.fitboosttrainer.R
-import edu.unicauca.fitboosttrainer.ui.components.BottomNavItem
+import androidx.lifecycle.viewmodel.compose.viewModel
 import edu.unicauca.fitboosttrainer.ui.components.BottomNavigation
 import edu.unicauca.fitboosttrainer.ui.components.MainTopAppBarAlt
 
@@ -30,9 +31,11 @@ import edu.unicauca.fitboosttrainer.ui.components.MainTopAppBarAlt
 fun AlimentacionScreen(
     scrollBehavior: TopAppBarScrollBehavior,
     navController: NavHostController,
-    drawerState: DrawerState
-){
-    var selectedNavItem by remember { mutableStateOf(BottomNavItem.ALIMENTACION) }
+    drawerState: DrawerState,
+    viewModel: AlimentacionViewModel = viewModel()
+) {
+    val selectedNavItem by viewModel.selectedNavItem.collectAsState()
+    val categories by viewModel.categories.collectAsState()
 
     Scaffold(
         topBar = {
@@ -46,7 +49,7 @@ fun AlimentacionScreen(
         bottomBar = {
             BottomNavigation(
                 selectedItem = selectedNavItem,
-                onItemSelected = { selectedNavItem = it },
+                onItemSelected = { viewModel.onNavItemSelected(it) },
                 navController = navController
             )
         }
@@ -61,12 +64,12 @@ fun AlimentacionScreen(
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            // Imagen de "Endulza tus días"
+            // Tarjeta de información con imagen
             Card(
                 shape = RoundedCornerShape(8.dp),
                 elevation = CardDefaults.cardElevation(4.dp),
-                modifier = Modifier.fillMaxWidth(),
-                //colors = CardDefaults.cardColors(containerColor = Color(0xFFDDE3E7))
+                modifier = Modifier
+                    .fillMaxWidth(),
             ) {
                 Row(
                     modifier = Modifier
@@ -75,28 +78,38 @@ fun AlimentacionScreen(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Image(
-                        painter = painterResource(id = R.drawable.dessert),  // Reemplaza con tu imagen
+                        painter = painterResource(id = R.drawable.food),
                         contentDescription = "Imagen",
-                        modifier = Modifier.size(100.dp),
+                        modifier = Modifier
+                            .size(100.dp)
+                            .clip(RoundedCornerShape(8.dp)),
                         contentScale = ContentScale.Crop
                     )
 
                     Spacer(modifier = Modifier.width(16.dp))
 
                     Column {
-                        Text(text = stringResource(R.string.endulza), style = MaterialTheme.typography.titleLarge)
-                        //Text(text = stringResource(R.string.dessert), color = Color.Gray)
+                        Text(text = stringResource(R.string.title_food), style = MaterialTheme.typography.titleLarge)
+                        Text(text = stringResource(R.string.desc_food))
                     }
                 }
             }
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            // Lista de categorías
-            CategoryItem(title = stringResource(R.string.snack))
-            CategoryItem(title = stringResource(R.string.desayuno))
-            CategoryItem(title = stringResource(R.string.almuerzo))
-            CategoryItem(title = stringResource(R.string.cena))
+            // Lista de categorías con acciones específicas
+            CategoryItem(title = stringResource(R.string.snack)) {
+                //navController.navigate("snackScreen")
+            }
+            CategoryItem(title = stringResource(R.string.desayuno)) {
+                //navController.navigate("desayunoScreen")
+            }
+            CategoryItem(title = stringResource(R.string.almuerzo)) {
+                //navController.navigate("almuerzoScreen")
+            }
+            CategoryItem(title = stringResource(R.string.cena)) {
+                //navController.navigate("cenaScreen")
+            }
 
             Spacer(modifier = Modifier.height(16.dp))
 
@@ -104,7 +117,6 @@ fun AlimentacionScreen(
             Button(
                 onClick = { navController.navigate("caloriasScreen") },
                 modifier = Modifier.fillMaxWidth(),
-                //colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF006C7A))
             ) {
                 Text(text = stringResource(R.string.seguimiento_calorico))
             }
@@ -113,15 +125,14 @@ fun AlimentacionScreen(
 }
 
 @Composable
-fun CategoryItem(title: String) {
+fun CategoryItem(title: String, onClick: () -> Unit) {
     Card(
         shape = RoundedCornerShape(8.dp),
         elevation = CardDefaults.cardElevation(4.dp),
         modifier = Modifier
             .fillMaxWidth()
             .padding(vertical = 8.dp)
-            .clickable { /* Acción al hacer clic */ },
-        //colors = CardDefaults.cardColors(containerColor = Color.White)
+            .clickable(onClick = onClick),  // Cambiado para aceptar la acción personalizada
     ) {
         Row(
             modifier = Modifier
@@ -143,5 +154,5 @@ fun AlimentacionScreenPreview() {
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val navController = rememberNavController()
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
-    AlimentacionScreen(scrollBehavior = scrollBehavior, navController= navController, drawerState = drawerState)
+    AlimentacionScreen(scrollBehavior = scrollBehavior, navController = navController, drawerState = drawerState)
 }

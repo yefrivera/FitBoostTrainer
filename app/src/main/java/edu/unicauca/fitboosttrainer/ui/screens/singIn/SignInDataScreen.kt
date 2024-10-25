@@ -450,6 +450,8 @@ fun Registro(innerPadding: PaddingValues, navController: NavHostController, view
                     pantorrillaIzq = pantorrillaIzq,
                     pantorrillaDer = pantorrillaDer
                 )
+                navController.navigate("crearRutinasHome")
+
 
             },
             modifier = Modifier.fillMaxWidth()
@@ -501,14 +503,5 @@ fun DropdownMenuField(
                 )
             }
         }
-    }
-}
-
-
-@Preview(showBackground = true)
-@Composable
-fun SingInDataScreenPreview() {
-    FitBoostTrainerTheme {
-        SingInDataScreen(navController= rememberNavController())
     }
 }
