@@ -21,9 +21,10 @@ import edu.unicauca.fitboosttrainer.ui.screens.calorias.CaloriasScreen
 import edu.unicauca.fitboosttrainer.ui.screens.creationRoutine.CreateRoutineScreen
 import edu.unicauca.fitboosttrainer.ui.screens.creationRoutine.RoutineSummaryScreen
 import edu.unicauca.fitboosttrainer.ui.screens.home.Home
+import edu.unicauca.fitboosttrainer.ui.screens.progreso.ProgresoScreen
 import edu.unicauca.fitboosttrainer.ui.screens.routineDetail.RoutineDetailScreen
 import edu.unicauca.fitboosttrainer.ui.screens.savedRoutines.SavedRoutinesScreen
-import edu.unicauca.fitboosttrainer.ui.screens.singIn.MeasuresScreen
+
 import edu.unicauca.fitboosttrainer.ui.screens.singIn.SingInDataScreen
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -73,10 +74,6 @@ fun NavigationFunction() {
                 SingInDataScreen(navController = navController)
             }
 
-            // Pantalla registro de medidas (sin drawer)
-            composable("RegistrerMessureScreen") {
-                MeasuresScreen(navController = navController)
-            }
 
             // Pantalla de inicio (Home) con drawer
             composable("home") {
@@ -94,6 +91,12 @@ fun NavigationFunction() {
                     navController = navController,
                     drawerState = drawerState,
                     scrollBehavior = scrollBehavior
+                )
+            }
+            composable("progresoScreen") {
+                ProgresoScreen(
+                    navController = navController,
+                    drawerState = drawerState
                 )
             }
 
