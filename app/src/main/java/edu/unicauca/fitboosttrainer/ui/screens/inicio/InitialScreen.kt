@@ -126,7 +126,7 @@ fun InitialScreen(
         Spacer(modifier = Modifier.height(12.dp))
 
         Button(
-            onClick = { /* Acción para ver más */ },
+            onClick = { navController.navigate("creditosScreen") },
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp)

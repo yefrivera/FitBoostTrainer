@@ -130,5 +130,11 @@
     <string name="deleted">Eliminar</string>
     <string name="edit_routine">Editar Rutina</string>
     <string name="saved_changes">Guardar Cambios</string>
+    <string name="salir">Salir</string>
+    <string name="daniela">Daniela Diaz</string>
+    <string name="yefri">Yefri Vera</string>
+    <string name="andres">Andres Muñoz</string>
+    <string name="creditos">Esta aplicación está diseñada para ayudarte a gestionar tu salud y bienestar de manera integral. Te permite crear rutinas de ejercicio personalizadas, acceder a rutinas predefinidas y llevar un control detallado de tus entrenamientos, incluyendo series, repeticiones y peso utilizado. Además, cuenta con una sección para registrar tus comidas diarias y el seguimiento de las calorías consumidas. También ofrece una sección de gráficas que te permite visualizar tu progreso a lo largo del tiempo, observando cambios en tu peso y medidas físicas para mantener un seguimiento efectivo de tus objetivos de salud.</string>
+    <string name="integrantes">Desarrolladores:</string>
 
 </resources>

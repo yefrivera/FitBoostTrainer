@@ -147,20 +147,6 @@ fun NavigationFunction() {
                     scrollBehavior = scrollBehavior
                 )
             }
-            composable("progresoScreen") {
-                ProgresoScreen(
-                    navController = navController,
-                    drawerState = drawerState
-                )
-            }
-
-
-            /*composable("sumaryRoutine"){
-                RoutineSummaryScreen(
-                    navController = navController
-                )
-            }*/
-
 
             // Pantalla de Rutinas Guardadas con drawer
             composable("savedRoutine") {
@@ -179,21 +165,16 @@ fun NavigationFunction() {
                 )
             }
 
-            composable("editRoutine/{routineId}") { backStackEntry ->
-                val routineId = backStackEntry.arguments?.getString("routineId") ?: ""
-                EditRoutineScreen(
-                    navController = navController,
-                    drawerState = drawerState,
-                    routineId = routineId
-                )
-            }
-
             composable("RegisterDoneScreen") {
                 CompletedScreen(congratsText = stringResource(R.string.register_done),navController = navController)
             }
 
             composable("RoutineCreationDoneScreen") {
                 CompletedScreen(congratsText = stringResource(R.string.routine_done),navController = navController)
+            }
+
+            composable("CreditosScreen") {
+                CreditosScreen(navController = navController)
             }
 
         }
