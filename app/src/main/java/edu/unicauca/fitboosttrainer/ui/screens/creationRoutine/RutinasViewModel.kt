@@ -87,17 +87,36 @@ class RoutineViewModel : ViewModel() {
             _uiState.value = _uiState.value.copy(
                 selectedExercises = _uiState.value.selectedExercises + exerciseWithDetails
             )
-
             // Limpiar los campos del modal después de añadir el ejercicio
             resetModalFields()
         }
     }
 
     // Limpiar los campos del modal
-    private fun resetModalFields() {
+    fun resetModalFields() {
         modalSeries = ""
         modalReps = ""
         modalWeight = ""
+    }
+
+
+    // Editar un ejercicio existente
+    /*
+    fun editExercise(oldExercise: Exercise, newExercise: Exercise) {
+        _uiState.value = _uiState.value.copy(
+            selectedExercises = _uiState.value.selectedExercises.map {
+                if (it == oldExercise) newExercise else it
+            }
+        )
+    }
+  */
+    // Método para eliminar un ejercicio de la rutina temporal
+    fun removeExercise(exercise: Exercise) {
+        _uiState.value = _uiState.value.copy(
+            selectedExercises = _uiState.value.selectedExercises.filter { it != exercise }
+        )
+        // Actualizar la rutina temporal
+        currentRoutine = currentRoutine?.copy(exercises = _uiState.value.selectedExercises)
     }
 
     // Guardar rutina en Firebase
@@ -116,17 +135,50 @@ class RoutineViewModel : ViewModel() {
                 .addOnFailureListener { exception ->
                     // Manejo de errores
                 }
+            clearRoutineFields()
         }
     }
 
+
     // Limpiar los campos de la rutina y los ejercicios seleccionados
-    fun clearRoutineFields() {
+    private fun clearRoutineFields() {
         _uiState.value = _uiState.value.copy(
             routineName = "",
             selectedExercises = emptyList()
         )
+        currentRoutine = null
+    }
+
+    var editingExercise: Exercise? = null  // Ejercicio que se está editando
+
+    // Método para cargar los detalles del ejercicio en el modal
+    fun loadExerciseForEditing(exercise: Exercise) {
+        editingExercise = exercise
+        modalSeries = exercise.numSeries.toString()
+        modalReps = exercise.numReps.toString()
+        modalWeight = exercise.weight
+    }
+
+    // Método para actualizar un ejercicio después de editarlo
+    fun updateExercise() {
+        val updatedExercise = editingExercise?.copy(
+            numSeries = modalSeries.toIntOrNull() ?: 0,
+            numReps = modalReps.toIntOrNull() ?: 0,
+            weight = modalWeight
+        )
+
+        if (updatedExercise != null) {
+            _uiState.value = _uiState.value.copy(
+                selectedExercises = _uiState.value.selectedExercises.map {
+                    if (it == editingExercise) updatedExercise else it
+                }
+            )
+            editingExercise = null
+            resetModalFields()
+        }
     }
 }
+
 
 
 
