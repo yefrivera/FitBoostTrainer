@@ -9,8 +9,8 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
 
 class ProgresoViewModel : ViewModel() {
-    private val db = FirebaseFirestore.getInstance() // Instancia de Firestore
-    val auth = FirebaseAuth.getInstance()
+    private val db = FirebaseFirestore.getInstance()
+    val auth = Firebase.auth
     val userID = auth.currentUser?.uid ?: ""
 
     val pecho = MutableLiveData(mutableListOf(90, 92, 94))
@@ -21,66 +21,129 @@ class ProgresoViewModel : ViewModel() {
     val cadera = MutableLiveData(mutableListOf(90, 91, 92))
     val musloIzq = MutableLiveData(mutableListOf(50, 51, 52))
     val musloDer = MutableLiveData(mutableListOf(50, 51, 53))
+    val pantorrillaIzq = MutableLiveData(mutableListOf(63, 62, 61))
+    val pantorrillaDer = MutableLiveData(mutableListOf(60, 61, 62))
     val weight = MutableLiveData(mutableListOf(65, 66, 67))
     val height = MutableLiveData(mutableListOf(170, 171))
 
     val selectedGraph = MutableLiveData(1)
     val selectedMeasure = MutableLiveData("pecho")
 
-    // Guardar una medida actualizada en Firestore
     private fun saveToFirestore(measureName: String, newValue: List<Int>) {
-        db.collection("users").document(userID).update(measureName, newValue)
-            .addOnSuccessListener {
-                // Guardado exitoso
-            }
-            .addOnFailureListener { e ->
-                // Error al guardar
-            }
+        if (userID.isNotEmpty()) {
+            db.collection("users").document(userID).update(measureName, newValue)
+                .addOnSuccessListener {
+                    // Guardado exitoso
+                }
+                .addOnFailureListener { e ->
+                    // Manejar error aquí
+                }
+        } else {
+
+        }
     }
 
-    // Agregar un nuevo valor a la lista correspondiente y guardar en Firestore
+
     fun addValueToMeasure(value: Int) {
         when (selectedMeasure.value) {
             "pecho" -> {
-                pecho.value?.add(value)
-                saveToFirestore("pecho", pecho.value ?: listOf())
+                pecho.value?.let {
+                    val updatedList = it.toMutableList()
+                    updatedList.add(value)
+                    pecho.value = updatedList
+                    saveToFirestore("pecho", updatedList)
+                }
             }
             "espalda" -> {
-                espalda.value?.add(value)
-                saveToFirestore("espalda", espalda.value ?: listOf())
+                espalda.value?.let {
+                    val updatedList = it.toMutableList()
+                    updatedList.add(value)
+                    espalda.value = updatedList
+                    saveToFirestore("espalda", updatedList)
+                }
             }
             "bicepIzq" -> {
-                bicepIzq.value?.add(value)
-                saveToFirestore("bicepIzq", bicepIzq.value ?: listOf())
+                bicepIzq.value?.let {
+                    val updatedList = it.toMutableList()
+                    updatedList.add(value)
+                    bicepIzq.value = updatedList
+                    saveToFirestore("bicepIzq", updatedList)
+                }
             }
             "bicepDer" -> {
-                bicepDer.value?.add(value)
-                saveToFirestore("bicepDer", bicepDer.value ?: listOf())
+                bicepDer.value?.let {
+                    val updatedList = it.toMutableList()
+                    updatedList.add(value)
+                    bicepDer.value = updatedList
+                    saveToFirestore("bicepDer", updatedList)
+                }
             }
             "cintura" -> {
-                cintura.value?.add(value)
-                saveToFirestore("cintura", cintura.value ?: listOf())
+                cintura.value?.let {
+                    val updatedList = it.toMutableList()
+                    updatedList.add(value)
+                    cintura.value = updatedList
+                    saveToFirestore("cintura", updatedList)
+                }
             }
             "cadera" -> {
-                cadera.value?.add(value)
-                saveToFirestore("cadera", cadera.value ?: listOf())
+                cadera.value?.let {
+                    val updatedList = it.toMutableList()
+                    updatedList.add(value)
+                    cadera.value = updatedList
+                    saveToFirestore("cadera", updatedList)
+                }
             }
             "musloIzq" -> {
-                musloIzq.value?.add(value)
-                saveToFirestore("musloIzq", musloIzq.value ?: listOf())
+                musloIzq.value?.let {
+                    val updatedList = it.toMutableList()
+                    updatedList.add(value)
+                    musloIzq.value = updatedList
+                    saveToFirestore("musloIzq", updatedList)
+                }
             }
             "musloDer" -> {
-                musloDer.value?.add(value)
-                saveToFirestore("musloDer", musloDer.value ?: listOf())
+                musloDer.value?.let {
+                    val updatedList = it.toMutableList()
+                    updatedList.add(value)
+                    musloDer.value = updatedList
+                    saveToFirestore("musloDer", updatedList)
+                }
+            }
+            "pantorrillaIzq" -> { // Nueva medida
+                pantorrillaIzq.value?.let {
+                    val updatedList = it.toMutableList()
+                    updatedList.add(value)
+                    pantorrillaIzq.value = updatedList
+                    saveToFirestore("pantorrillaIzq", updatedList)
+                }
+            }
+            "pantorrillaDer" -> { // Nueva medida
+                pantorrillaDer.value?.let {
+                    val updatedList = it.toMutableList()
+                    updatedList.add(value)
+                    pantorrillaDer.value = updatedList
+                    saveToFirestore("pantorrillaDer", updatedList)
+                }
             }
             "weight" -> {
-                weight.value?.add(value)
-                saveToFirestore("weight", weight.value ?: listOf())
+                weight.value?.let {
+                    val updatedList = it.toMutableList()
+                    updatedList.add(value)
+                    weight.value = updatedList
+                    saveToFirestore("weight", updatedList)
+                }
             }
             "height" -> {
-                height.value?.add(value)
-                saveToFirestore("height", height.value ?: listOf())
+                height.value?.let {
+                    val updatedList = it.toMutableList()
+                    updatedList.add(value)
+                    height.value = updatedList
+                    saveToFirestore("height", updatedList)
+                }
             }
         }
     }
+
+
 }

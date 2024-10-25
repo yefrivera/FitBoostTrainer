@@ -84,7 +84,7 @@ fun BottomNavigation(
             },
             selected = selectedItem == BottomNavItem.ESTADISTICAS,
             onClick = { onItemSelected(BottomNavItem.ESTADISTICAS)
-                        navController.navigate("trainCompletedScreen")}
+                        navController.navigate("progresoScreen")}
         )
     }
 }

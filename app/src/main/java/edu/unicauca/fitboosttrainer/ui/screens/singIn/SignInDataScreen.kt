@@ -450,6 +450,8 @@ fun Registro(innerPadding: PaddingValues, navController: NavHostController, view
                     pantorrillaIzq = pantorrillaIzq,
                     pantorrillaDer = pantorrillaDer
                 )
+                navController.navigate("crearRutinasHome")
+
 
             },
             modifier = Modifier.fillMaxWidth()

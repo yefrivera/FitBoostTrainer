@@ -11,9 +11,13 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.lifecycle.viewmodel.compose.viewModel
 import android.graphics.Color
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import com.github.mikephil.charting.charts.LineChart
 import com.github.mikephil.charting.components.Legend
 import com.github.mikephil.charting.data.Entry
@@ -37,7 +41,7 @@ fun ProgresoScreen(
     Scaffold(
         topBar = {
             MainTopAppBarAlt(
-                title = stringResource(R.string.saved_routines),
+                title = stringResource(R.string.estadisticas),
                 scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(),
                 drawerState = drawerState,
                 onBackClick = { navController.popBackStack() }
@@ -54,11 +58,11 @@ fun ProgresoScreen(
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(innerPadding)
+                .padding(top = innerPadding.calculateTopPadding(), start = 20.dp, end = 20.dp,bottom = 40.dp)
                 .verticalScroll(scrollState)
         ) {
             // Dropdown para seleccionar gráfica
-            val graphOptions = listOf("Gráfica 1", "Gráfica 2", "Gráfica 3", "Gráfica 4", "Gráfica 5", "Gráfica 6")
+            val graphOptions = listOf("Pecho - Espalda", "Biceps", "Cintura - Cadera", "Muslos", "Pantorrillas", "Otros")
             var selectedGraph by remember { mutableStateOf(graphOptions[0]) }
             DropdownMenuField(
                 label = "Selecciona una gráfica",
@@ -115,15 +119,28 @@ fun ProgresoScreen(
 
 @Composable
 fun ShowGraph(graphIndex: Int, viewModel: ProgresoViewModel) {
+    val pecho by viewModel.pecho.observeAsState(listOf())
+    val espalda by viewModel.espalda.observeAsState(listOf())
+    val bicepIzq by viewModel.bicepIzq.observeAsState(listOf())
+    val bicepDer by viewModel.bicepDer.observeAsState(listOf())
+    val cintura by viewModel.cintura.observeAsState(listOf())
+    val cadera by viewModel.cadera.observeAsState(listOf())
+    val musloIzq by viewModel.musloIzq.observeAsState(listOf())
+    val musloDer by viewModel.musloDer.observeAsState(listOf())
+    val weight by viewModel.weight.observeAsState(listOf())
+    val pantorrillaIzq by viewModel.height.observeAsState(listOf())
+    val pantorrillaDer by viewModel.height.observeAsState(listOf())
+
     when (graphIndex) {
-        1 -> LineChartView(data1 = viewModel.pecho.value ?: listOf(), data2 = viewModel.espalda.value ?: listOf())
-        2 -> LineChartView(data1 = viewModel.bicepIzq.value ?: listOf(), data2 = viewModel.bicepDer.value ?: listOf())
-        3 -> LineChartView(data1 = viewModel.cintura.value ?: listOf(), data2 = viewModel.cadera.value ?: listOf())
-        4 -> LineChartView(data1 = viewModel.musloIzq.value ?: listOf(), data2 = viewModel.musloDer.value ?: listOf())
-        5 -> LineChartView(data1 = viewModel.weight.value ?: listOf())
-        6 -> LineChartView(data1 = viewModel.height.value ?: listOf())
+        1 -> LineChartView(data1 = pecho, data2 = espalda)
+        2 -> LineChartView(data1 = bicepIzq, data2 = bicepDer)
+        3 -> LineChartView(data1 = cintura, data2 = cadera)
+        4 -> LineChartView(data1 = musloIzq, data2 = musloDer)
+        5 -> LineChartView(data1 = pantorrillaIzq, data2 = pantorrillaDer)
+        6 -> LineChartView(data1 = weight)
     }
 }
+
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -168,39 +185,53 @@ fun DropdownMenuField(
     }
 }
 
+
 @Composable
 fun LineChartView(data1: List<Int>, data2: List<Int>? = null) {
-    AndroidView(factory = { context ->
-        LineChart(context).apply {
-            // Configuración básica
-            description.isEnabled = false
-            legend.isEnabled = true
-            legend.form = Legend.LegendForm.LINE
-            axisRight.isEnabled = false
+    AndroidView(
+        factory = { context ->
+            LineChart(context).apply {
+                // Configuración básica
+                description.isEnabled = false
+                legend.isEnabled = true
+                legend.form = Legend.LegendForm.LINE
+                axisRight.isEnabled = false
 
-            // Datos para la primera línea
-            val entries1 = data1.mapIndexed { index, value -> Entry(index.toFloat(), value.toFloat()) }
-            val lineDataSet1 = LineDataSet(entries1, "Línea 1").apply {
-                color = Color.BLUE
-                lineWidth = 2f
-                setCircleColor(Color.BLUE)
-            }
-
-            val lineData = LineData(lineDataSet1)
-
-            // Si hay segunda línea, agregarla
-            if (data2 != null) {
-                val entries2 = data2.mapIndexed { index, value -> Entry(index.toFloat(), value.toFloat()) }
-                val lineDataSet2 = LineDataSet(entries2, "Línea 2").apply {
-                    color = Color.RED
+                // Datos para la primera línea
+                val entries1 = data1.mapIndexed { index, value -> Entry(index.toFloat(), value.toFloat()) }
+                val lineDataSet1 = LineDataSet(entries1, "Línea 1").apply {
+                    color = Color.BLUE
                     lineWidth = 2f
-                    setCircleColor(Color.RED)
+                    setCircleColor(Color.BLUE)
                 }
-                lineData.addDataSet(lineDataSet2)
-            }
 
-            this.data = lineData
-            invalidate() // Refrescar la gráfica
-        }
-    })
+                val lineData = LineData(lineDataSet1)
+
+                // Si hay segunda línea, agregarla
+                if (data2 != null) {
+                    val entries2 = data2.mapIndexed { index, value -> Entry(index.toFloat(), value.toFloat()) }
+                    val lineDataSet2 = LineDataSet(entries2, "Línea 2").apply {
+                        color = Color.RED
+                        lineWidth = 2f
+                        setCircleColor(Color.RED)
+                    }
+                    lineData.addDataSet(lineDataSet2)
+                }
+
+                this.data = lineData
+                invalidate()
+            }
+        },
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(300.dp)
+            .padding(16.dp)
+    )
+}
+
+@Composable
+@Preview(showBackground = true)
+fun ProgresoScreenPreview() {
+    ProgresoScreen(navController = rememberNavController(), drawerState = rememberDrawerState(DrawerValue.Closed))
+
 }
