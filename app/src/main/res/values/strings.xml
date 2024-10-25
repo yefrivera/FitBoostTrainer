@@ -85,7 +85,8 @@
     <string name="comidas_agregadas">Comidas agregadas</string>
     <string name="buscar_comida">Buscar comida</string>
     <string name="calorias">Calorías</string>
-    <string name="nombre">Nombre</string>
+
+    <string name="nombre">Nombres y Apellidos</string>
     <string name="correo">Correo</string>
     <string name="contrasena">Contraseña</string>
     <string name="altura">Altura(Cm)</string>

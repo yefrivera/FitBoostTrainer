@@ -22,11 +22,9 @@ class RoutineViewModel : ViewModel() {
 
     private val firestore = FirebaseFirestore.getInstance()
 
-    // Guardar temporalmente la rutina creada
     var currentRoutine: Routine? = null
         private set
 
-    // Estado para controlar el modal de ejercicios
     var modalSeries by mutableStateOf("")
         private set
     var modalReps by mutableStateOf("")
@@ -34,12 +32,10 @@ class RoutineViewModel : ViewModel() {
     var modalWeight by mutableStateOf("")
         private set
 
-    // Método para actualizar el nombre de la rutina
     fun onRoutineNameChange(newName: String) {
         _uiState.value = _uiState.value.copy(routineName = newName)
     }
 
-    // Método para actualizar el texto de búsqueda
     fun onSearchExerciseChange(newSearch: String) {
         _uiState.value = _uiState.value.copy(searchExercise = newSearch)
         filterExercises(newSearch)
@@ -57,7 +53,6 @@ class RoutineViewModel : ViewModel() {
         )
     }
 
-    // Método para actualizar los campos del modal
     fun onSeriesChange(newSeries: String) {
         modalSeries = newSeries
     }
@@ -70,12 +65,10 @@ class RoutineViewModel : ViewModel() {
         modalWeight = newWeight
     }
 
-    // Método para verificar si los campos están completos
     fun areModalFieldsComplete(): Boolean {
         return modalSeries.isNotEmpty() && modalReps.isNotEmpty() && modalWeight.isNotEmpty()
     }
 
-    // Método para agregar un ejercicio seleccionado con los detalles del modal
     fun addExerciseWithDetails(exercise: Exercise) {
         if (areModalFieldsComplete()) {
             val exerciseWithDetails = exercise.copy(
@@ -87,12 +80,10 @@ class RoutineViewModel : ViewModel() {
             _uiState.value = _uiState.value.copy(
                 selectedExercises = _uiState.value.selectedExercises + exerciseWithDetails
             )
-            // Limpiar los campos del modal después de añadir el ejercicio
             resetModalFields()
         }
     }
 
-    // Limpiar los campos del modal
     fun resetModalFields() {
         modalSeries = ""
         modalReps = ""
@@ -100,16 +91,13 @@ class RoutineViewModel : ViewModel() {
     }
 
 
-    // Método para eliminar un ejercicio de la rutina temporal
     fun removeExercise(exercise: Exercise) {
         _uiState.value = _uiState.value.copy(
             selectedExercises = _uiState.value.selectedExercises.filter { it != exercise }
         )
-        // Actualizar la rutina temporal
         currentRoutine = currentRoutine?.copy(exercises = _uiState.value.selectedExercises)
     }
 
-    // Guardar rutina en Firebase
     fun saveRoutine(name: String) {
         val newRoutine = Routine(
             name = name,
@@ -120,17 +108,13 @@ class RoutineViewModel : ViewModel() {
             firestore.collection("rutinasGuardadas")
                 .add(newRoutine)
                 .addOnSuccessListener {
-                    // Acciones en caso de éxito
                 }
                 .addOnFailureListener { exception ->
-                    // Manejo de errores
                 }
             clearRoutineFields()
         }
     }
 
-
-    // Limpiar los campos de la rutina y los ejercicios seleccionados
     private fun clearRoutineFields() {
         _uiState.value = _uiState.value.copy(
             routineName = "",
@@ -139,9 +123,8 @@ class RoutineViewModel : ViewModel() {
         currentRoutine = null
     }
 
-    var editingExercise: Exercise? = null  // Ejercicio que se está editando
+    var editingExercise: Exercise? = null
 
-    // Método para cargar los detalles del ejercicio en el modal
     fun loadExerciseForEditing(exercise: Exercise) {
         editingExercise = exercise
         modalSeries = exercise.numSeries.toString()
@@ -149,7 +132,6 @@ class RoutineViewModel : ViewModel() {
         modalWeight = exercise.weight
     }
 
-    // Método para actualizar un ejercicio después de editarlo
     fun updateExercise() {
         val updatedExercise = editingExercise?.copy(
             numSeries = modalSeries.toIntOrNull() ?: 0,

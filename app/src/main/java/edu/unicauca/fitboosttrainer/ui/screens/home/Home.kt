@@ -38,7 +38,6 @@ fun Home(
     scrollBehavior: TopAppBarScrollBehavior,
     homeViewModel: HomeViewModel = viewModel()
 ) {
-    // Usar los valores observados para mostrar las calorías y entrenamientos
     val userName by homeViewModel.userName.collectAsState()
     val dailyGoalCalories by homeViewModel.dailyGoalCalories.collectAsState()
     val totalCalories by homeViewModel.totalCalories.collectAsState()
@@ -90,7 +89,6 @@ fun Home(
                 )
             }
 
-            // Usar los valores observados para mostrar el progreso
             ProgressSummary(
                 dailyGoalCalories = dailyGoalCalories,
                 totalCalories = totalCalories,
@@ -142,10 +140,9 @@ fun NewWorkoutButton(navController: NavHostController) {
         onClick = { navController.navigate("crearRutinasHome") },
         modifier = Modifier
             .fillMaxWidth()
-            .padding(vertical = 16.dp),
-        colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF6C63FF))
+            .padding(vertical = 16.dp)
     ) {
-        Text(text = "Registrar Nuevo Entrenamiento", fontSize = 16.sp, color = Color.White)
+        Text(text = "Registrar Nuevo Entrenamiento")
     }
 }
 

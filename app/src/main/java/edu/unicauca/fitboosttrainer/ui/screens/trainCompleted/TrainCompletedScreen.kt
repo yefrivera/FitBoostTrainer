@@ -82,12 +82,3 @@ fun TrainCompletedScreen(
     }
 }
 
-@Preview(showBackground = true)
-@Composable
-fun TrainCompletedScreenPreview() {
-    FitBoostTrainerTheme {
-
-        val navController = rememberNavController()
-        TrainCompletedScreen( navController = navController)
-    }
-}

@@ -6,7 +6,6 @@ import kotlinx.coroutines.flow.StateFlow
 
 class HomeViewModel : ViewModel() {
 
-    // Propiedades existentes
     private val _userName = MutableStateFlow("Usuario")
     val userName: StateFlow<String> = _userName
 
@@ -16,23 +15,14 @@ class HomeViewModel : ViewModel() {
     private val _completedWorkouts = MutableStateFlow(0)
     val completedWorkouts: StateFlow<Int> = _completedWorkouts
 
-    private val _totalWorkouts = MutableStateFlow(7)  // Ejemplo: 7 entrenamientos por semana
+    private val _totalWorkouts = MutableStateFlow(7)
     val totalWorkouts: StateFlow<Int> = _totalWorkouts
 
-    // Propiedades para calorías diarias y consumidas
-    private val _dailyGoalCalories = MutableStateFlow(2000)  // Meta calórica diaria predeterminada
+    private val _dailyGoalCalories = MutableStateFlow(2000)
     val dailyGoalCalories: StateFlow<Int> = _dailyGoalCalories
 
-    private val _totalCalories = MutableStateFlow(0)  // Calorías consumidas actuales
+    private val _totalCalories = MutableStateFlow(0)
     val totalCalories: StateFlow<Int> = _totalCalories
 
-    // Actualiza las calorías
-    fun updateDailyGoalCalories(newGoal: Int) {
-        _dailyGoalCalories.value = newGoal
-    }
-
-    fun updateTotalCalories(consumedCalories: Int) {
-        _totalCalories.value = consumedCalories
-    }
 }
 

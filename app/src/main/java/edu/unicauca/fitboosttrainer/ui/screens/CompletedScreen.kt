@@ -28,8 +28,6 @@ import androidx.compose.ui.zIndex
 import androidx.navigation.compose.rememberNavController
 import edu.unicauca.fitboosttrainer.ui.theme.FitBoostTrainerTheme
 
-
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CompletedScreen(
     navController: NavHostController,

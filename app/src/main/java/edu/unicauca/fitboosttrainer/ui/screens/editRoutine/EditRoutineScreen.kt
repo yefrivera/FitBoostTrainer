@@ -50,7 +50,7 @@ fun EditRoutineScreen(
     navController: NavHostController,
     drawerState: DrawerState,
     routineId: String,
-    viewModel: EditRoutineViewModel = viewModel() // ViewModel para la edición de la rutina
+    viewModel: EditRoutineViewModel = viewModel()
 ) {
 
     var selectedNavItem by remember { mutableStateOf(BottomNavItem.RUTINAS) }
@@ -122,7 +122,7 @@ fun paddingEditRoutine(
             Button(
                 onClick = {
                     viewModel.saveChanges()
-                    navController.navigate("savedRoutine") // Regresar a la pantalla anterior
+                    navController.navigate("savedRoutine")
                 },
                 modifier = Modifier.fillMaxWidth().padding(16.dp)
             ) {

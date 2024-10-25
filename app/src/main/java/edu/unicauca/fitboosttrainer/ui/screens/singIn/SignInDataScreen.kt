@@ -16,27 +16,24 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
 import edu.unicauca.fitboosttrainer.R
 import edu.unicauca.fitboosttrainer.ui.components.TopBarTitle
-import edu.unicauca.fitboosttrainer.ui.theme.FitBoostTrainerTheme
+
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SingInDataScreen(navController: NavHostController, viewModel: SignInViewModel = viewModel()) {
+fun SignInDataScreen(navController: NavHostController, viewModel: SignInViewModel = viewModel()) {
     Scaffold(
-        topBar ={
+        topBar = {
             TopBarTitle(
                 title = stringResource(R.string.app_name),
             )
         }
     ) { innerPadding ->
-            Registro(innerPadding = innerPadding, navController = navController, viewModel = viewModel)
-
+        Registro(innerPadding = innerPadding, navController = navController, viewModel = viewModel)
     }
 }
 
@@ -47,24 +44,25 @@ fun Registro(innerPadding: PaddingValues, navController: NavHostController, view
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var name by remember { mutableStateOf("") }
-    var day by remember { mutableStateOf(0) }
-    var month by remember { mutableStateOf(0) }
-    var year by remember { mutableStateOf(0) }
-    var height by remember { mutableStateOf(0) }
-    var weight by remember { mutableStateOf(0) }
+    var day by remember { mutableStateOf("") }
+    var month by remember { mutableStateOf("") }
+    var year by remember { mutableStateOf("") }
+    var height by remember { mutableStateOf("") }
+    var weight by remember { mutableStateOf("") }
     var trainingFrequency by remember { mutableStateOf("") }
     var trainingGoal by remember { mutableStateOf("") }
-    var hombro by remember { mutableStateOf(0) }
-    var pecho by remember { mutableStateOf(0) }
-    var bicepIzq by remember { mutableStateOf(0) }
-    var bicepDer by remember { mutableStateOf(0) }
-    var cintura by remember { mutableStateOf(0) }
-    var cadera by remember { mutableStateOf(0) }
-    var musloIzq by remember { mutableStateOf(0) }
-    var musloDer by remember { mutableStateOf(0) }
-    var pantorrillaIzq by remember { mutableStateOf(0) }
-    var pantorrillaDer by remember { mutableStateOf(0) }
+    var hombro by remember { mutableStateOf("") }
+    var pecho by remember { mutableStateOf("") }
+    var bicepIzq by remember { mutableStateOf("") }
+    var bicepDer by remember { mutableStateOf("") }
+    var cintura by remember { mutableStateOf("") }
+    var cadera by remember { mutableStateOf("") }
+    var musloIzq by remember { mutableStateOf("") }
+    var musloDer by remember { mutableStateOf("") }
+    var pantorrillaIzq by remember { mutableStateOf("") }
+    var pantorrillaDer by remember { mutableStateOf("") }
 
+    var showError by remember { mutableStateOf(false) }
 
     val espaciado = 20.dp
     val scrollState = rememberScrollState()
@@ -73,43 +71,50 @@ fun Registro(innerPadding: PaddingValues, navController: NavHostController, view
         modifier = Modifier
             .fillMaxSize()
             .verticalScroll(scrollState)
-            .padding(top = innerPadding.calculateTopPadding(), start = 20.dp, end = 20.dp,bottom = 40.dp),
+            .padding(top = innerPadding.calculateTopPadding(), start = 20.dp, end = 20.dp, bottom = 40.dp),
         verticalArrangement = Arrangement.Top
     ) {
-
-        // Nombre
         Spacer(modifier = Modifier.height(espaciado))
         OutlinedTextField(
             value = name,
-            onValueChange = { name = it },
+            onValueChange = {
+                name = it
+                showError = false
+            },
             label = { Text(stringResource(R.string.nombre)) },
             keyboardOptions = KeyboardOptions(
                 keyboardType = KeyboardType.Text,
                 imeAction = ImeAction.Done
             ),
             singleLine = true,
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth(),
+            isError = showError && name.isEmpty()
         )
 
-        // Correo
         Spacer(modifier = Modifier.height(espaciado))
         OutlinedTextField(
             value = email,
-            onValueChange = { email = it },
+            onValueChange = {
+                email = it
+                showError = false
+            },
             label = { Text(stringResource(R.string.correo)) },
             keyboardOptions = KeyboardOptions(
                 keyboardType = KeyboardType.Email,
                 imeAction = ImeAction.Done
             ),
             singleLine = true,
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth(),
+            isError = showError && email.isEmpty()
         )
 
-        // Contraseña
         Spacer(modifier = Modifier.height(espaciado))
         OutlinedTextField(
             value = password,
-            onValueChange = { password =it },
+            onValueChange = {
+                password = it
+                showError = false
+            },
             label = { Text(stringResource(R.string.contrasena)) },
             singleLine = true,
             keyboardOptions = KeyboardOptions(
@@ -117,10 +122,10 @@ fun Registro(innerPadding: PaddingValues, navController: NavHostController, view
                 imeAction = ImeAction.Done
             ),
             modifier = Modifier.fillMaxWidth(),
-            visualTransformation = PasswordVisualTransformation()
+            visualTransformation = PasswordVisualTransformation(),
+            isError = showError && password.isEmpty()
         )
 
-        // Fecha de nacimiento (día, mes, año)
         Spacer(modifier = Modifier.height(espaciado))
         Text(text = "Fecha de Nacimiento")
         Row(
@@ -128,50 +133,49 @@ fun Registro(innerPadding: PaddingValues, navController: NavHostController, view
             modifier = Modifier.fillMaxWidth()
         ) {
             OutlinedTextField(
-                value = day.toString(),
+                value = day,
                 onValueChange = {
-                    if (it.length <= 2) {
-                        day = it.toInt()
-                    }
+                    if (it.length <= 2) day = it
+                    showError = false
                 },
-                label = {Text("DD") },
+                label = { Text("DD") },
                 keyboardOptions = KeyboardOptions(
                     keyboardType = KeyboardType.Number,
                     imeAction = ImeAction.Done
                 ),
                 singleLine = true,
-                modifier = Modifier.weight(1f)
+                modifier = Modifier.weight(1f),
+                isError = showError && day.isEmpty()
             )
             OutlinedTextField(
-                value = month.toString(),
+                value = month,
                 onValueChange = {
-                    if (it.length <= 2) {
-                        month= it.toInt()
-                    } },
-                label = { Text("MM")},
+                    if (it.length <= 2) month = it
+                    showError = false
+                },
+                label = { Text("MM") },
                 keyboardOptions = KeyboardOptions(
                     keyboardType = KeyboardType.Number,
                     imeAction = ImeAction.Done
                 ),
-                modifier = Modifier.weight(1f)
-
+                modifier = Modifier.weight(1f),
+                isError = showError && month.isEmpty()
             )
             OutlinedTextField(
-                value = year.toString(),
+                value = year,
                 onValueChange = {
-                    if (it.length <= 4) {
-                        year= it.toInt()
-                    } },
+                    if (it.length <= 4) year = it
+                    showError = false
+                },
                 label = { Text("YYYY") },
                 keyboardOptions = KeyboardOptions(
                     keyboardType = KeyboardType.Number,
                     imeAction = ImeAction.Done
                 ),
-                modifier = Modifier.weight(2f)
+                modifier = Modifier.weight(2f),
+                isError = showError && year.isEmpty()
             )
         }
-
-        // Altura y peso
 
         Spacer(modifier = Modifier.height(espaciado))
         Text(text = "Información Corporal")
@@ -181,35 +185,35 @@ fun Registro(innerPadding: PaddingValues, navController: NavHostController, view
             modifier = Modifier.fillMaxWidth()
         ) {
             OutlinedTextField(
-                value = height.toString(),
+                value = height,
                 onValueChange = {
-                    if (it.length <= 3) {
-                        height = it.toInt() }
+                    if (it.length <= 3) height = it
+                    showError = false
                 },
                 label = { Text(stringResource(R.string.altura)) },
                 keyboardOptions = KeyboardOptions(
                     keyboardType = KeyboardType.Number,
                     imeAction = ImeAction.Done
                 ),
-                modifier = Modifier.weight(1f)
+                modifier = Modifier.weight(1f),
+                isError = showError && height.isEmpty()
             )
             OutlinedTextField(
-                value = weight.toString(),
+                value = weight,
                 onValueChange = {
-                    if (it.length <= 3) {
-                        weight= it.toInt()
-                    }
+                    if (it.length <= 3) weight = it
+                    showError = false
                 },
                 label = { Text(stringResource(R.string.pesoKg)) },
                 keyboardOptions = KeyboardOptions(
                     keyboardType = KeyboardType.Number,
                     imeAction = ImeAction.Done
                 ),
-                modifier = Modifier.weight(1f)
+                modifier = Modifier.weight(1f),
+                isError = showError && weight.isEmpty()
             )
         }
 
-        // ¿Cuántas veces a la semana desea entrenar?
         Spacer(modifier = Modifier.height(espaciado))
         DropdownMenuField(
             label = "¿Cuántas veces a la semana desea entrenar?",
@@ -218,15 +222,13 @@ fun Registro(innerPadding: PaddingValues, navController: NavHostController, view
             onOptionSelected = { trainingFrequency = it }
         )
 
-        // ¿Cuál es su meta de entrenamiento?
         Spacer(modifier = Modifier.height(espaciado))
         DropdownMenuField(
             label = "¿Cuál es su meta de entrenamiento?",
             options = goalOptions,
             selectedOption = trainingGoal,
-            onOptionSelected = { trainingGoal= it }
+            onOptionSelected = { trainingGoal = it }
         )
-
 
         Spacer(modifier = Modifier.height(espaciado))
         Image(
@@ -253,33 +255,32 @@ fun Registro(innerPadding: PaddingValues, navController: NavHostController, view
                 modifier = Modifier.fillMaxWidth()
             ) {
                 OutlinedTextField(
-                    value = hombro.toString(),
+                    value = hombro,
                     onValueChange = {
-                        if (it.length <= 3) {
-                            hombro = it.toInt()
-                        }
+                        if (it.length <= 3) hombro = it
+                        showError = false
                     },
                     label = { Text(stringResource(R.string.hombro)) },
                     keyboardOptions = KeyboardOptions(
                         keyboardType = KeyboardType.Number,
                         imeAction = ImeAction.Done
                     ),
-                    modifier = Modifier.weight(1f)
+                    modifier = Modifier.weight(1f),
+                    isError = showError && hombro.isEmpty()
                 )
                 OutlinedTextField(
-                    value = pecho.toString(),
+                    value = pecho,
                     onValueChange = {
-                        if (it.length <= 3) {
-                            pecho = it.toInt()
-                        }
+                        if (it.length <= 3) pecho = it
+                        showError = false
                     },
                     label = { Text(stringResource(R.string.ce_chest)) },
                     keyboardOptions = KeyboardOptions(
                         keyboardType = KeyboardType.Number,
                         imeAction = ImeAction.Done
                     ),
-                    modifier = Modifier.weight(1f)
-
+                    modifier = Modifier.weight(1f),
+                    isError = showError && pecho.isEmpty()
                 )
             }
             Row(
@@ -287,68 +288,65 @@ fun Registro(innerPadding: PaddingValues, navController: NavHostController, view
                 modifier = Modifier.fillMaxWidth()
             ) {
                 OutlinedTextField(
-                    value = bicepIzq.toString(),
+                    value = bicepIzq,
                     onValueChange = {
-                        if (it.length <= 2) {
-                            bicepIzq = it.toInt()
-                        }
+                        if (it.length <= 2) bicepIzq = it
+                        showError = false
                     },
                     label = { Text(stringResource(R.string.BicepIzq)) },
                     keyboardOptions = KeyboardOptions(
                         keyboardType = KeyboardType.Number,
                         imeAction = ImeAction.Done
                     ),
-                    modifier = Modifier.weight(1f)
+                    modifier = Modifier.weight(1f),
+                    isError = showError && bicepIzq.isEmpty()
                 )
                 OutlinedTextField(
-                    value = bicepDer.toString(),
+                    value = bicepDer,
                     onValueChange = {
-                        if (it.length <= 2) {
-                            bicepDer = it.toInt()
-                        }
+                        if (it.length <= 2) bicepDer = it
+                        showError = false
                     },
                     label = { Text(stringResource(R.string.bicepDer)) },
                     keyboardOptions = KeyboardOptions(
                         keyboardType = KeyboardType.Number,
                         imeAction = ImeAction.Done
                     ),
-                    modifier = Modifier.weight(1f)
-
+                    modifier = Modifier.weight(1f),
+                    isError = showError && bicepDer.isEmpty()
                 )
             }
-
             Row(
                 horizontalArrangement = Arrangement.spacedBy(8.dp),
                 modifier = Modifier.fillMaxWidth()
             ) {
                 OutlinedTextField(
-                    value = cintura.toString(),
+                    value = cintura,
                     onValueChange = {
-                        if (it.length <= 3) {
-                            cintura= it.toInt()
-                        }
+                        if (it.length <= 3) cintura = it
+                        showError = false
                     },
-                    label = { Text(stringResource(R.string.cintura))},
+                    label = { Text(stringResource(R.string.cintura)) },
                     keyboardOptions = KeyboardOptions(
                         keyboardType = KeyboardType.Number,
                         imeAction = ImeAction.Done
                     ),
-                    modifier = Modifier.weight(1f)
+                    modifier = Modifier.weight(1f),
+                    isError = showError && cintura.isEmpty()
                 )
                 OutlinedTextField(
-                    value = cadera.toString(),
+                    value = cadera,
                     onValueChange = {
-                        if (it.length <= 3) {
-                            cadera = it.toInt()
-                        }
+                        if (it.length <= 3) cadera = it
+                        showError = false
                     },
                     label = { Text(stringResource(R.string.cadera)) },
                     keyboardOptions = KeyboardOptions(
                         keyboardType = KeyboardType.Number,
                         imeAction = ImeAction.Done
                     ),
-                    modifier = Modifier.weight(1f)
-
+                    modifier = Modifier.weight(1f),
+                    isError = showError && cadera.isEmpty()
                 )
             }
             Row(
@@ -356,107 +354,116 @@ fun Registro(innerPadding: PaddingValues, navController: NavHostController, view
                 modifier = Modifier.fillMaxWidth()
             ) {
                 OutlinedTextField(
-                    value = musloIzq.toString(),
+                    value = musloIzq,
                     onValueChange = {
-                        if (it.length <= 2) {
-                            musloIzq = it.toInt()
-                        }
+                        if (it.length <= 2) musloIzq = it
+                        showError = false
                     },
                     label = { Text(stringResource(R.string.musloIzq)) },
                     keyboardOptions = KeyboardOptions(
                         keyboardType = KeyboardType.Number,
                         imeAction = ImeAction.Done
                     ),
-                    modifier = Modifier.weight(1f)
-
+                    modifier = Modifier.weight(1f),
+                    isError = showError && musloIzq.isEmpty()
                 )
                 OutlinedTextField(
-                    value = musloDer.toString(),
+                    value = musloDer,
                     onValueChange = {
-                        if (it.length <= 2) {
-                            musloDer = it.toInt()
-                        }
+                        if (it.length <= 2) musloDer = it
+                        showError = false
                     },
                     label = { Text(stringResource(R.string.musloDer)) },
                     keyboardOptions = KeyboardOptions(
                         keyboardType = KeyboardType.Number,
                         imeAction = ImeAction.Done
                     ),
-                    modifier = Modifier.weight(1f)
+                    modifier = Modifier.weight(1f),
+                    isError = showError && musloDer.isEmpty()
                 )
-
             }
-
             Row(
                 horizontalArrangement = Arrangement.spacedBy(8.dp),
                 modifier = Modifier.fillMaxWidth()
             ) {
                 OutlinedTextField(
-                    value = pantorrillaIzq.toString(),
+                    value = pantorrillaIzq,
                     onValueChange = {
-                        if (it.length <= 2) {
-                            pantorrillaIzq = it.toInt()
-                        }
+                        if (it.length <= 2) pantorrillaIzq = it
+                        showError = false
                     },
                     label = { Text(stringResource(R.string.pantorrillaIzq)) },
                     keyboardOptions = KeyboardOptions(
                         keyboardType = KeyboardType.Number,
                         imeAction = ImeAction.Done
                     ),
-                    modifier = Modifier.weight(1f)
+                    modifier = Modifier.weight(1f),
+                    isError = showError && pantorrillaIzq.isEmpty()
                 )
                 OutlinedTextField(
-                    value = pantorrillaDer.toString(),
+                    value = pantorrillaDer,
                     onValueChange = {
-                        if (it.length <= 2) {
-                            pantorrillaDer = it.toInt()
-                        }
+                        if (it.length <= 2) pantorrillaDer = it
+                        showError = false
                     },
                     label = { Text(stringResource(R.string.pantorrillaDer)) },
                     keyboardOptions = KeyboardOptions(
                         keyboardType = KeyboardType.Number,
                         imeAction = ImeAction.Done
                     ),
-                    modifier = Modifier.weight(1f)
-
+                    modifier = Modifier.weight(1f),
+                    isError = showError && pantorrillaDer.isEmpty()
                 )
             }
 
         }
 
-        // Botón Siguiente
         Spacer(modifier = Modifier.height(espaciado))
         Button(
             onClick = {
-                viewModel.registerUser(
-                    email = email,
-                    password = password,
-                    name = name,
-                    day = day,
-                    month = month,
-                    year = year,
-                    height = height,
-                    weight = weight,
-                    trainingFrequency = trainingFrequency,
-                    trainingGoal = trainingGoal,
-                    hombro = hombro,
-                    pecho = pecho,
-                    bicepIzq = bicepIzq,
-                    bicepDer = bicepDer,
-                    cintura = cintura,
-                    cadera = cadera,
-                    musloIzq = musloIzq,
-                    musloDer = musloDer,
-                    pantorrillaIzq = pantorrillaIzq,
-                    pantorrillaDer = pantorrillaDer
-                )
-                navController.navigate("crearRutinasHome")
-
-
+                if (email.isNotBlank() && password.isNotBlank() && name.isNotBlank() && day.isNotBlank() &&
+                    month.isNotBlank() && year.isNotBlank() && height.isNotBlank() && weight.isNotBlank() &&
+                    hombro.isNotBlank() && pecho.isNotBlank() && bicepIzq.isNotBlank() && bicepDer.isNotBlank() &&
+                    cintura.isNotBlank() && cadera.isNotBlank() && trainingFrequency.isNotBlank() && trainingGoal.isNotBlank()
+                ) {
+                    viewModel.registerUser(
+                        email = email,
+                        password = password,
+                        name = name,
+                        day = day.toIntOrNull() ?: 0,
+                        month = month.toIntOrNull() ?: 0,
+                        year = year.toIntOrNull() ?: 0,
+                        height = height.toIntOrNull() ?: 0,
+                        weight = weight.toIntOrNull() ?: 0,
+                        trainingFrequency = trainingFrequency,
+                        trainingGoal = trainingGoal,
+                        hombro = hombro.toIntOrNull() ?: 0,
+                        pecho = pecho.toIntOrNull() ?: 0,
+                        bicepIzq = bicepIzq.toIntOrNull() ?: 0,
+                        bicepDer = bicepDer.toIntOrNull() ?: 0,
+                        cintura = cintura.toIntOrNull() ?: 0,
+                        cadera = cadera.toIntOrNull() ?: 0,
+                        musloIzq = musloIzq.toIntOrNull() ?: 0,
+                        musloDer = musloDer.toIntOrNull() ?: 0,
+                        pantorrillaIzq = pantorrillaIzq.toIntOrNull() ?: 0,
+                        pantorrillaDer = pantorrillaDer.toIntOrNull() ?: 0
+                    )
+                    navController.navigate("RegisterDoneScreen")
+                } else {
+                    showError = true
+                }
             },
             modifier = Modifier.fillMaxWidth()
         ) {
             Text(text = "Finalizar")
+        }
+
+        if (showError) {
+            Text(
+                text = "Todos los campos son obligatorios.",
+                color = MaterialTheme.colorScheme.error,
+                modifier = Modifier.padding(top = 8.dp)
+            )
         }
     }
 }
@@ -470,7 +477,6 @@ fun DropdownMenuField(
     onOptionSelected: (String) -> Unit
 ) {
     var expanded by remember { mutableStateOf(false) }
-
 
     ExposedDropdownMenuBox(
         expanded = expanded,
@@ -488,7 +494,6 @@ fun DropdownMenuField(
                 .menuAnchor()
                 .fillMaxWidth()
         )
-        // Menu options
         ExposedDropdownMenu(
             expanded = expanded,
             onDismissRequest = { expanded = false }

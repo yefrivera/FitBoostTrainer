@@ -254,7 +254,7 @@ fun ExerciseItem(
     @StringRes nameExercise: Int,
     @StringRes categoryExercise: Int,
     @DrawableRes imageRes: Int,
-    onAddExercise: () -> Unit // Pasar callback para agregar ejercicio
+    onAddExercise: () -> Unit
 ) {
     Card(
         modifier = Modifier

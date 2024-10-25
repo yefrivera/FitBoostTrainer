@@ -25,7 +25,7 @@ enum class BottomNavItem {
 
 @Composable
 fun BottomNavigation(
-    selectedItem: BottomNavItem,  // Nuevo parámetro
+    selectedItem: BottomNavItem,
     onItemSelected: (BottomNavItem) -> Unit,
     navController: NavHostController,
     modifier: Modifier = Modifier

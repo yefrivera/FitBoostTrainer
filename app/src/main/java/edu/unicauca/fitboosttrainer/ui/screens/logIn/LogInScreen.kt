@@ -17,7 +17,7 @@ import androidx.navigation.NavHostController
 import edu.unicauca.fitboosttrainer.R
 import edu.unicauca.fitboosttrainer.ui.components.TopBarTitle
 import androidx.compose.runtime.livedata.observeAsState
-
+import androidx.navigation.compose.rememberNavController
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -38,6 +38,7 @@ fun LoginScreen(navController: NavHostController, viewModel: LoginViewModel = an
 fun InicioSesion(innerPadding: PaddingValues, navController: NavHostController, viewModel: LoginViewModel) {
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
+    var showError by remember { mutableStateOf(false) }
 
     Column(
         modifier = Modifier
@@ -58,54 +59,71 @@ fun InicioSesion(innerPadding: PaddingValues, navController: NavHostController, 
             )
         }
 
-
         OutlinedTextField(
             value = email,
-            onValueChange = { email = it },
+            onValueChange = {
+                email = it
+                showError = false
+            },
             label = { Text(stringResource(R.string.correo)) },
             singleLine = true,
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email)
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
+            isError = showError && email.isEmpty()
         )
 
         Spacer(modifier = Modifier.height(16.dp))
 
         OutlinedTextField(
             value = password,
-            onValueChange = { password = it },
+            onValueChange = {
+                password = it
+                showError = false
+            },
             label = { Text(stringResource(R.string.contrasena)) },
             singleLine = true,
             visualTransformation = PasswordVisualTransformation(),
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password)
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
+            isError = showError && password.isEmpty()
         )
 
         Spacer(modifier = Modifier.height(32.dp))
 
-         Button(
-                onClick = {
-                    if (email.isNotBlank() && password.isNotBlank()) {
-                        viewModel.login(email, password) { success ->
-                            if (success) navController.navigate("home")
+        Button(
+            onClick = {
+                if (email.isNotBlank() && password.isNotBlank()) {
+                    viewModel.login(email, password) { success ->
+                        if (success) {
+                            navController.navigate("home")
+                        } else {
+                            showError = true
                         }
-                    }else{
-                        //aqui va un mensaje de error!!!!
                     }
-                },
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                Text(stringResource(R.string.iniciar_sesion))
-         }
+                } else {
+                    showError = true
+                }
+            },
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Text(stringResource(R.string.iniciar_sesion))
+        }
+
+        if (showError) {
+            Text(
+                text = "Por favor, completa todos los campos o verifica que tus datos sean correctos.",
+                color = MaterialTheme.colorScheme.error,
+                modifier = Modifier.padding(top = 8.dp)
+            )
+        }
 
         Text(stringResource(R.string.no_cuenta))
         Spacer(modifier = Modifier.height(8.dp))
 
         Button(
-            onClick = {navController.navigate("singIn") },
+            onClick = { navController.navigate("signIn") },
             modifier = Modifier.fillMaxWidth()
         ) {
             Text(stringResource(R.string.registrarse))
         }
-
     }
-
 }
 

@@ -136,11 +136,4 @@ fun InitialScreen(
     }
 }
 
-@Preview(showBackground = true)
-@Composable
-fun InitialScreenPreview() {
-    FitBoostTrainerTheme {
-        InitialScreen(navController = rememberNavController())
-    }
-}
 

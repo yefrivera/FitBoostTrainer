@@ -28,10 +28,9 @@ import edu.unicauca.fitboosttrainer.ui.components.MainTopAppBarAlt
 fun RoutineDetailScreen(
     navController: NavHostController,
     drawerState: DrawerState,
-    routineId: String, // ID de la rutina seleccionada
-    viewModel: RoutineDetailViewModel = viewModel() // ViewModel para cargar los ejercicios
+    routineId: String,
+    viewModel: RoutineDetailViewModel = viewModel()
 ) {
-    // Cargar los ejercicios de la rutina seleccionada
     LaunchedEffect(routineId) {
         viewModel.loadRoutineExercises(routineId)
     }
@@ -110,12 +109,11 @@ fun paddingExercise(innerPadding: PaddingValues,
                     )
                 }
             }
-            // Botón para finalizar rutina
             Button(
                 onClick = {
                     navController.navigate("trainCompletedScreen")
                 },
-                enabled = completedCount == exercises.size,  // Se habilita solo cuando todos los ejercicios están completados
+                enabled = completedCount == exercises.size,
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(16.dp)
@@ -163,7 +161,7 @@ fun ExerciseItemCard(
                 checked = isChecked,
                 onCheckedChange = { checked ->
                     isChecked = checked
-                    onCheckedChange(checked)  // Llamar al callback
+                    onCheckedChange(checked)
                 }
             )
         }

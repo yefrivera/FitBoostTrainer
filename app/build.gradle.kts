@@ -93,8 +93,11 @@ dependencies {
     implementation ("com.google.firebase:firebase-firestore:25.1.0")
     implementation ("com.google.firebase:firebase-firestore-ktx:25.1.0")
 
-    //Graficas
+
+    //Graficas s
     //implementation ("com.github.theras:charts:0.2.4-alpha")
+    //implementation ("com.github.PhilJay:MPAndroidChart:v3.1.0")
     implementation ("com.github.PhilJay:MPAndroidChart:v3.1.0")
+
 
 }

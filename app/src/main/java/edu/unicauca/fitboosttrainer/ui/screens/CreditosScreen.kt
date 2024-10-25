@@ -39,24 +39,17 @@ fun CreditosScreen(
             .fillMaxSize()
     ) {
 
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
+        Text(
+            text = stringResource(id = R.string.app_name),
+            style = TextStyle(
+                fontSize = 28.sp,
+                fontWeight = FontWeight.Bold,
+                textAlign = TextAlign.Center
+            ),
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(top=52.dp)
-        ) {
-
-            Text(
-                text = stringResource(id = R.string.app_name),
-                style = TextStyle(
-                    fontSize = 28.sp,
-                    fontWeight = FontWeight.Bold,
-                    textAlign = TextAlign.Center
-                ),
-                modifier = Modifier.padding(start = 85.dp)
-            )
-        }
-
+                .padding(top = 52.dp)
+        )
 
         Box(modifier = Modifier.fillMaxWidth()) {
             Image(
@@ -70,23 +63,55 @@ fun CreditosScreen(
         }
 
         Spacer(modifier = Modifier.height(12.dp))
+
         Text(
             text = stringResource(R.string.creditos),
-            modifier = Modifier.padding(8.dp)
+            style = TextStyle(
+                textAlign = TextAlign.Justify
+            ),
+            modifier = Modifier.padding(24.dp)
         )
+
         Spacer(modifier = Modifier.height(12.dp))
+
         Text(
             text=stringResource(id = R.string.integrantes),
-            modifier = Modifier.padding(start = 8.dp)
+            style = TextStyle(
+                textAlign = TextAlign.Justify
+            ),
+            modifier = Modifier.padding(8.dp)
         )
-        Spacer(modifier = Modifier.height(12.dp))
-        Text(text=stringResource(id = R.string.andres))
-        Text(text=stringResource(id = R.string.yefri))
-        Text(text=stringResource(id = R.string.daniela))
-        Spacer(modifier = Modifier.height(24.dp))
+
+        Spacer(modifier = Modifier.height(36.dp))
+
+        Text(
+            text = stringResource(id = R.string.andres),
+            style = TextStyle(
+                textAlign = TextAlign.Justify
+            )
+        )
+
+        Text(
+            text = stringResource(id = R.string.yefri),
+            style = TextStyle(
+                textAlign = TextAlign.Justify
+            )
+        )
+
+        Text(
+            text = stringResource(id = R.string.daniela),
+            style = TextStyle(
+                textAlign = TextAlign.Justify
+            )
+        )
+
+        Spacer(modifier = Modifier.height(64.dp))
+
         Button(
-            onClick = { navController.navigate("home") },
-            modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp)
+            onClick = { navController.popBackStack() },
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp)
         ) {
             Text(text = stringResource(id = R.string.salir))
         }
@@ -98,7 +123,6 @@ fun CreditosScreen(
 fun CreditosScreenPre() {
     FitBoostTrainerTheme {
         val navController = rememberNavController()
-        CreditosScreen( navController = navController)
+        CreditosScreen(navController = navController)
     }
 }
-

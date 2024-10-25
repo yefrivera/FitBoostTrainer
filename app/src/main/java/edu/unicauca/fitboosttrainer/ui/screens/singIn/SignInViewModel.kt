@@ -22,7 +22,6 @@ class SignInViewModel: ViewModel() {
     ) {
         createUserEmailAndPassword(email, password) { isSuccess ->
             if (isSuccess) {
-                // Si la creación del usuario es exitosa, crea el perfil del usuario en Firestore
                 createUser(userID, name, day, month, year, listOf(height), listOf(weight), trainingFrequency, trainingGoal,
                     listOf(hombro), listOf(pecho), listOf(bicepIzq), listOf(bicepDer), listOf(cintura),
                     listOf(cadera), listOf(musloIzq), listOf(musloDer), listOf(pantorrillaIzq), listOf(pantorrillaDer))

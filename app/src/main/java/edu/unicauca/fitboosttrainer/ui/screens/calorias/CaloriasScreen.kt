@@ -55,7 +55,7 @@ fun CaloriasScreen(
     val selectedItem = remember { mutableStateOf(BottomNavItem.ALIMENTACION) }
 
     LaunchedEffect(Unit) {
-        viewModel.fetchDailyGoalCalories()  // Cargar la meta diaria al iniciar la pantalla
+        viewModel.fetchDailyGoalCalories()
     }
 
     Scaffold(
@@ -83,7 +83,7 @@ fun CaloriasScreen(
                 .verticalScroll(rememberScrollState())
                 .padding(16.dp)
         ) {
-            DailyGoalSection(uiState, viewModel)  // Ya no pasamos homeViewModel
+            DailyGoalSection(uiState, viewModel)
             Spacer(modifier = Modifier.height(16.dp))
             AddFoodSection(viewModel, snackbarHostState, coroutineScope, uiState)
             Spacer(modifier = Modifier.height(16.dp))
@@ -166,12 +166,12 @@ fun DailyGoalSection(uiState: CaloriasUIState, viewModel: FoodViewModel) {
         EditDailyGoalDialog(
             currentGoal = uiState.dailyGoalCalories,
             onConfirm = { newGoal ->
-                showEditDialog = false  // Cerrar el diálogo inmediatamente
+                showEditDialog = false
                 coroutineScope.launch {
-                    //viewModel.addDailyGoalToFirebase(newGoal)  // Guardar la nueva meta en Firebase
+                    //viewModel.addDailyGoalToFirebase(newGoal)
                 }
             },
-            onCancel = { showEditDialog = false },  // Asegurarse de cerrar el diálogo si se cancela
+            onCancel = { showEditDialog = false },
             viewModel = viewModel,
             coroutineScope = coroutineScope
         )
@@ -183,7 +183,7 @@ fun EditDailyGoalDialog(
     currentGoal: Int,
     onConfirm: (Int) -> Unit,
     onCancel: () -> Unit,
-    viewModel: FoodViewModel, // Cambia para pasar el viewModel
+    viewModel: FoodViewModel,
     coroutineScope: CoroutineScope
 ) {
     var newGoal by remember { mutableStateOf(currentGoal.toString()) }
@@ -218,12 +218,11 @@ fun EditDailyGoalDialog(
             Button(onClick = {
                 val newGoalInt = newGoal.toIntOrNull()
                 if (newGoalInt != null && newGoalInt > 0) {
-                    // Guardar en Firebase a través del ViewModel
                     coroutineScope.launch {
                         viewModel.addDailyGoalToFirebase(newGoalInt)
                     }
 
-                    onConfirm(newGoalInt) // Actualiza la UI
+                    onConfirm(newGoalInt)
                 } else {
                     showError = true
                 }

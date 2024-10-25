@@ -25,9 +25,9 @@ fun FullBodyScreen(
     scrollBehavior: TopAppBarScrollBehavior,
     drawerState: DrawerState,
     navController: NavHostController,
-    viewModel: FullBodyViewModel = viewModel() // ViewModel inyectado
+    viewModel: FullBodyViewModel = viewModel()
 ) {
-    val selectedNavItem = viewModel.selectedNavItem.value // Observar el estado
+    val selectedNavItem = viewModel.selectedNavItem.value
 
     Scaffold(
         topBar = {
@@ -41,7 +41,7 @@ fun FullBodyScreen(
         bottomBar = {
             BottomNavigation(
                 selectedItem = selectedNavItem,
-                onItemSelected = { viewModel.selectNavItem(it) }, // Actualizar el estado desde el ViewModel
+                onItemSelected = { viewModel.selectNavItem(it) },
                 navController = navController
             )
         }
@@ -52,7 +52,7 @@ fun FullBodyScreen(
                 .padding(paddingValues)
                 .padding(16.dp)
         ) {
-            // Lista de rutinas
+
             RoutineItem(
                 title = stringResource(R.string.strength_max),
                 description = stringResource(R.string.strength_max_d),
@@ -113,12 +113,3 @@ fun RoutineItem(title: String, description: String, onClick: () -> Unit) {
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
-@Preview(showBackground = true)
-@Composable
-fun FullBodyScreenPreview() {
-    val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
-    val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
-    val navController = rememberNavController()
-    FullBodyScreen(scrollBehavior = scrollBehavior, drawerState = drawerState, navController = navController)
-}

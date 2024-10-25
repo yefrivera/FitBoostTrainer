@@ -84,7 +84,6 @@ private fun ScrollContent(
     val savedRoutines = viewModel.savedRoutines
     val isLoading = viewModel.isLoading
 
-    // Estado para manejar el ID de la rutina seleccionada para eliminar y mostrar el modal
     var showDeleteDialog by remember { mutableStateOf(false) }
     var routineToDelete by remember { mutableStateOf<SavedRoutine?>(null) }
 
@@ -100,16 +99,13 @@ private fun ScrollContent(
                     SavedRoutineCard(
                         routine = routine,
                         onEditClick = {
-                            // Navegar a la pantalla de detalles con el ID de la rutina
                             navController.navigate("editRoutine/${routine.id}")
                         },
                         onDeleteClick = {
-                            // Mostrar el diálogo de confirmación
                             routineToDelete = routine
                             showDeleteDialog = true
                         },
                         onClickCard = {
-                            // Navegar a la pantalla de detalles de la rutina
                             navController.navigate("routineDetail/${routine.id}")
                         }
                     )
@@ -117,7 +113,6 @@ private fun ScrollContent(
             }
         }
 
-        // Si el modal de confirmación está activo, mostrarlo
         if (showDeleteDialog && routineToDelete != null) {
             DeleteRoutineDialog(
                 routineName = routineToDelete?.name ?: "",
@@ -145,7 +140,7 @@ fun SavedRoutineCard(
         modifier = Modifier
             .fillMaxWidth()
             .padding(8.dp)
-            .clickable { onClickCard() }  // Navegar a los detalles de la rutina cuando se presiona la Card
+            .clickable { onClickCard() }
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,

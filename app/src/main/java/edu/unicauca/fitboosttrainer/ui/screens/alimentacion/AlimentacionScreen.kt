@@ -64,7 +64,6 @@ fun AlimentacionScreen(
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            // Tarjeta de información con imagen
             Card(
                 shape = RoundedCornerShape(8.dp),
                 elevation = CardDefaults.cardElevation(4.dp),
@@ -97,7 +96,6 @@ fun AlimentacionScreen(
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            // Lista de categorías con acciones específicas
             CategoryItem(title = stringResource(R.string.snack)) {
                 //navController.navigate("snackScreen")
             }
@@ -113,7 +111,6 @@ fun AlimentacionScreen(
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            // Botón de seguimiento calórico
             Button(
                 onClick = { navController.navigate("caloriasScreen") },
                 modifier = Modifier.fillMaxWidth(),
@@ -132,7 +129,7 @@ fun CategoryItem(title: String, onClick: () -> Unit) {
         modifier = Modifier
             .fillMaxWidth()
             .padding(vertical = 8.dp)
-            .clickable(onClick = onClick),  // Cambiado para aceptar la acción personalizada
+            .clickable(onClick = onClick),
     ) {
         Row(
             modifier = Modifier
